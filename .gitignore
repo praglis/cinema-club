@@ -16,7 +16,7 @@ spring-test/test-output/
 argfile*
 activemq-data/
 
-applications.properties
+application.properties
 
 classes/
 /build
