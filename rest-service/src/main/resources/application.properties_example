@@ -1,3 +1,6 @@
+# Ostatnia zmiana: 14-11-2019 23:00
+
+
 # serivce name
 spring.application.name=rest-service
 # port
@@ -13,6 +16,9 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 spring.flyway.locations=classpath:db/migration/{vendor}
 spring.flyway.check-location=false
 
+# JPA
+spring.jpa.database=postgresql
+
 # Baza danych
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
@@ -20,4 +26,5 @@ spring.datasource.url= jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username=postgres
 spring.datasource.password=admin
 #change to validate on production
+
 spring.jpa.hibernate.ddl-auto=update
