@@ -10,7 +10,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class UserDTO implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
