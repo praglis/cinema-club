@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.DAO;
 
-import com.misernandfriends.cinemaclub.model.User;
+import com.misernandfriends.cinemaclub.model.UserDTO;
 import com.misernandfriends.cinemaclub.repository.UserRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,18 +8,18 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 @Repository
-public class UserDaoImpl extends AbstractDAOImpl<User> implements UserRepository {
+public class UserDaoImpl extends AbstractDAOImpl<UserDTO> implements UserRepository {
 
     @Override
-    protected Class<User> getEntityClazz() {
-        return User.class;
+    protected Class<UserDTO> getEntityClazz() {
+        return UserDTO.class;
     }
 
     @Override
-    public User findByUsername(String username) {
+    public UserDTO findByUsername(String username) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
                 "WHERE data.username = :username";
-        TypedQuery<User> query = em.createQuery(queryTxt, User.class)
+        TypedQuery<UserDTO> query = em.createQuery(queryTxt, UserDTO.class)
                 .setParameter("username", username);
         try {
             return query.getSingleResult();

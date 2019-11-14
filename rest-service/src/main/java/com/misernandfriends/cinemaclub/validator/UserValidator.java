@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.validator;
 
-import com.misernandfriends.cinemaclub.model.User;
+import com.misernandfriends.cinemaclub.model.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,12 +15,12 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return User.class.equals(aClass);
+        return UserDTO.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        User user = (User) o;
+        UserDTO user = (UserDTO) o;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {

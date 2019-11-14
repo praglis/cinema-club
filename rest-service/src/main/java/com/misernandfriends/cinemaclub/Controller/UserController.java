@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.Controller;
 
-import com.misernandfriends.cinemaclub.model.User;
+import com.misernandfriends.cinemaclub.model.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import com.misernandfriends.cinemaclub.validator.UserValidator;
@@ -28,13 +28,13 @@ public class UserController {
 
     @GetMapping("/registration")
     public String registration(Model model) {
-        model.addAttribute("userForm", new User());
+        model.addAttribute("userForm", new UserDTO());
 
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+    public String registration(@ModelAttribute("userForm") UserDTO userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
         if (bindingResult.hasErrors()) {
             return "registration";

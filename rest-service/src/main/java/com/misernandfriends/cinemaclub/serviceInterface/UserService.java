@@ -1,9 +1,9 @@
 package com.misernandfriends.cinemaclub.serviceInterface;
 
-import com.misernandfriends.cinemaclub.model.User;
+import com.misernandfriends.cinemaclub.model.UserDTO;
 
 public interface UserService {
-    void save(User user);
+    void save(UserDTO user);
 
-    User findByUsername(String username);
+    UserDTO findByUsername(String username);
 }
