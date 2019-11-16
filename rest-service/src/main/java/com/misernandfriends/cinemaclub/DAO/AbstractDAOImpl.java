@@ -1,12 +1,16 @@
 package com.misernandfriends.cinemaclub.DAO;
 
 import com.misernandfriends.cinemaclub.repository.AbstractRepository;
+import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Date;
 
 @Repository
 public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractRepository<T> {
@@ -21,8 +25,23 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public T create(T entity) {
+        fillInfoCd(entity);
         em.persist(entity);
         return entity;
+    }
+
+    private void fillInfoCd(T entity) {
+        Method setInfoCD;
+        try {
+            setInfoCD = entity.getClass().getMethod("setInfoCD", Date.class);
+        } catch (NoSuchMethodException e) {
+            return;
+        }
+        try {
+            setInfoCD.invoke(entity, DateTimeUtil.getCurrentDate());
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional

@@ -1,7 +1,8 @@
-package com.misernandfriends.cinemaclub.DAO;
+package com.misernandfriends.cinemaclub.DAO.user;
 
-import com.misernandfriends.cinemaclub.model.UserDTO;
-import com.misernandfriends.cinemaclub.repository.UserRepository;
+import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;

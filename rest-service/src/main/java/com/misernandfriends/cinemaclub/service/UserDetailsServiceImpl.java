@@ -1,9 +1,9 @@
 package com.misernandfriends.cinemaclub.service;
 
 
-import com.misernandfriends.cinemaclub.model.RoleDTO;
-import com.misernandfriends.cinemaclub.model.UserDTO;
-import com.misernandfriends.cinemaclub.repository.UserRepository;
+import com.misernandfriends.cinemaclub.model.user.RoleDTO;
+import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.Controller;
 
-import com.misernandfriends.cinemaclub.model.UserDTO;
+import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import com.misernandfriends.cinemaclub.validator.UserValidator;

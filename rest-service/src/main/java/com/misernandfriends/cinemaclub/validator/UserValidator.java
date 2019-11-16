@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.validator;
 
-import com.misernandfriends.cinemaclub.model.UserDTO;
+import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
