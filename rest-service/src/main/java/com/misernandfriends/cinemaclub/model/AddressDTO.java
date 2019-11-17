@@ -5,19 +5,27 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "role")
-public class RoleDTO implements Serializable {
+@Table(name = "address")
+public class AddressDTO implements Serializable {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String country;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<UserDTO> users;
+    private String state;
+
+    private String city;
+
+    private String streetName;
+
+    private String houseNumber;
+
+
 }
