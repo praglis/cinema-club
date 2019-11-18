@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.Controller;
 
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.service.SecurityServiceImpl;
+import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,17 +17,15 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private SecurityServiceImpl securityService;
+    private SecurityService securityService;
 
-    @SuppressWarnings("rawtypes")
     @PostMapping("/login")
     public UsernamePasswordAuthenticationToken login(@RequestBody UserDTO user) {
-        securityService.autoLogin(user.getUsername(), user.getPassword());
 
-        return securityService.getUsernamePasswordAuthenticationToken();
+
+        return  securityService.autoLogin(user.getUsername(), user.getPassword());
     }
 
-    @SuppressWarnings("rawtypes")
     @PostMapping("/register")
     public UsernamePasswordAuthenticationToken register(@RequestBody UserDTO user) {
         UserDTO userExists = userService.findByUsername(user.getUsername());
@@ -34,8 +33,8 @@ public class UserController {
             throw new BadCredentialsException("User with username: " + user.getUsername() + " already exists");
         }
         userService.save(user);
-        securityService.autoLogin(user.getUsername(), user.getPasswordConfirm());
 
-        return securityService.getUsernamePasswordAuthenticationToken();
+
+        return  securityService.autoLogin(user.getUsername(), user.getPasswordConfirm());
     }
 }
