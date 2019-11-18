@@ -1,19 +1,15 @@
 package com.misernandfriends.cinemaclub.Controller;
 
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.service.SecurityServiceImpl;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
-import com.misernandfriends.cinemaclub.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 
@@ -23,43 +19,22 @@ public class UserController {
     @Autowired
     private SecurityService securityService;
 
-    @Autowired
-    private UserValidator userValidator;
+    @PostMapping("/login")
+    public UsernamePasswordAuthenticationToken login(@RequestBody UserDTO user) {
 
-    @GetMapping("/registration")
-    public String registration(Model model) {
-        model.addAttribute("userForm", new UserDTO());
 
-        return "registration";
+        return  securityService.autoLogin(user.getUsername(), user.getPassword());
     }
 
-    @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") UserDTO userForm, BindingResult bindingResult) {
-        userValidator.validate(userForm, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "registration";
+    @PostMapping("/register")
+    public UsernamePasswordAuthenticationToken register(@RequestBody UserDTO user) {
+        UserDTO userExists = userService.findByUsername(user.getUsername());
+        if (userExists != null) {
+            throw new BadCredentialsException("User with username: " + user.getUsername() + " already exists");
         }
+        userService.save(user);
 
-        userService.save(userForm);
 
-        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
-
-        return "redirect:/home";
-    }
-
-    @GetMapping("/login")
-    public String login(Model model, String error, String logout) {
-        if (error != null)
-            model.addAttribute("error", "Your username and password is invalid.");
-
-        if (logout != null)
-            model.addAttribute("message", "You have been logged out successfully.");
-
-        return "login";
-    }
-
-    @GetMapping({"/", "/welcome"})
-    public String welcome(Model model) {
-        return "welcome";
+        return  securityService.autoLogin(user.getUsername(), user.getPasswordConfirm());
     }
 }
