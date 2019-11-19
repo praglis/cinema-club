@@ -1,7 +1,7 @@
 package com.misernandfriends.cinemaclub.model.user;
 
 import com.misernandfriends.cinemaclub.model.AddressDTO;
-import com.misernandfriends.cinemaclub.model.user.RoleDTO;
+import com.misernandfriends.cinemaclub.model.event.EventDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,7 +64,8 @@ public class UserDTO implements Serializable {
 
     private String type;
 
-    //    private TierDTO tier;
+    @ManyToOne
+    private TierDTO tier;
 
     private Long points;
 
@@ -73,6 +74,9 @@ public class UserDTO implements Serializable {
 
     @Transient
     private String passwordConfirm;
+
+    @ManyToMany(mappedBy = "participants")
+    private Set<EventDTO> events;
 
     public UserDTO() {
 
