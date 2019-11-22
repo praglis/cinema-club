@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.Optional;
 
 @Repository
 public abstract class AbstractDAOImpl<T extends Serializable> implements AbstractRepository<T> {
@@ -57,8 +58,8 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     }
 
     @Override
-    public T getById(long id) {
-        return em.find(getEntityClazz(), id);
+    public Optional<T> getById(long id) {
+        return Optional.ofNullable(em.find(getEntityClazz(), id));
     }
 
     protected abstract Class<T> getEntityClazz();
