@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface NotificationRepository extends AbstractRepository<NotificationDTO> {
 
-    public List<NotificationDTO> getUserFutureNotifications(Long userId);
+    List<NotificationDTO> getUserFutureNotifications(Long userId);
 
 }

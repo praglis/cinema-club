@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface EventRepository extends AbstractRepository<EventDTO> {
 
-    public List<EventDTO> getUserEvents(Long userId);
+    List<EventDTO> getUserEvents(Long userId);
 
 }

@@ -5,11 +5,12 @@ import com.misernandfriends.cinemaclub.model.dictionary.DictionaryItemDTO;
 import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DictionaryRepository extends AbstractRepository<DictionaryDTO> {
 
-    public DictionaryDTO getByDomain(String domain);
+    Optional<DictionaryDTO> getByDomain(String domain);
 
-    public List<DictionaryItemDTO> getDomainItems(String domain);
+    List<DictionaryItemDTO> getDomainItems(String domain);
 
 }

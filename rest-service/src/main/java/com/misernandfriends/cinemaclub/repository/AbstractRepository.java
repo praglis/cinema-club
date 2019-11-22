@@ -2,15 +2,16 @@ package com.misernandfriends.cinemaclub.repository;
 
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public interface AbstractRepository<T extends Serializable> {
 
-    public T create(T entity);
+    T create(T entity);
 
-    public T update(T entity);
+    T update(T entity);
 
-    public void delete(T entity);
+    void delete(T entity);
 
-    public T getById(long id);
+    Optional<T> getById(long id);
 
 }

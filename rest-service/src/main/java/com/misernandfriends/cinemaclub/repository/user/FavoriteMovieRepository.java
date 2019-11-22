@@ -6,15 +6,16 @@ import com.misernandfriends.cinemaclub.model.user.FavoriteMovieDTO;
 import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FavoriteMovieRepository extends AbstractRepository<FavoriteMovieDTO> {
 
-    public List<MovieDTO> getMovieForCategory(Long categoryId, Long userId);
+    List<MovieDTO> getMovieForCategory(Long categoryId, Long userId);
 
-    public List<MovieDTO> getMovieForCategory(Long categoryId);
+    List<MovieDTO> getMovieForCategory(Long categoryId);
 
-    public FavoriteMovieDTO getFavoriteMovie(Long categoryId, Long userId, Long movieId);
+    Optional<FavoriteMovieDTO> getFavoriteMovie(Long categoryId, Long userId, Long movieId);
 
-    public CategoryDTO getMovieCategory(Long userId, Long movieId);
+    Optional<CategoryDTO> getMovieCategory(Long userId, Long movieId);
 
 }

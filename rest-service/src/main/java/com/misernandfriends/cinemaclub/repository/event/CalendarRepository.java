@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CalendarRepository extends AbstractRepository<CalendarDTO> {
 
-    public List<CalendarDTO> getUserCalendars(Long userId);
+    List<CalendarDTO> getUserCalendars(Long userId);
 
 }

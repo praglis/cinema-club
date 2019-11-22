@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class FavoriteMovieDAOImpl extends AbstractDAOImpl<FavoriteMovieDTO> implements FavoriteMovieRepository {
@@ -46,7 +47,7 @@ public class FavoriteMovieDAOImpl extends AbstractDAOImpl<FavoriteMovieDTO> impl
     }
 
     @Override
-    public FavoriteMovieDTO getFavoriteMovie(Long categoryId, Long userId, Long movieId) {
+    public Optional<FavoriteMovieDTO> getFavoriteMovie(Long categoryId, Long userId, Long movieId) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
                 "data.user.id = :userId AND data.movie.id = :movieId AND data.category.id = :categoryId";
 
@@ -56,14 +57,14 @@ public class FavoriteMovieDAOImpl extends AbstractDAOImpl<FavoriteMovieDTO> impl
                 .setParameter("movieId", movieId);
 
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 
     @Override
-    public CategoryDTO getMovieCategory(Long userId, Long movieId) {
+    public Optional<CategoryDTO> getMovieCategory(Long userId, Long movieId) {
         String queryTxt = "SELECT data.category FROM " + getEntityName() + " data WHERE " +
                 "data.user.id = :userId AND data.movie.id = :movieId";
         TypedQuery<CategoryDTO> query = em.createQuery(queryTxt, CategoryDTO.class)
@@ -71,9 +72,9 @@ public class FavoriteMovieDAOImpl extends AbstractDAOImpl<FavoriteMovieDTO> impl
                 .setParameter("movieId", movieId);
 
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }

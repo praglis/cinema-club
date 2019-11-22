@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ReportRepository extends AbstractRepository<ReportDTO> {
 
-    public List<ReportDTO> getUnassignedReports();
+    List<ReportDTO> getUnassignedReports();
 
 }

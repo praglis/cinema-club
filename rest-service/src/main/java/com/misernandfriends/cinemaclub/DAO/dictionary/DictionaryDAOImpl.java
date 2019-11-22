@@ -10,6 +10,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class DictionaryDAOImpl extends AbstractDAOImpl<DictionaryDTO> implements DictionaryRepository {
@@ -20,16 +21,16 @@ public class DictionaryDAOImpl extends AbstractDAOImpl<DictionaryDTO> implements
     }
 
     @Override
-    public DictionaryDTO getByDomain(String domain) {
+    public Optional<DictionaryDTO> getByDomain(String domain) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
                 "WHERE data.domain = :domain";
         TypedQuery<DictionaryDTO> query = em.createQuery(queryTxt, DictionaryDTO.class)
                 .setParameter("domain", domain);
 
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 

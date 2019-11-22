@@ -2,8 +2,10 @@ package com.misernandfriends.cinemaclub.serviceInterface;
 
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 
+import java.util.Optional;
+
 public interface UserService {
     void save(UserDTO user);
 
-    UserDTO findByUsername(String username);
+    Optional<UserDTO> findByUsername(String username);
 }

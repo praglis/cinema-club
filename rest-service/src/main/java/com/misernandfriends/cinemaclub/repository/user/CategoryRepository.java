@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CategoryRepository extends AbstractRepository<CategoryDTO> {
 
-    public List<CategoryDTO> getByUserId(Long userId);
+    List<CategoryDTO> getByUserId(Long userId);
 }

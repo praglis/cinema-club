@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.Optional;
 
 @Repository
 public class ActorDAOImpl extends AbstractDAOImpl<ActorDTO> implements ActorRepository {
@@ -16,16 +17,16 @@ public class ActorDAOImpl extends AbstractDAOImpl<ActorDTO> implements ActorRepo
     }
 
     @Override
-    public ActorDTO getByUrlApi(String apiUrl) {
+    public Optional<ActorDTO> getByUrlApi(String apiUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
                 "data.apiUrl = :apiUrl AND data.infoRD IS NULL";
         TypedQuery<ActorDTO> query = em.createQuery(queryTxt, ActorDTO.class)
                 .setParameter("apiUrl", apiUrl);
 
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }

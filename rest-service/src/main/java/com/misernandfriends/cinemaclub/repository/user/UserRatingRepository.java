@@ -5,6 +5,6 @@ import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 
 public interface UserRatingRepository extends AbstractRepository<UserRatingDTO> {
 
-    public double getAvgRatingForMovie(Long movieId);
+    double getAvgRatingForMovie(Long movieId);
 
 }

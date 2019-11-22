@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends AbstractDAOImpl<UserDTO> implements UserRepository {
@@ -17,15 +18,15 @@ public class UserDaoImpl extends AbstractDAOImpl<UserDTO> implements UserReposit
     }
 
     @Override
-    public UserDTO findByUsername(String username) {
+    public Optional<UserDTO> findByUsername(String username) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
                 "WHERE data.username = :username";
         TypedQuery<UserDTO> query = em.createQuery(queryTxt, UserDTO.class)
                 .setParameter("username", username);
         try {
-            return query.getSingleResult();
+            return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }
