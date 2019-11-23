@@ -1,4 +1,4 @@
-package com.misernandfriends.cinemaclub.DAO;
+package com.misernandfriends.cinemaclub.dao;
 
 import com.misernandfriends.cinemaclub.model.AddressDTO;
 import com.misernandfriends.cinemaclub.repository.AddressRepository;

@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.event;
+package com.misernandfriends.cinemaclub.dao.event;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.event.NotificationDTO;
 import com.misernandfriends.cinemaclub.repository.event.NotificationRepository;
 import com.misernandfriends.cinemaclub.utils.DateTimeUtil;

@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.dictionary;
+package com.misernandfriends.cinemaclub.dao.dictionary;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryDTO;
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryItemDTO;
 import com.misernandfriends.cinemaclub.repository.dictionary.DictionaryRepository;

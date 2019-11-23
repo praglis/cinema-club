@@ -1,8 +1,8 @@
-package com.misernandfriends.cinemaclub.DAO.movie;
+package com.misernandfriends.cinemaclub.dao.movie.actor;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
-import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
-import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.model.movie.actor.ActorDTO;
+import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
@@ -10,18 +10,17 @@ import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
-public class MovieDAOImpl extends AbstractDAOImpl<MovieDTO> implements MovieRepository {
-
+public class ActorDAOImpl extends AbstractDAOImpl<ActorDTO> implements ActorRepository {
     @Override
-    protected Class<MovieDTO> getEntityClazz() {
-        return MovieDTO.class;
+    protected Class<ActorDTO> getEntityClazz() {
+        return ActorDTO.class;
     }
 
     @Override
-    public Optional<MovieDTO> getByApiUrl(String apiUrl) {
+    public Optional<ActorDTO> getByUrlApi(String apiUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
                 "data.apiUrl = :apiUrl AND data.infoRD IS NULL";
-        TypedQuery<MovieDTO> query = em.createQuery(queryTxt, MovieDTO.class)
+        TypedQuery<ActorDTO> query = em.createQuery(queryTxt, ActorDTO.class)
                 .setParameter("apiUrl", apiUrl);
 
         try {

@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.movie;
+package com.misernandfriends.cinemaclub.dao.movie;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.cinema.CinemaDTO;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.PremiereDTO;

@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.event;
+package com.misernandfriends.cinemaclub.dao.event;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.event.CalendarDTO;
 import com.misernandfriends.cinemaclub.repository.event.CalendarRepository;
 import org.springframework.stereotype.Repository;

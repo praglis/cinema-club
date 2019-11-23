@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.review;
+package com.misernandfriends.cinemaclub.dao.review;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.review.CommentDTO;
 import com.misernandfriends.cinemaclub.repository.review.CommentRepository;
 import org.springframework.stereotype.Repository;

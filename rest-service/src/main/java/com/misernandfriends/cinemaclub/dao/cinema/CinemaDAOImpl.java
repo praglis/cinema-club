@@ -1,6 +1,6 @@
-package com.misernandfriends.cinemaclub.DAO.cinema;
+package com.misernandfriends.cinemaclub.dao.cinema;
 
-import com.misernandfriends.cinemaclub.DAO.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.cinema.CinemaDTO;
 import com.misernandfriends.cinemaclub.repository.cinema.CinemaRepository;
 import org.springframework.stereotype.Repository;
