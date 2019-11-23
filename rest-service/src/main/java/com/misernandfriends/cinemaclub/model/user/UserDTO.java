@@ -59,7 +59,7 @@ public class UserDTO implements Serializable {
 
     private String phoneNo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private AddressDTO address = new AddressDTO();
 
     private String type;

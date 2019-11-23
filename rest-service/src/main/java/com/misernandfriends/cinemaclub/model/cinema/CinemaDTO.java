@@ -33,6 +33,6 @@ public class CinemaDTO implements Serializable {
      */
     private String additionalPhoneNos;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private AddressDTO address = new AddressDTO();
 }

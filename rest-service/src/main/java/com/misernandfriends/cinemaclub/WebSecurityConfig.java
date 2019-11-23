@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .authorizeRequests()
-                .antMatchers("/registration", "/home", "/welcome").permitAll()
+                .antMatchers("/register", "/home", "/welcome").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
