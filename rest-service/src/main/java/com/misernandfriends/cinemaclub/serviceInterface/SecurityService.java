@@ -5,5 +5,5 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 public interface SecurityService {
     String findLoggedInUsername();
 
-    UsernamePasswordAuthenticationToken autoLogin(String username, String password);
+    void autoLogin(String username, String password);
 }
