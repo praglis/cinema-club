@@ -37,6 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
 
+
         return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }

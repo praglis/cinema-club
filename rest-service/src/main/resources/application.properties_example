@@ -27,4 +27,4 @@ spring.datasource.username=postgres
 spring.datasource.password=admin
 #change to validate on production
 
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=create

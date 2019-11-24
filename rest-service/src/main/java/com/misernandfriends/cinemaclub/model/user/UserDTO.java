@@ -69,7 +69,7 @@ public class UserDTO implements Serializable {
 
     private Long points;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private Set<RoleDTO> roles;
 
     @Transient
