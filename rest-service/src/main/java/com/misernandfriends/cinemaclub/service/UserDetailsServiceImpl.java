@@ -33,8 +33,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserDTO user = userOptional.get();
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        for (RoleDTO role : user.getRoles()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+        if(user.getRoles() != null) {
+            for (RoleDTO role : user.getRoles()) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+            }
         }
 
 
