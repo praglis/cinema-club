@@ -22,9 +22,7 @@ public class UserController {
 
     @PostMapping("/login")
     public UsernamePasswordAuthenticationToken login(@RequestBody UserDTO user) {
-
-
-        return  securityService.autoLogin(user.getUsername(), user.getPassword());
+        return securityService.autoLogin(user.getUsername(), user.getPassword());
     }
 
     @PostMapping("/register")
