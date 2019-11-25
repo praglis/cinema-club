@@ -44,9 +44,22 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserDTO user) {
+        Optional<UserDTO> checkUser = userService.findByUsername(user.getUsername());
+        if(checkUser.isPresent() ){
+            if(checkUser.get().getStatus().equals("C")){
+                return new ResponseEntity(user.getUsername() + " has been closed", HttpStatus.BAD_REQUEST);
+            }
+            if(checkUser.get().getStatus().equals("B")){
+                return new ResponseEntity(user.getUsername() + " has been banned", HttpStatus.BAD_REQUEST);
+            }
+        }
+        else{
+            return new ResponseEntity("Username/password is incorrect", HttpStatus.BAD_REQUEST);
+        }
+
         String transientPassword = user.getPassword();
         securityService.autoLogin(user.getUsername(), transientPassword);
-        return new ResponseEntity<String>("GET Response : "
+        return new ResponseEntity("GET Response : "
                 + user.getUsername(), HttpStatus.OK);
     }
 
@@ -54,13 +67,18 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody UserDTO user) {
         Optional<UserDTO> userExists = userService.findByUsername(user.getUsername());
+        Optional<UserDTO> emailExists = userService.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
-            throw new BadCredentialsException("User with username: " + user.getUsername() + " already exists");
+            return new ResponseEntity("User already exists", HttpStatus.BAD_REQUEST);
+        }
+        if (emailExists.isPresent()) {
+            return new ResponseEntity("Email already exists", HttpStatus.BAD_REQUEST);
         }
         String transientPassword = user.getPassword();
         Date date = new Date();
         user.setEnrolmentDate(date);
-        user.setStatus("A");
+        user.setStatus("N");
+        user.setType("U");
         userService.save(user);
         securityService.autoLogin(user.getUsername(), transientPassword);
         return new ResponseEntity<String>("GET Response : "

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface UserRepository extends AbstractRepository<UserDTO> {
     Optional<UserDTO> findByUsername(String username);
-
+    Optional<UserDTO> findByEmail(String email);
 }
