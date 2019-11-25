@@ -29,4 +29,17 @@ public class UserDaoImpl extends AbstractDAOImpl<UserDTO> implements UserReposit
             return Optional.empty();
         }
     }
+
+
+    public Optional<UserDTO> findByEmail(String email) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
+                "WHERE data.email = :email";
+        TypedQuery<UserDTO> query = em.createQuery(queryTxt, UserDTO.class)
+                .setParameter("email", email);
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 }

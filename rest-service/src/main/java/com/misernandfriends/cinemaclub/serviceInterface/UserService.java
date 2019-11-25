@@ -8,4 +8,6 @@ public interface UserService {
     void save(UserDTO user);
 
     Optional<UserDTO> findByUsername(String username);
+    Optional<UserDTO> findByEmail(String email);
+
 }
