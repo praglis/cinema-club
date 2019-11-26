@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"", uniqueConstraints=@UniqueConstraint(columnNames={"username", "email"}))
 public class UserDTO implements Serializable {
 
     public interface Status {
@@ -33,6 +33,7 @@ public class UserDTO implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+
     private String username;
 
     @Column(nullable = false)
