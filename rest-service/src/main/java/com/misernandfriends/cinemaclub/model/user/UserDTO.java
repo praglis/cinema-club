@@ -32,7 +32,7 @@ public class UserDTO implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
@@ -50,7 +50,7 @@ public class UserDTO implements Serializable {
 
     private Date birthday;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     private Boolean emailConfirmed;
