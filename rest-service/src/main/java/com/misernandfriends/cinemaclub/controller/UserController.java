@@ -62,7 +62,7 @@ public class UserController {
         Optional<UserDTO> userExists = userService.findByUsername(user.getUsername());
         Optional<UserDTO> emailExists = userService.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
-            return ErrorResponse.createError("User already taken");
+            return ErrorResponse.createError("Username already taken");
         }
         if (emailExists.isPresent()) {
             return ErrorResponse.createError("Email already used");
