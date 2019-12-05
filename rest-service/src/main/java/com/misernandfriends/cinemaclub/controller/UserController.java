@@ -28,10 +28,9 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity userName() {
         String currentPrincipalName = securityService.findLoggedInUsername();
-        UserDTO user = userService.findByUsername(currentPrincipalName).get();
         Map<String, String> body = new HashMap<>();
         body.put("username", currentPrincipalName);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
 
