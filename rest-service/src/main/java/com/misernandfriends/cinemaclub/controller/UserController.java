@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.controller;
 
+import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
@@ -60,16 +61,12 @@ public class UserController {
         Optional<UserDTO> userExists = userService.findByUsername(user.getUsername());
         Optional<UserDTO> emailExists = userService.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
-            return new ResponseEntity<>("User already exists", HttpStatus.BAD_REQUEST);
+            return ErrorResponse.createError("Username already taken");
         }
         if (emailExists.isPresent()) {
-            return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+            return ErrorResponse.createError("Email already used");
         }
         String transientPassword = user.getPassword();
-        Date date = new Date();
-        user.setEnrolmentDate(date);
-        user.setStatus("N");
-        user.setType("U");
         userService.save(user);
         securityService.autoLogin(user.getUsername(), transientPassword);
         Map<String, String> body = new HashMap<>();
