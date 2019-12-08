@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class MovieController {
-
     @Autowired
     private MovieFetchServiceLocal movieService;
 
@@ -19,4 +18,3 @@ public class MovieController {
         return movieService.getMovieById(id);
     }
 }
-
