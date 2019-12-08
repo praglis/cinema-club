@@ -1,4 +1,4 @@
-# Ostatnia zmiana: 14-11-2019 23:00
+# Ostatnia zmiana: 07-12-2019
 
 
 # serivce name
@@ -27,4 +27,16 @@ spring.datasource.username=postgres
 spring.datasource.password=admin
 #change to validate on production
 
-spring.jpa.hibernate.ddl-auto=create
+spring.jpa.hibernate.ddl-auto=update
+
+# Website
+custom.verification-token-link=http://localhost:4200/verification
+
+# Mail
+custom.mail-options.host=smtp.gmail.com
+custom.mail-options.host-port=465
+custom.mail-options.socket-factory-port=465
+custom.mail-options.socket-factory-class=javax.net.ssl.SSLSocketFactory
+custom.mail-options.email=cinema.club.friends@gmail.com
+custom.mail-options.password=ySPHNymHikKje4K
+custom.mail-options.enable=true

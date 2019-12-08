@@ -3,10 +3,10 @@ package com.misernandfriends.cinemaclub.dao;
 import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
