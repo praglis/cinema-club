@@ -6,20 +6,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 public class ErrorResponse extends ResponseEntity implements Serializable {
 
-    ErrorResponse(String message) {
-        super(message, HttpStatus.BAD_REQUEST);
+    ErrorResponse(Object object) {
+        super(object, HttpStatus.BAD_REQUEST);
     }
 
-    ErrorResponse(HttpStatus httpStatus, String message) {
-        super(message, httpStatus);
+    ErrorResponse(HttpStatus httpStatus, Object object) {
+        super(object, httpStatus);
     }
 
     public static ErrorResponse createError(String message) {
-        return new ErrorResponse(message);
+        Map<String, String> map = new HashMap<>();
+        map.put("message", message);
+        return new ErrorResponse(map);
     }
 }

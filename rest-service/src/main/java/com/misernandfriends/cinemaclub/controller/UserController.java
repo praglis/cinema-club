@@ -4,12 +4,12 @@ import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
+import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +23,9 @@ public class UserController {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private VerificationTokenService verificationTokenService;
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -39,13 +42,16 @@ public class UserController {
         Optional<UserDTO> checkUser = userService.findByUsername(user.getUsername());
         if (checkUser.isPresent()) {
             if (checkUser.get().getStatus().equals("C")) {
-                return new ResponseEntity<>(user.getUsername() + " has been closed", HttpStatus.BAD_REQUEST);
+                return ErrorResponse.createError(user.getUsername() + " has been closed");
             }
             if (checkUser.get().getStatus().equals("B")) {
-                return new ResponseEntity<>(user.getUsername() + " has been banned", HttpStatus.BAD_REQUEST);
+                return ErrorResponse.createError(user.getUsername() + " has been banned");
+            }
+            if (!checkUser.get().getEmailConfirmed()) {
+                return ErrorResponse.createError("Please active your account by clicking activation link that was sent to your email address");
             }
         } else {
-            return new ResponseEntity<>("Username/password is incorrect", HttpStatus.BAD_REQUEST);
+            return ErrorResponse.createError("Username/password is incorrect");
         }
 
         String transientPassword = user.getPassword();
@@ -64,13 +70,27 @@ public class UserController {
             return ErrorResponse.createError("Username already taken");
         }
         if (emailExists.isPresent()) {
-            return ErrorResponse.createError("Email already used");
+            if (emailExists.get().getEmailConfirmed()) {
+                return ErrorResponse.createError("Email already used");
+            } else {
+                return ErrorResponse.createError("Activation link has been already sent to email: " + emailExists.get().getEmail());
+            }
         }
-        String transientPassword = user.getPassword();
-        userService.save(user);
-        securityService.autoLogin(user.getUsername(), transientPassword);
+        userService.register(user);
+
         Map<String, String> body = new HashMap<>();
         body.put("username", user.getUsername());
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/verifyuser")
+    public ResponseEntity verifyUser(@RequestParam(name = "token") String token,
+                                     @RequestParam(name = "username") String username) {
+        Optional<UserDTO> user = userService.findByUsername(username);
+        if (!user.isPresent() || user.get().getEmailConfirmed()) {
+            return ErrorResponse.createError("User cannot be activate!");
+        }
+        verificationTokenService.verifyRegistrationToken(user.get(), token);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
