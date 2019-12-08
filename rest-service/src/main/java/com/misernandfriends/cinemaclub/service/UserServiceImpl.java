@@ -45,6 +45,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void changePassword(UserDTO user, String password){
+        user.setPassword(bCryptPasswordEncoder.encode(password));
+        userRepository.update(user);
+    }
+
+    @Override
     public Optional<UserDTO> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

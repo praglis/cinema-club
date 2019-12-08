@@ -66,4 +66,5 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         verificationTokenRepository.setAsUsed(verfToken.getUser().getId());
         userRepository.update(user);
     }
+
 }
