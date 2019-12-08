@@ -13,6 +13,7 @@ public class CustomProperties {
 
     private MailOptions mailOptions;
     private String verificationTokenLink;
+    private String passwordTokenLink;
 
     @Getter
     @Setter

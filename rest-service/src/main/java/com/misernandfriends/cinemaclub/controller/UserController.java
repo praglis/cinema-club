@@ -2,12 +2,11 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
-import com.misernandfriends.cinemaclub.serviceInterface.UserService;
-import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
+import com.misernandfriends.cinemaclub.serviceInterface.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -26,6 +25,13 @@ public class UserController {
 
     @Autowired
     private VerificationTokenService verificationTokenService;
+
+    @Autowired
+    private ResetPasswordService resetPasswordService;
+
+    @Autowired
+    private MailService mailService;
+
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -92,5 +98,33 @@ public class UserController {
         }
         verificationTokenService.verifyRegistrationToken(user.get(), token);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestBody UserDTO userPassword, @RequestParam(name = "token") String token,
+                                            @RequestParam(name = "username") String username) {
+        Optional<UserDTO> user = userService.findByUsername(username);
+        if (!user.isPresent()) {
+            return ErrorResponse.createError("User don't exists");
+        }
+        resetPasswordService.verifyChangePasswordToken(user.get(), token);
+        userService.changePassword(user.get(), userPassword.getPassword());
+
+        Map<String, String> body = new HashMap<>();
+        body.put("username", username);
+        return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @PostMapping("/resetPassword")
+    public ResponseEntity resetPassword(@RequestBody UserDTO user) {
+        Optional<UserDTO> userExists = userService.findByUsername(user.getUsername());
+        if (!userExists.isPresent()) {
+            return ErrorResponse.createError("User don't exists");
+        }
+        mailService.sendChangePasswordEmail(userExists.get());
+
+        Map<String, String> body = new HashMap<>();
+        body.put("username", user.getUsername());
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }
