@@ -5,14 +5,12 @@ import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
-import com.sun.net.ssl.internal.ssl.Provider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.security.Security;
 import java.util.Properties;
 
 @Service
@@ -38,7 +36,6 @@ public class MailServiceImpl implements MailService {
             return;
         }
 
-        Security.addProvider(new Provider());
         Properties props = System.getProperties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
