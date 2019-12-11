@@ -1,11 +1,9 @@
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.CustomProperties;
-import com.misernandfriends.cinemaclub.model.user.ResetPasswordTokenDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
-import com.misernandfriends.cinemaclub.serviceInterface.ResetPasswordService;
 import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +21,6 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private VerificationTokenService verificationTokenService;
 
-    @Autowired
-    private ResetPasswordService resetPasswordService;
 
     private Session session;
 
@@ -88,7 +84,7 @@ public class MailServiceImpl implements MailService {
             if (!customProperties.getMailOptions().getEnable()) {
                 return;
             }
-            ResetPasswordTokenDTO verfToken = resetPasswordService.generateRegistrationToken(user);
+            VerificationTokenDTO verfToken = verificationTokenService.generatePasswordResetToken(user);
 
             String verificationLink = customProperties.getPasswordTokenLink() +
                     "?token=" + verfToken.getToken() + "&username=" + user.getUsername();
