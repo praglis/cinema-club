@@ -14,6 +14,11 @@ import java.util.Date;
 @Table(name = "verification_token")
 public class VerificationTokenDTO implements Serializable {
 
+    public interface Type {
+        public static String EMAIL_VERIFICATION = "E";
+        public static String PASSWORD_VERIFICATION = "P";
+    }
+
     @Column(nullable = false)
     private Date infoCD;
 
@@ -26,6 +31,9 @@ public class VerificationTokenDTO implements Serializable {
     private String token;
 
     private Date tokenExpirationDate;
+
+    @Column(length = 1, nullable = false)
+    private String tokenType;
 
     @PrePersist
     public void prePersist() {

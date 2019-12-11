@@ -9,4 +9,8 @@ public interface VerificationTokenService  {
 
     void verifyRegistrationToken(UserDTO user, String token);
 
+    VerificationTokenDTO generatePasswordResetToken(UserDTO user);
+
+    void verifyChangePasswordToken(UserDTO user, String token);
+
 }

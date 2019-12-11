@@ -19,11 +19,12 @@ public class VerificationTokenDAOImpl extends AbstractDAOImpl<VerificationTokenD
     }
 
     @Override
-    public Optional<VerificationTokenDTO> getByUserId(Long userId) {
+    public Optional<VerificationTokenDTO> getByUserId(Long userId, String type) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
-                "data.user.id = :userId AND data.infoRD IS NULL";
+                "data.user.id = :userId AND data.tokenType = :type AND data.infoRD IS NULL";
         TypedQuery<VerificationTokenDTO> query = em.createQuery(queryTxt, VerificationTokenDTO.class)
-                .setParameter("userId", userId);
+                .setParameter("userId", userId)
+                .setParameter("type", type);
         try {
             return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {

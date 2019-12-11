@@ -18,6 +18,10 @@ import java.util.UUID;
 @Service
 public class VerificationTokenServiceImpl implements VerificationTokenService {
 
+    private enum VerificationResult {
+        OK, RESENT, NO_VERIFICATION, NOT_MATCH
+    }
+
     @Autowired
     VerificationTokenRepository verificationTokenRepository;
 
@@ -28,8 +32,50 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     MailService mailService;
 
     @Override
+    public VerificationTokenDTO generatePasswordResetToken(UserDTO user) {
+        return getVerificationTokenDTO(user, VerificationTokenDTO.Type.PASSWORD_VERIFICATION);
+    }
+
+    @Override
     public VerificationTokenDTO generateRegistrationToken(UserDTO user) {
-        Optional<VerificationTokenDTO> optional = verificationTokenRepository.getByUserId(user.getId());
+        return getVerificationTokenDTO(user, VerificationTokenDTO.Type.EMAIL_VERIFICATION);
+    }
+
+    @Override
+    @Transactional(dontRollbackOn = ApplicationException.class)
+    public void verifyChangePasswordToken(UserDTO user, String token) {
+        VerificationResult result = verifyToken(user, token, VerificationTokenDTO.Type.PASSWORD_VERIFICATION);
+        switch (result) {
+            case NO_VERIFICATION:
+                throw new ApplicationException("There is no verification needed for user: " + user.getUsername());
+            case NOT_MATCH:
+                throw new ApplicationException("Provided token not match actual token");
+            case RESENT:
+                throw new ApplicationException("Activation link has expire, new link has been sent to your email.");
+        }
+    }
+
+    @Override
+    @Transactional(dontRollbackOn = ApplicationException.class)
+    public void verifyRegistrationToken(UserDTO user, String token) {
+        VerificationResult result = verifyToken(user, token, VerificationTokenDTO.Type.EMAIL_VERIFICATION);
+        switch (result) {
+            case OK:
+                user.setEmailConfirmed(true);
+                userRepository.update(user);
+                break;
+            case RESENT:
+                mailService.sendConfirmationEmail(user);
+                throw new ApplicationException("Activation link has expire, new link has been sent to your email.");
+            case NOT_MATCH:
+                throw new ApplicationException("Provided token not match actual token");
+            case NO_VERIFICATION:
+                throw new ApplicationException("There is no verification needed for user: " + user.getUsername());
+        }
+    }
+
+    private VerificationTokenDTO getVerificationTokenDTO(UserDTO user, String type) {
+        Optional<VerificationTokenDTO> optional = verificationTokenRepository.getByUserId(user.getId(), type);
         if (optional.isPresent()) {
             VerificationTokenDTO verfToken = optional.get();
             verfToken.setTokenExpirationDate(null);
@@ -38,33 +84,30 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         } else {
             String token = UUID.randomUUID().toString();
             VerificationTokenDTO verfToken = new VerificationTokenDTO();
+            verfToken.setTokenType(type);
             verfToken.setToken(token);
             verfToken.setUser(user);
             return verificationTokenRepository.create(verfToken);
         }
     }
 
-    @Override
-    @Transactional(dontRollbackOn = ApplicationException.class)
-    public void verifyRegistrationToken(UserDTO user, String token) {
-        Optional<VerificationTokenDTO> optional = verificationTokenRepository.getByUserId(user.getId());
+    private VerificationResult verifyToken(UserDTO user, String token, String type) {
+        Optional<VerificationTokenDTO> optional = verificationTokenRepository.getByUserId(user.getId(), type);
         if (!optional.isPresent()) {
-            throw new ApplicationException("There is no verification needed for user: " + user.getUsername());
+            return VerificationResult.NO_VERIFICATION;
         }
 
         VerificationTokenDTO verfToken = optional.get();
         if (!verfToken.getToken().equals(token)) {
-            throw new ApplicationException("Provided token not match actual token");
+            return VerificationResult.NOT_MATCH;
         }
 
         if (verfToken.getTokenExpirationDate().before(DateTimeUtil.getCurrentDate())) {
-            mailService.sendConfirmationEmail(user);
-            throw new ApplicationException("Activation link has expire, new link has been sent to your email.");
+            return VerificationResult.RESENT;
         }
 
-        user.setEmailConfirmed(true);
         verificationTokenRepository.setAsUsed(verfToken.getUser().getId());
-        userRepository.update(user);
+        return VerificationResult.OK;
     }
 
 }

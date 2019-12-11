@@ -27,9 +27,6 @@ public class UserController {
     private VerificationTokenService verificationTokenService;
 
     @Autowired
-    private ResetPasswordService resetPasswordService;
-
-    @Autowired
     private MailService mailService;
 
 
@@ -107,7 +104,7 @@ public class UserController {
         if (!user.isPresent()) {
             return ErrorResponse.createError("User don't exists");
         }
-        resetPasswordService.verifyChangePasswordToken(user.get(), token);
+        verificationTokenService.verifyChangePasswordToken(user.get(), token);
         userService.changePassword(user.get(), userPassword.getPassword());
 
         Map<String, String> body = new HashMap<>();
