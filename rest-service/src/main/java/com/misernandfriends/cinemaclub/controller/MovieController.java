@@ -26,4 +26,9 @@ public class MovieController {
     public String getMovieNYTReviews(@RequestParam(value = "title") String title) {
         return reviewService.getNYTMovieReview(title);
     }
+
+    @GetMapping("movie/get/search")
+    public String getMovieByQuery(@RequestParam(value = "query") String query) {
+        return movieService.getMovieByQuery(query);
+    }
 }
