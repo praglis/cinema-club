@@ -1,6 +1,7 @@
 package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,16 @@ public class MovieController {
     @Autowired
     private MovieFetchServiceLocal movieService;
 
+    @Autowired
+    private ReviewServiceLocal reviewService;
+
     @GetMapping("movie/get")
     public String getMovieDetail(@RequestParam(value = "id") Integer id) {
         return movieService.getMovieById(id);
+    }
+
+    @GetMapping("movie/get/reviews")
+    public String getMovieNYTReviews(@RequestParam(value = "title") String title) {
+        return reviewService.getNYTMovieReview(title);
     }
 }
