@@ -12,4 +12,11 @@ public class ReviewService implements ReviewServiceLocal {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(uri, String.class);
     }
+
+    @Override
+    public String getNYTMovieReview(String title) {
+        final String uri = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=" + title + "&api-key=iDAhRto0lVh4h1FAhnLiYTHjHePGWVLL";
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(uri, String.class);
+    }
 }
