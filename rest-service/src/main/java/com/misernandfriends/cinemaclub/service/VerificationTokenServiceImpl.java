@@ -46,12 +46,12 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public void verifyChangePasswordToken(UserDTO user, String token) {
         VerificationResult result = verifyToken(user, token, VerificationTokenDTO.Type.PASSWORD_VERIFICATION);
         switch (result) {
-            case NO_VERIFICATION:
-                throw new ApplicationException("There is no verification needed for user: " + user.getUsername());
             case NOT_MATCH:
                 throw new ApplicationException("Provided token not match actual token");
             case RESENT:
-                throw new ApplicationException("Activation link has expire, new link has been sent to your email.");
+                throw new ApplicationException("Link has expire, new link has been sent to your email.");
+            default:
+                throw new ApplicationException("Link is not working propoerly");
         }
     }
 
@@ -106,7 +106,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             return VerificationResult.RESENT;
         }
 
-        verificationTokenRepository.setAsUsed(verfToken.getUser().getId());
+        verificationTokenRepository.setAsUsed(verfToken.getUser().getId(),type);
         return VerificationResult.OK;
     }
 

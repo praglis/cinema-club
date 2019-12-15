@@ -19,13 +19,16 @@ public class VerificationTokenDTO implements Serializable {
         public static String PASSWORD_VERIFICATION = "P";
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
     @Column(nullable = false)
     private Date infoCD;
 
     private Date infoRD;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @Id
     private UserDTO user;
 
     private String token;

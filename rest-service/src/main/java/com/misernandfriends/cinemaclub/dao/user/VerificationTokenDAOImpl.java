@@ -33,13 +33,15 @@ public class VerificationTokenDAOImpl extends AbstractDAOImpl<VerificationTokenD
     }
 
     @Override
-    public void setAsUsed(Long id) {
+    public void setAsUsed(Long id, String type) {
         Date currDate = DateTimeUtil.getCurrentDate();
         String queryTxt = "UPDATE " + getEntityName() + " data SET data.infoRD = :date WHERE " +
-                "data.user.id = :id";
+                "data.user.id = :id AND data.tokenType = :type" ;
 
         em.createQuery(queryTxt)
                 .setParameter("date", currDate)
+                .setParameter("type", type)
                 .setParameter("id", id).executeUpdate();
+
     }
 }
