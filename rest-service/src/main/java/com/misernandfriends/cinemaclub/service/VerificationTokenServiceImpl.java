@@ -106,7 +106,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             return VerificationResult.RESENT;
         }
 
-        verificationTokenRepository.setAsUsed(verfToken.getUser().getId(),VerificationTokenDTO.Type.EMAIL_VERIFICATION);
+        verificationTokenRepository.setAsUsed(verfToken.getUser().getId(),type);
         return VerificationResult.OK;
     }
 
