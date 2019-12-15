@@ -9,5 +9,5 @@ public interface VerificationTokenRepository extends AbstractRepository<Verifica
 
     Optional<VerificationTokenDTO> getByUserId(Long userId, String type);
 
-    void setAsUsed(Long id);
+    void setAsUsed(Long id,String type);
 }
