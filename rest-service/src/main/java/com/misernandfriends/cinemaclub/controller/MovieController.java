@@ -22,9 +22,14 @@ public class MovieController {
         return movieService.getMovieById(id);
     }
 
-    @GetMapping("movie/get/reviews")
+    @GetMapping("movie/get/reviews/nyt")
     public String getMovieNYTReviews(@RequestParam(value = "title") String title) {
         return reviewService.getNYTMovieReview(title);
+    }
+
+    @GetMapping("movie/get/reviews/guardian")
+    public String getMovieGuardianReviews(@RequestParam(value = "title") String title) {
+        return reviewService.getGuardianMovieReview(title);
     }
 
     @GetMapping("movie/get/search")
