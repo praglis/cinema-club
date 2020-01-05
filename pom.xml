@@ -26,6 +26,7 @@
     <modules>
         <module>spring-eureka-server</module>
         <module>rest-service</module>
+        <module>premieres-fetcher</module>
     </modules>
 
     <dependencies>

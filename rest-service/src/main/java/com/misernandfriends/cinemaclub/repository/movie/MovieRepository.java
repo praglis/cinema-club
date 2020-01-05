@@ -9,4 +9,6 @@ public interface MovieRepository extends AbstractRepository<MovieDTO> {
 
     Optional<MovieDTO> getByApiUrl(String apiUrl);
 
+    Optional<MovieDTO> getByTitle(String title);
+
 }

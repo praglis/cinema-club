@@ -1,4 +1,4 @@
-# Ostatnia zmiana: 07-12-2019
+# Ostatnia zmiana: 22-12-2019 21:00
 
 
 # serivce name
@@ -15,6 +15,10 @@ spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 # Flyway
 spring.flyway.locations=classpath:db/migration/{vendor}
 spring.flyway.check-location=false
+spring.flyway.url=jdbc:postgresql://localhost:5432/postgres
+spring.flyway.user=postgres
+spring.flyway.password=admin
+spring.flyway.baseline-on-migrate=true
 
 # JPA
 spring.jpa.database=postgresql
@@ -22,7 +26,7 @@ spring.jpa.database=postgresql
 # Baza danych
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
-spring.datasource.url= jdbc:postgresql://localhost:5432/postgres
+spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
 spring.datasource.username=postgres
 spring.datasource.password=admin
 #change to validate on production
@@ -31,6 +35,7 @@ spring.jpa.hibernate.ddl-auto=update
 
 # Website
 custom.verification-token-link=http://localhost:4200/verification
+custom.password-token-link=http://localhost:4200/password
 
 # Mail
 custom.mail-options.host=smtp.gmail.com
