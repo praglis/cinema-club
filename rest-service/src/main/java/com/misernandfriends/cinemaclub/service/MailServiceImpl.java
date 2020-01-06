@@ -65,7 +65,7 @@ public class MailServiceImpl implements MailService {
             String verificationLink = customProperties.getVerificationTokenLink() +
                     "?token=" + verfToken.getToken() + "&username=" + user.getUsername();
 
-            String bodyText = "Welcome in Cinema Club!<br/>Please active your account by clicking the following link:<br/>" + verificationLink;
+            String bodyText = "Welcome in Cinema Club!<br/>Please activate your account by clicking the following link:<br/>" + verificationLink;
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));

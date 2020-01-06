@@ -30,4 +30,18 @@ public class MovieDAOImpl extends AbstractDAOImpl<MovieDTO> implements MovieRepo
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<MovieDTO> getByTitle(String title) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
+                "data.title = :title AND data.infoRD IS NULL";
+        TypedQuery<MovieDTO> query = em.createQuery(queryTxt, MovieDTO.class)
+                .setParameter("title", title);
+
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 }
