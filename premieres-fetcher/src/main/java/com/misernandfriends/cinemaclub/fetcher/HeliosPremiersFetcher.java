@@ -74,6 +74,7 @@ public class HeliosPremiersFetcher {
         }
         String dayMonth = getDayMonth(page);
         if (dayMonth == null) {
+            log.warn("Can't get date for {}, skipping", url);
             return;
         }
 

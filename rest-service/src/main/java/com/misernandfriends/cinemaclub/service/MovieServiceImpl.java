@@ -20,11 +20,6 @@ public class MovieServiceImpl implements MovieServiceLocal {
     @Autowired
     private MovieRepository movieRepository;
 
-    /** TODO: Aktualnie movieName jest przypisywany jako tutuł dla MovieDTo
-     *  MovieName jest zazwyczaj po polsku, a odpowiedź z API posiada tytul po angielsku
-     *  moze przechowywac rozne wersje jezykowe w bazie?
-     */
-
     @Override
     public MovieDTO getMovie(String movieName) {
         Optional<MovieDTO> movieOptional = movieRepository.getByTitle(movieName);
