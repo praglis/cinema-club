@@ -27,7 +27,9 @@ public class MovieDTO implements Serializable {
 
     private Date infoRD;
 
-    @Column(nullable = false)
     private String apiUrl;
+
+    @Column(nullable = false)
+    private String title;
 
 }

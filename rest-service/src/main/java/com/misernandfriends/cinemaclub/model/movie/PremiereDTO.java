@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.model.movie;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.misernandfriends.cinemaclub.model.cinema.CinemaDTO;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class PremiereDTO implements Serializable {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     private CinemaDTO cinema;
 
     @ManyToOne
