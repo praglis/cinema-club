@@ -6,7 +6,7 @@ spring.application.name=premiers-fetcher
 # port
 server.port=8220
 # eureka server url
-eureka.client.service-url.default-zone=http://localhost:8761
+eureka.client.service-url.default-zone=${SERVER_URL:http://localhost}:8761
 eureka.client.enabled=false
 
 # Usuwa jakis blad co wywala podczas uruchamianai zapewne niepotrzebne
@@ -21,16 +21,16 @@ spring.jpa.database=postgresql
 # Baza danych
 spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
-spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-spring.datasource.username=postgres
-spring.datasource.password=admin
+spring.datasource.url=${DB_URL:jdbc:postgresql://localhost:5432/postgres}
+spring.datasource.username=${DB_USERNAME:postgres}
+spring.datasource.password=${DB_PASSWORD:admin}
 #change to validate on production
 
 spring.jpa.hibernate.ddl-auto=update
 
 # Website
-custom.verification-token-link=http://localhost:4200/verification
-custom.password-token-link=http://localhost:4200/password
+custom.verification-token-link=${WEB_URL:http://localhost:4200}/verification
+custom.password-token-link=${WEB_URL:http://localhost:4200}/password
 
 # Mail
 custom.mail-options.host=smtp.gmail.com
