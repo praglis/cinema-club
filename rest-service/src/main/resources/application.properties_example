@@ -13,7 +13,6 @@ eureka.client.enabled=false
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
 
 # Flyway
-spring.flyway.enabled=false
 spring.flyway.locations=classpath:db/migration/{vendor}
 spring.flyway.check-location=false
 spring.flyway.url=${DB_URL:jdbc:postgresql://localhost:5432/postgres}
