@@ -11,8 +11,10 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "notification")
+@Table(name = "EVN_NOTIFICATIONS")
 public class NotificationDTO implements Serializable {
+
+    private static final long serialVersionUID = -2285030564208708033L;
 
     public interface Status {
         public static String SEND = "S";    // Notification has been send
@@ -25,19 +27,24 @@ public class NotificationDTO implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "NOT_ID")
+    @SequenceGenerator(name = "seq_evn_not_id", sequenceName = "seq_evn_not_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_evn_not_id")
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "NOT_USR_ID")
     private UserDTO user;
 
-    @Column(length = 1, nullable = false)
+    @Column(name = "NOT_STATUS", length = 1, nullable = false)
     private String status;
 
-    @Column(length = 1, nullable = false)
+    @Column(name = "NOT_TYPE",length = 1, nullable = false)
     private String type;
 
+    @Column(name = "NOT_DATE")
     private Date date;
 
+    @Column(name = "NOT_DESCRIPTION")
     private String description;
 }

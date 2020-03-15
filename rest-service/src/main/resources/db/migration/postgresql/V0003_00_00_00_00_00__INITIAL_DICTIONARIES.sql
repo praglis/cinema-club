@@ -1,0 +1,29 @@
+CREATE TABLE SYS_DIC_ITEMS (
+    DIT_ID int primary key,
+    DIT_INFO_CD timestamp not null,
+    DIT_NAME varchar(45) not null,
+    DIT_VALUE varchar(45) not null
+);
+
+CREATE TABLE SYS_DICTIONARIES (
+    DIC_ID int primary key,
+    DIC_DOMAIN varchar(45) not null
+);
+
+ALTER TABLE SYS_DIC_ITEMS
+ADD COLUMN DIT_DIC_ID int;
+
+ALTER TABLE SYS_DIC_ITEMS
+ADD FOREIGN KEY (DIT_DIC_ID) REFERENCES SYS_DICTIONARIES(DIC_ID);
+
+CREATE SEQUENCE seq_sys_dit_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;
+
+CREATE SEQUENCE seq_sys_dic_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;

@@ -11,8 +11,10 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "report")
+@Table(name = "USR_REPORTS")
 public class ReportDTO implements Serializable {
+
+    private static final long serialVersionUID = 5428445031484557055L;
 
     public interface STATUS {
         public static final String NEW = "N";
@@ -23,32 +25,41 @@ public class ReportDTO implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "REP_ID")
+    @SequenceGenerator(name = "seq_usr_rep_id", sequenceName = "seq_usr_rep_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usr_rep_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "REP_INFO_CD", nullable = false)
     private Date infoCD;
 
-    @Column(nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "REP_INFO_CU", nullable = false)
     private UserDTO infoCU;
 
+    @Column(name = "REP_INFO_RD", nullable = false)
     private Date infoRD;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "REP_INFO_RU", nullable = false)
     private UserDTO infoRU;
 
-    @Column(nullable = false, length = 1)
+    @Column(name = "REP_STATUS", nullable = false, length = 1)
     private String status;
 
+    @Column(name = "REP_DESCRIPTION")
     private String description;
 
-    @Column(nullable = false)
+    @Column(name = "REP_URL", nullable = false, length = 100)
     private String url;
 
-    @Column(nullable = false, length = 1)
+    @Column(name = "REP_TYPE", nullable = false, length = 1)
     private String type;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "REP_ASSIGNED_USER_ID", nullable = false)
     private UserDTO assignedUser;
 
+    @Column(name = "REP_ASSIGNED_MSG")
     private String assignedMessage;
-
 }

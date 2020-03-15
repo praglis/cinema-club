@@ -11,20 +11,24 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "actor")
+@Table(name = "MOV_ACTORS")
 public class ActorDTO implements Serializable {
 
+    private static final long serialVersionUID = 8719282548093362444L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ACT_ID")
+    @SequenceGenerator(name = "seq_mov_act_id", sequenceName = "seq_mov_act_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_mov_act_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "ACT_INFO_CD", nullable = false)
     private Date infoCD;
 
-    @Column(nullable = false)
+    @Column(name = "ACT_INFO_RD", nullable = false)
     private Date infoRD;
 
-    @Column(nullable = false)
+    @Column(name = "ACT_API_URL", nullable = false)
     private String apiUrl;
 
 }

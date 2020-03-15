@@ -15,21 +15,26 @@ import java.util.Date;
 @Filters({
         @Filter(name = "movieFiler", condition = "infoRD IS NULL")
 })
-@Table(name = "movie")
+@Table(name = "MOV_MOVIES")
 public class MovieDTO implements Serializable {
 
+    private static final long serialVersionUID = -470973098276486768L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MOV_ID")
+    @SequenceGenerator(name = "seq_mov_id", sequenceName = "seq_mov_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_mov_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "MOV_INFO_CD", nullable = false)
     private Date infoCD;
 
+    @Column(name = "MOV_INFO_RD", nullable = false)
     private Date infoRD;
 
+    @Column(name = "MOV_API_URL", nullable = false)
     private String apiUrl;
 
-    @Column(nullable = false)
+    @Column(name = "MOV_TITLE", nullable = false)
     private String title;
-
 }

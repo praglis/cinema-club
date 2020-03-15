@@ -1,0 +1,39 @@
+CREATE TABLE USR_COMMENTS (
+    UCM_ID int primary key,
+    UCM_INFO_CD timestamp not null,
+    UCM_INFO_CU int not null,
+    UCM_INFO_RD timestamp,
+    UCM_INFO_RU int not null,
+    UCM_DESCRIPTION text not null,
+    FOREIGN KEY (UCM_INFO_CU) REFERENCES USR_USERS(USR_ID),
+    FOREIGN KEY (UCM_INFO_RU) REFERENCES USR_USERS(USR_ID)
+);
+
+CREATE TABLE USR_REVIEWS (
+     URV_ID int primary key,
+     URV_INFO_CD timestamp not null,
+     URV_INFO_CU int not null,
+     URV_INFO_RD timestamp,
+     URV_INFO_RU int not null,
+     URV_MOVIE_ID int,
+     URV_CINEMA_ID int,
+     URV_STATEMENT varchar(500),
+     URV_HIGHLIGHTED boolean,
+     URV_LIKES int,
+     FOREIGN KEY (URV_INFO_CU) REFERENCES USR_USERS(USR_ID),
+     FOREIGN KEY (URV_INFO_RU) REFERENCES USR_USERS(USR_ID),
+     FOREIGN KEY (URV_MOVIE_ID) REFERENCES MOV_MOVIES(MOV_ID),
+     FOREIGN KEY (URV_CINEMA_ID) REFERENCES MOV_CINEMAS(CIN_ID)
+);
+
+CREATE SEQUENCE seq_usr_ucm_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;
+
+CREATE SEQUENCE seq_usr_urv_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;

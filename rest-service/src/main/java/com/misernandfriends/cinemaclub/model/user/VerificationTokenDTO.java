@@ -11,31 +11,39 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "verification_token")
+@Table(name = "USR_VERIFICATION_TOKENS")
 public class VerificationTokenDTO implements Serializable {
 
+    private static final long serialVersionUID = 5979000802718522459L;
+
     public interface Type {
-        public static String EMAIL_VERIFICATION = "E";
-        public static String PASSWORD_VERIFICATION = "P";
+        String EMAIL_VERIFICATION = "E";
+        String PASSWORD_VERIFICATION = "P";
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Column(name = "VRT_ID")
+    @SequenceGenerator(name = "seq_usr_vrt_id", sequenceName = "seq_usr_vrt_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usr_vrt_id")
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "VRT_INFO_CD", nullable = false)
     private Date infoCD;
 
+    @Column(name = "VRT_INFO_RD")
     private Date infoRD;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "VRT_USR_ID", nullable = false)
     private UserDTO user;
 
+    @Column(name = "VRT_TOKEN")
     private String token;
 
+    @Column(name = "VRT_TOKEN_EXP")
     private Date tokenExpirationDate;
 
-    @Column(length = 1, nullable = false)
+    @Column(name = "VRT_TOKEN_TYPE", length = 1, nullable = false)
     private String tokenType;
 
     @PrePersist
