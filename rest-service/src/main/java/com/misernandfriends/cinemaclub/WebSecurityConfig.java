@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/register", "/home", "/welcome", "/movies/best", "/movies/popular",
                         "/login", "/verifyuser", "/movie/get", "/movie/get/search", "/movie/get/reviews/nyt",
-                        "/movie/get/reviews/guardian", "/changePassword", "/resetPassword","/cinema/*", "/cinema/*/premiers").permitAll()
+                        "/movie/get/reviews/guardian", "/changePassword", "/resetPassword","/cinema/*", "/cinema/*/premiers", "swagger-ui.html#/", "swagger-ui.html#/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()
