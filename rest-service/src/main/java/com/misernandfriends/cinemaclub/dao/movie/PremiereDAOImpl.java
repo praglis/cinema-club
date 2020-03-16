@@ -64,7 +64,7 @@ public class PremiereDAOImpl extends AbstractDAOImpl<PremiereDTO> implements Pre
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         StringBuilder queryTxt = new StringBuilder("SELECT data FROM " + getEntityName() + " data " +
-                "WHERE data.movie.infoRD IS NULL AND data.cinema.infoRD IS NULL ");
+                "WHERE data.movie.infoRD IS NULL AND data.cinema.infoRD IS NULL AND data.cinema.id = :cinemaId");
         if (params.containsKey("fromDate")) {
             queryTxt.append(" AND ").append("date >= :fromDate");
         }
@@ -75,7 +75,8 @@ public class PremiereDAOImpl extends AbstractDAOImpl<PremiereDTO> implements Pre
             queryTxt.append(" AND ").append("date = :onDay");
         }
 
-        TypedQuery<PremiereDTO> query = em.createQuery(queryTxt.toString(), PremiereDTO.class);
+        TypedQuery<PremiereDTO> query = em.createQuery(queryTxt.toString(), PremiereDTO.class)
+                .setParameter("cinemaId", cinemaId);
         params.forEach((s, s2) -> {
             try {
                 query.setParameter(s, sdf.parse(s2));
