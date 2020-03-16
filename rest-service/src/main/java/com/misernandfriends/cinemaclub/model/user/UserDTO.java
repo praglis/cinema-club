@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.model.user;
 import com.misernandfriends.cinemaclub.model.AddressDTO;
 import com.misernandfriends.cinemaclub.model.event.EventDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,8 +14,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "\"user\"")
+@NoArgsConstructor
+@Table(name = "USR_USERS")
 public class UserDTO implements Serializable {
+
+    private static final long serialVersionUID = 1831528581331720348L;
 
     public interface Status {
         public final String ACTIVE = "A";
@@ -29,58 +33,67 @@ public class UserDTO implements Serializable {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USR_ID")
+    @SequenceGenerator(name = "seq_usr_user_id", sequenceName = "seq_usr_user_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usr_user_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "USR_USERNAME", nullable = false, unique = true, length = 45)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "USR_PASSWORD", nullable = false)
     private String password;
 
+    @Column(name = "USR_NAME", length = 45)
     private String name;
 
+    @Column(name = "USR_SURNAME", length = 45)
     private String surname;
 
-    @Column(nullable = false)
+    @Column(name = "USR_ENROLMENT_DATE", nullable = false)
     private Date enrolmentDate;
 
-    @Column(nullable = false)
+    @Column(name = "USR_ACCOUNT_STATUS", nullable = false, length = 1)
     private String status;
 
+    @Column(name = "USR_BIRTHDATE")
     private Date birthday;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "USR_EMAIL", nullable = false, unique = true, length = 150)
     private String email;
 
+    @Column(name = "USR_EMAIL_CONFIRMED")
     private Boolean emailConfirmed;
 
+    @Column(name = "USR_EMAIL_NEW", unique = true, length = 150)
     private String newEmail;
 
+    @Column(name = "USR_PHONE_NO", length = 45)
     private String phoneNo;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "USR_ADR_ID")
     private AddressDTO address = new AddressDTO();
 
+    @Column(name = "USR_TYPE", length = 1)
     private String type;
 
     @ManyToOne
+    @JoinColumn(name = "USR_TIER_ID", nullable = false)
     private TierDTO tier;
 
+    @Column(name = "USR_POINTS")
     private Long points;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
     private Set<RoleDTO> roles;
 
     @Transient
     private String passwordConfirm;
 
     @ManyToMany(mappedBy = "participants")
+    @Transient
     private Set<EventDTO> events;
-
-    public UserDTO() {
-
-    }
 
     public UserDTO(String username, String password, String passwordConfirm) {
         this.username = username;

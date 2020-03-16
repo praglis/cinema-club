@@ -10,14 +10,18 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "dictionary")
+@Table(name = "SYS_DICTIONARIES")
 public class DictionaryDTO implements Serializable {
 
+    private static final long serialVersionUID = 7506239043800375586L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "DIC_ID")
+    @SequenceGenerator(name = "seq_sys_dic_id", sequenceName = "seq_sys_dic_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_sys_dic_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "DIC_DOMAIN", nullable = false, length = 45)
     private String domain;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dictionary")

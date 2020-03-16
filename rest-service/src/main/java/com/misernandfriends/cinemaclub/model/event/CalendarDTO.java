@@ -13,31 +13,38 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "calendar")
+@Table(name = "EVN_CALENDARS")
 public class CalendarDTO implements Serializable {
 
+    private static final long serialVersionUID = -3871483902668286621L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CAL_ID")
+    @SequenceGenerator(name = "seq_evn_cal_id", sequenceName = "seq_evn_cal_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_evn_cal_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "CAL_INFO_CD", nullable = false)
     private Date infoCD;
 
-    @Column(nullable = false)
+    @Column(name = "CAL_INFO_RD", nullable = false)
     private Date infoRD;
 
     @ManyToOne
+    @JoinColumn(name = "CAL_USR_ID")
     private UserDTO user;
 
     @ManyToOne
+    @JoinColumn(name = "CAL_MOV_ID")
     private MovieDTO movie;
 
     @ManyToOne
+    @JoinColumn(name = "CAL_CIN_ID")
     private CinemaDTO cinema;
 
-    @Column(nullable = false)
+    @Column(name = "CAL_DATE", nullable = false)
     private Date date;
 
+    @Column(name = "CAL_TIME")
     private Integer time;
-
 }
