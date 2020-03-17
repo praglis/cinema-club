@@ -79,7 +79,7 @@ public class UserDTO implements Serializable {
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "USR_TIER_ID", nullable = false)
+    @JoinColumn(name = "USR_TIER_ID")
     private TierDTO tier;
 
     @Column(name = "USR_POINTS")
