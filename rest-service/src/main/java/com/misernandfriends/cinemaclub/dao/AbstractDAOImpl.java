@@ -26,15 +26,15 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public T create(T entity) {
-        fillInfoCd(entity);
+        setCurrentDate(entity, "setInfoCD");
         em.persist(entity);
         return entity;
     }
 
-    private void fillInfoCd(T entity) {
+    private void setCurrentDate(T entity, String methodName) {
         Method setInfoCD;
         try {
-            setInfoCD = entity.getClass().getMethod("setInfoCD", Date.class);
+            setInfoCD = entity.getClass().getMethod(methodName, Date.class);
         } catch (NoSuchMethodException e) {
             return;
         }
@@ -48,6 +48,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public T update(T entity) {
+        setCurrentDate(entity, "setInfoMD");
         return em.merge(entity);
     }
 
