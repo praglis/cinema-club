@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -82,11 +83,20 @@ public class UserDTO implements Serializable {
     @JoinColumn(name = "USR_TIER_ID")
     private TierDTO tier;
 
+    @Column(name = "USR_BANNED")
+    private Boolean banned;
+
     @Column(name = "USR_POINTS")
     private Long points;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userID")
-    private Set<RoleDTO> roles;
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "USR_ID"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "ROL_ID"))
+    private Collection<RoleDTO> roles;
 
     @Transient
     private String passwordConfirm;

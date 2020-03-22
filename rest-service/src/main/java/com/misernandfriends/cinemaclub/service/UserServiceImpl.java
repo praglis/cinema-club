@@ -1,7 +1,9 @@
 package com.misernandfriends.cinemaclub.service;
 
+import com.misernandfriends.cinemaclub.model.enums.RoleEnum;
 import com.misernandfriends.cinemaclub.model.user.RoleDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.repository.user.RoleRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
@@ -11,9 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
 
     @Override
     @Transactional
@@ -35,11 +39,15 @@ public class UserServiceImpl implements UserService {
         user.setType("U");
         user.setEmailConfirmed(false);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        RoleDTO role = new RoleDTO();
-        role.setName("USER");
-        Set<RoleDTO> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
+        Optional<RoleDTO> userRole = roleRepository.findByName(RoleEnum.USER.getValue());
+        if(userRole.isPresent()) {
+            user.setRoles(Arrays.asList(userRole.get()));
+        } else {
+            RoleDTO role = new RoleDTO();
+            role.setName(RoleEnum.USER.getValue());
+            roleRepository.create(role);
+            user.setRoles(Arrays.asList(role));
+        }
         userRepository.create(user);
         mailService.sendConfirmationEmail(user);
     }

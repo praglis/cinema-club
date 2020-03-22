@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub;
 
+import com.misernandfriends.cinemaclub.model.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,23 +29,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .authorizeRequests()
-                .antMatchers("/register", "/home", "/welcome", "/movies/best", "/movies/popular",
-                        "/login", "/verifyuser", "/movie/get", "/movie/get/search", "/movie/get/reviews/nyt",
-                        "/movie/get/reviews/guardian", "/changePassword", "/resetPassword","/cinema/*", "/cinema/*/premiers").permitAll()
+                .antMatchers(  "/movies/best","/movies/popular",
+                        "/movie/get", "/movie/get/search", "/movie/get/reviews/nyt",
+                        "/movie/get/reviews/guardian", "/changePassword", "/cinema/*", "/cinema/*/premiers", "/home", "/welcome").hasAnyAuthority(RoleEnum.USER.getValue(),RoleEnum.ADMIN.getValue())
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .logout()
-                .permitAll().and().csrf().disable();
+                .antMatchers("/register", "/login", "/resetPassword",  "/verifyuser").permitAll()
+                .antMatchers("/admin/**","/admin/","/admin" ).hasAuthority(RoleEnum.ADMIN.getValue())
+                .and().csrf().disable();
     }
 
     @Bean

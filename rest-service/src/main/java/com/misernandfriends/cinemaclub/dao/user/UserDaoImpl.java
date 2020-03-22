@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -40,6 +42,17 @@ public class UserDaoImpl extends AbstractDAOImpl<UserDTO> implements UserReposit
             return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public List<UserDTO> findAll() {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data ";
+        TypedQuery<UserDTO> query = em.createQuery(queryTxt, UserDTO.class);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return Collections.EMPTY_LIST;
         }
     }
 }
