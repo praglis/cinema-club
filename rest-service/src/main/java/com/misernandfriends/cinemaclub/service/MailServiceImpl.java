@@ -1,6 +1,8 @@
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.CustomProperties;
+import com.misernandfriends.cinemaclub.model.cache.CacheValue;
+import com.misernandfriends.cinemaclub.model.cache.LazyCache;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
@@ -65,11 +67,11 @@ public class MailServiceImpl implements MailService {
             String verificationLink = customProperties.getVerificationTokenLink() +
                     "?token=" + verfToken.getToken() + "&username=" + user.getUsername();
 
-            String bodyText = "Welcome in Cinema Club!<br/>Please activate your account by clicking the following link:<br/>" + verificationLink;
+            String bodyText = LazyCache.getValue(CacheValue._EMAIL_CONFIGURATION.ACTIVATE_MESSAGE) + verificationLink;
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-            message.setSubject("Confirm your email");
+            message.setSubject(LazyCache.getValue(CacheValue._EMAIL_CONFIGURATION.ACTIVATE_TITLE));
             message.setContent(bodyText, "text/html; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
@@ -89,11 +91,11 @@ public class MailServiceImpl implements MailService {
             String verificationLink = customProperties.getPasswordTokenLink() +
                     "?token=" + verfToken.getToken() + "&username=" + user.getUsername();
 
-            String bodyText = "Welcome in Cinema Club!<br/>Change your password by clicking the following link:<br/>" + verificationLink;
+            String bodyText = LazyCache.getValue(CacheValue._EMAIL_CONFIGURATION.PWD_RESET_MESSAGE) + verificationLink;
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(user.getEmail()));
-            message.setSubject("Change your password");
+            message.setSubject(LazyCache.getValue(CacheValue._EMAIL_CONFIGURATION.PWD_RESET_TITLE));
             message.setContent(bodyText, "text/html; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
