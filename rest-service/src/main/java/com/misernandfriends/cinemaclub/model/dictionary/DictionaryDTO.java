@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.model.dictionary;
 
+import com.misernandfriends.cinemaclub.model.cache.EnumCache;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,4 +27,22 @@ public class DictionaryDTO implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dictionary")
     private List<DictionaryItemDTO> items;
+
+
+    public String getValue(EnumCache itemName) {
+        DictionaryItemDTO item = get(itemName);
+        if (item != null) {
+            return item.getValue();
+        }
+        return null;
+    }
+
+    public DictionaryItemDTO get(EnumCache itemName) {
+        for (DictionaryItemDTO item : items) {
+            if (item.getName().equals(itemName.name())) {
+                return item;
+            }
+        }
+        return null;
+    }
 }
