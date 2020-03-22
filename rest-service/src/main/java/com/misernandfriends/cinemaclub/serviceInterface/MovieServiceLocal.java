@@ -6,4 +6,6 @@ public interface MovieServiceLocal {
 
     MovieDTO getMovie(String movieName);
 
+    MovieDTO getMovie(Integer movieId);
+
 }

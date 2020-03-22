@@ -31,6 +31,13 @@ public class UserReviewDTO implements Serializable {
     @JoinColumn(name = "URV_INFO_CU", nullable = false)
     private UserDTO infoCU;
 
+    @Column(name = "URV_INFO_MD")
+    private Date infoMD;
+
+    @ManyToOne
+    @JoinColumn(name = "URV_INFO_MU")
+    private UserDTO infoMU;
+
     @Column(name = "URV_INFO_RD")
     private Date infoRD;
 
