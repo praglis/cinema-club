@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -67,5 +69,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserDTO> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public List<String> getAllUsers() {
+        List<UserDTO> userDTOList = userRepository.findAll();
+        List<String> userNames = userDTOList.stream().map(UserDTO::getUsername).collect(Collectors.toList());
+        return userNames;
     }
 }

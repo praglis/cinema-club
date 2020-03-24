@@ -9,9 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -25,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
         Optional<UserDTO> optionalUserDTO = userRepository.findByUsername(userName);
         if(optionalUserDTO.isPresent()){
             UserDTO userDTO = optionalUserDTO.get();
-            userDTO.setBanned(true);
+            userDTO.setStatus("B");
             userRepository.update(userDTO);
             return ResponseEntity.ok().build();
         } else {
@@ -33,12 +31,5 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
         }
-    }
-
-    @Override
-    public List<String> getAllUsers() {
-        List<UserDTO> userDTOList = userRepository.findAll();
-        List<String> userNames = userDTOList.stream().map(UserDTO::getUsername).collect(Collectors.toList());
-        return userNames;
     }
 }
