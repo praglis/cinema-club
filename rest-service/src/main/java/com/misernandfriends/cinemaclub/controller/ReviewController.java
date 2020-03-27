@@ -55,4 +55,14 @@ public class ReviewController {
         reviewService.removeUserReview(reviewId, userOptional.get());
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("userReview/{reviewId}/like")
+    public ResponseEntity likeReview(@PathVariable Long reviewId) {
+        Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userOptional.isPresent()) {
+            return ErrorResponse.createError("User doesn't not exists");
+        }
+        reviewService.likeReview(reviewId, userOptional.get());
+        return ResponseEntity.noContent().build();
+    }
 }

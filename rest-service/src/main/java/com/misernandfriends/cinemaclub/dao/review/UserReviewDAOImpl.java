@@ -28,7 +28,7 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
     @Override
     public List<UserReviewDTO> getUserReviews(Long userId, int maxResults) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
-                "data.infoCU.id = :userId AND data.infoRD IS NULL";
+                "data.infoCU.id = :userId AND data.infoRD IS NULL ORDER BY data.likes DESC, data.infoCU";
         TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
                 .setParameter("userId", userId)
                 .setMaxResults(maxResults);
@@ -42,7 +42,7 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
     @Override
     public List<UserReviewDTO> getUserMovieReviews(String movieUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
-                "data.infoRD is NULL AND data.movie.apiUrl = :movieId";
+                "data.infoRD is NULL AND data.movie.apiUrl = :movieId ORDER BY data.likes DESC, data.infoCU";
 
         TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
                 .setParameter("movieId", movieUrl);
