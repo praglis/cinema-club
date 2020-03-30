@@ -2,14 +2,17 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.serviceInterface.*;
+import com.misernandfriends.cinemaclub.serviceInterface.MailService;
+import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
+import com.misernandfriends.cinemaclub.serviceInterface.UserService;
+import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -123,5 +126,10 @@ public class UserController {
         Map<String, String> body = new HashMap<>();
         body.put("username", user.getUsername());
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUsers")
+    public List<String> getUsers(){
+        return userService.getAllUsers();
     }
 }
