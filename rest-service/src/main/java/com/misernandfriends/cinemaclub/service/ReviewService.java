@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.pojo.GuardianResponse;
 import com.misernandfriends.cinemaclub.pojo.GuardianResult;
 import com.misernandfriends.cinemaclub.pojo.UserReview;
@@ -13,6 +14,7 @@ import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.misernandfriends.cinemaclub.utils.UrlHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,14 +36,14 @@ public class ReviewService implements ReviewServiceLocal {
 
     @Override
     public String getNYTCriticsPicksReview() {
-        final String uri = "https://api.nytimes.com/svc/movies/v2/reviews/picks.json?api-key=iDAhRto0lVh4h1FAhnLiYTHjHePGWVLL";
+        String uri = new UrlHelper(CacheValue._API_URLS.NYT_API_URL).build();
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(uri, String.class);
     }
 
     @Override
     public String getNYTMovieReview(String title) {
-        final String uri = "https://api.nytimes.com/svc/movies/v2/reviews/search.json?query=" + title + "&api-key=iDAhRto0lVh4h1FAhnLiYTHjHePGWVLL";
+        String uri = new UrlHelper(CacheValue._API_URLS.NYT_API_URL_QUERY).setQuery(title).build();
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(uri, String.class);
     }
@@ -50,7 +52,7 @@ public class ReviewService implements ReviewServiceLocal {
     public String getGuardianMovieReview(String title) {
         ObjectMapper m = new ObjectMapper();
 
-        String uri = "https://content.guardianapis.com/search?api-key=5ecfbb08-6408-46ca-aa33-60985a0f1f83&q=" + title + " review";
+        String uri = new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_URL_QUERY).setQuery(title).build();
         RestTemplate restTemplate = new RestTemplate();
         String json = restTemplate.getForObject(uri, String.class);
 
@@ -70,7 +72,7 @@ public class ReviewService implements ReviewServiceLocal {
         Optional<GuardianResult> optional = allMatching.getResponse().getResults().stream().filter(e -> e.getWebTitle().contains(title + " review ")).findFirst();
 
         if (optional.isPresent()) {
-            uri = optional.get().getApiUrl() + "?api-key=5ecfbb08-6408-46ca-aa33-60985a0f1f83&show-fields=byline,trailText";
+            uri = optional.get().getApiUrl() + CacheValue._API_URLS.GUARDIAN_API_KEY + "&show-fields=byline,trailText";
             return restTemplate.getForObject(uri, String.class);
         }
 
