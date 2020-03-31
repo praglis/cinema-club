@@ -35,7 +35,7 @@ public class UserController {
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
-    public ResponseEntity userName() {
+    public ResponseEntity user() {
         String currentPrincipalName = securityService.findLoggedInUsername();
         Optional<UserDTO> user = userService.findByUsername(currentPrincipalName);
         Map<String, Optional<UserDTO>> body = new HashMap<>();
