@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,15 +27,15 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public T create(T entity) {
-        fillInfoCd(entity);
+        setCurrentDate(entity, "setInfoCD");
         em.persist(entity);
         return entity;
     }
 
-    private void fillInfoCd(T entity) {
+    private void setCurrentDate(T entity, String methodName) {
         Method setInfoCD;
         try {
-            setInfoCD = entity.getClass().getMethod("setInfoCD", Date.class);
+            setInfoCD = entity.getClass().getMethod(methodName, Date.class);
         } catch (NoSuchMethodException e) {
             return;
         }
@@ -48,6 +49,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public T update(T entity) {
+        setCurrentDate(entity, "setInfoMD");
         return em.merge(entity);
     }
 
@@ -60,6 +62,12 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Override
     public Optional<T> getById(long id) {
         return Optional.ofNullable(em.find(getEntityClazz(), id));
+    }
+
+    @Override
+    public List<T> getAll() {
+        String query = "SELECT data FROM " + getEntityName() + " data";
+        return em.createQuery(query, getEntityClazz()).getResultList();
     }
 
     protected abstract Class<T> getEntityClazz();

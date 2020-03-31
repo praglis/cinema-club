@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -126,5 +127,10 @@ public class UserController {
         Map<String, String> body = new HashMap<>();
         body.put("username", user.getUsername());
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @GetMapping("/getUsers")
+    public List<String> getUsers(){
+        return userService.getAllUsers();
     }
 }

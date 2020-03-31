@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
-@RestController(value = "")
+@RestController
 @RequestMapping("/cinema")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CinemaController {
 
     @Autowired

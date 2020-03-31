@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.serviceInterface;
 
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -10,4 +11,5 @@ public interface UserService {
 
     Optional<UserDTO> findByUsername(String username);
     Optional<UserDTO> findByEmail(String email);
+    List<String> getAllUsers();
 }

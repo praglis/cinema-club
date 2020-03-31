@@ -5,11 +5,12 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "USR_ROLES")
+@Table(name = "SYS_ROLES")
 public class RoleDTO implements Serializable {
 
     private static final long serialVersionUID = 8012462160665822728L;
@@ -23,6 +24,6 @@ public class RoleDTO implements Serializable {
     @Column(name = "ROL_NAME")
     private String name;
 
-    @Column(name = "ROL_USR_ID")
-    private Integer userID;
+    @ManyToMany(mappedBy = "roles")
+    private List<UserDTO> users;
 }
