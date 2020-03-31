@@ -2,11 +2,13 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.serviceInterface.*;
+import com.misernandfriends.cinemaclub.serviceInterface.MailService;
+import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
+import com.misernandfriends.cinemaclub.serviceInterface.UserService;
+import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -34,8 +36,9 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity userName() {
         String currentPrincipalName = securityService.findLoggedInUsername();
-        Map<String, String> body = new HashMap<>();
-        body.put("username", currentPrincipalName);
+        Optional<UserDTO> user = userService.findByUsername(currentPrincipalName);
+        Map<String, Optional<UserDTO>> body = new HashMap<>();
+        body.put("username", user);
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
@@ -99,7 +102,7 @@ public class UserController {
 
     @PostMapping("/changePassword")
     public ResponseEntity changePassword(@RequestBody UserDTO userPassword, @RequestParam(name = "token") String token,
-                                            @RequestParam(name = "username") String username) {
+                                         @RequestParam(name = "username") String username) {
         Optional<UserDTO> user = userService.findByUsername(username);
         if (!user.isPresent()) {
             return ErrorResponse.createError("User don't exists");
