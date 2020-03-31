@@ -20,4 +20,6 @@ public interface ReviewServiceLocal {
     void editUserReview(UserReview userReviewData, UserDTO user);
 
     void removeUserReview(Long reviewId, UserDTO user);
+
+    void likeReview(Long reviewId, UserDTO user);
 }

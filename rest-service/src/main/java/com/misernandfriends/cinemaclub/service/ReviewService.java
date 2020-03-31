@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
+import com.misernandfriends.cinemaclub.model.cache.LazyCache;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
@@ -104,6 +105,21 @@ public class ReviewService implements ReviewServiceLocal {
             throw new ApplicationException("Review with id " + reviewId + " not exists!");
         }
         userReviewRepository.delete(userReviewDTO, user);
+    }
+
+    @Override
+    public void likeReview(Long reviewId, UserDTO user) {
+        Optional<UserReviewDTO> reviewOptional = userReviewRepository.getById(reviewId);
+        if (!reviewOptional.isPresent()) {
+            throw new ApplicationException("Review with id " + reviewId + " does not exists!");
+        }
+        UserReviewDTO userReviewDTO = reviewOptional.get();
+        if (LazyCache.getValue(CacheValue._USER_REVIEW.CAN_LIKE_SELF_COMMENT).equals(LazyCache.TRUE) &&
+                userReviewDTO.getInfoCU().getId().equals(user.getId())) {
+            throw new ApplicationException("You cannot like comment that you wrote!");
+        }
+        userReviewDTO.setLikes(userReviewDTO.getLikes() + 1);
+        userReviewRepository.update(userReviewDTO);
     }
 
     @Override

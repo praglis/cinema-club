@@ -36,7 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(  "/movies/best","/movies/popular",
                         "/movie/get", "/movie/get/search", "/movie/get/reviews/nyt",
-                        "/movie/get/reviews/guardian", "/changePassword", "/cinema/*", "/cinema/*/premiers", "/home", "/welcome").hasAnyAuthority(RoleEnum.USER.getValue(),RoleEnum.ADMIN.getValue())
+                        "/movie/get/reviews/guardian", "/changePassword", "/cinema/*", "/cinema/*/premiers", "/home",
+                        "/welcome", "/reviews/*")
+                .hasAnyAuthority(RoleEnum.USER.getValue(),RoleEnum.ADMIN.getValue())
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",

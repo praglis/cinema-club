@@ -9,6 +9,8 @@ import java.util.NoSuchElementException;
 public class LazyCache {
 
     public final static HashMap<CacheValue, DictionaryDTO> dictionaries = new HashMap<>();
+    public static final String TRUE = "1";
+    public static final String FALSE = "0";
 
 
     public static void add(CacheValue cacheValue, DictionaryDTO dictionary) {

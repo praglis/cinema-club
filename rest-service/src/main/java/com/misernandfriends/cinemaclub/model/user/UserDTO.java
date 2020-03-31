@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.misernandfriends.cinemaclub.model.AddressDTO;
 import com.misernandfriends.cinemaclub.model.event.EventDTO;
 import lombok.Getter;
@@ -86,6 +87,7 @@ public class UserDTO implements Serializable {
     @Column(name = "USR_POINTS")
     private Long points;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "USERS_ROLES",
