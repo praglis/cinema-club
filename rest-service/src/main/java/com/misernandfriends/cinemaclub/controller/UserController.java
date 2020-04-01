@@ -35,10 +35,11 @@ public class UserController {
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
-    public ResponseEntity userName() {
+    public ResponseEntity user() {
         String currentPrincipalName = securityService.findLoggedInUsername();
-        Map<String, String> body = new HashMap<>();
-        body.put("username", currentPrincipalName);
+        Optional<UserDTO> user = userService.findByUsername(currentPrincipalName);
+        Map<String, Optional<UserDTO>> body = new HashMap<>();
+        body.put("username", user);
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
@@ -102,7 +103,7 @@ public class UserController {
 
     @PostMapping("/changePassword")
     public ResponseEntity changePassword(@RequestBody UserDTO userPassword, @RequestParam(name = "token") String token,
-                                            @RequestParam(name = "username") String username) {
+                                         @RequestParam(name = "username") String username) {
         Optional<UserDTO> user = userService.findByUsername(username);
         if (!user.isPresent()) {
             return ErrorResponse.createError("User don't exists");
