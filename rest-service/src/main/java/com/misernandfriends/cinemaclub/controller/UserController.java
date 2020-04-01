@@ -43,6 +43,12 @@ public class UserController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
+    @GetMapping("/user/update")
+    public void editProfile(@RequestBody UserDTO user) {
+        String currentPrincipalName = securityService.findLoggedInUsername();
+        Optional<UserDTO> userFromDB = userService.findByUsername(currentPrincipalName);
+        userService.updateProfile(user, userFromDB);
+    }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody UserDTO user) {
