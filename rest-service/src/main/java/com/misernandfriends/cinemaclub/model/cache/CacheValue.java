@@ -3,7 +3,8 @@ package com.misernandfriends.cinemaclub.model.cache;
 public enum CacheValue {
 
     API_URLS(_API_URLS.class),
-    EMAIL_CONFIGURATION(_EMAIL_CONFIGURATION.class);
+    EMAIL_CONFIGURATION(_EMAIL_CONFIGURATION.class),
+    USER_REVIEW(_USER_REVIEW.class);
 
     private Class<? extends Enum> value;
 
@@ -54,5 +55,9 @@ public enum CacheValue {
         PWD_RESET_TITLE,
         PWD_RESET_MESSAGE,
         ;
+    }
+
+    public enum _USER_REVIEW implements EnumCache {
+        CAN_LIKE_SELF_COMMENT
     }
 }
