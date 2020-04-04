@@ -60,7 +60,7 @@ public class MovieServiceImpl implements MovieServiceLocal {
             }
             MovieDTO movie = new MovieDTO();
             movie.setTitle(movieObj.getString("title"));
-            movie.setApiUrl(movieObj.getString("id"));
+            movie.setApiUrl(String.valueOf(movieObj.getInt("id")));
             movieRepository.create(movie);
             return movie;
         } catch (JSONException e) {
