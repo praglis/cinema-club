@@ -41,4 +41,7 @@ public class GuardianResult {
 
     @SerializedName("pillarName")
     private String pillarName;
+
+    @SerializedName("fields")
+    private FieldsResponse fields;
 }
