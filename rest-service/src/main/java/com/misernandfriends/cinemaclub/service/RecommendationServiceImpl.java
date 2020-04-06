@@ -1,28 +1,36 @@
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.model.cache.GenreCache;
+import com.misernandfriends.cinemaclub.model.movie.FavouriteDTO;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.actor.ActorDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
 import com.misernandfriends.cinemaclub.pojo.Cast;
 import com.misernandfriends.cinemaclub.pojo.Credits;
 import com.misernandfriends.cinemaclub.pojo.Crew;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
+import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class RecommendationServiceImpl implements RecommendationService {
 
     private static Double START_FIT_LEVEL = 20d;
@@ -39,6 +47,12 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Autowired
     private ActorRepository actorRepository;
+
+    @Autowired
+    private UserRatingRepository userRatingRepository;
+
+    @Autowired
+    private FavouriteRepository favouriteRepository;
 
     @Override
     public void processMovie(UserDTO user, MovieDTO movie) {
@@ -71,6 +85,21 @@ public class RecommendationServiceImpl implements RecommendationService {
                 actorRepository.create(ActorDTO.newInstance(crewId, crewObject.getName()));
             }
         }
+    }
+
+    @Override
+    public void getMovieBaseOnTaste(UserDTO user) {
+        int maxResults = 100;
+
+        List<FavouriteDTO> favourites = favouriteRepository.getUserFavourites(user.getId(), DateTimeUtil.minusDate(DateTimeUtil.getCurrentDate(), 1, Calendar.MONTH), maxResults);
+        ;
+        List<String> moviesUrls = favourites.stream().map(favouriteDTO -> favouriteDTO.getMovie().getApiUrl()).collect(Collectors.toList());
+        if (moviesUrls.size() < 100) {
+            List<UserRatingDTO> rating = userRatingRepository.getUserBestRatedMovies(user.getId(), maxResults - moviesUrls.size());
+            moviesUrls.addAll(rating.stream().map(userRatingDTO -> userRatingDTO.getMovie().getApiUrl()).collect(Collectors.toList()));
+        }
+        List<Long> similarTaste = recommendationRepository.getSimilarUser(moviesUrls, user.getId());
+
     }
 
     @Override

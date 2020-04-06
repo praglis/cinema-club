@@ -72,4 +72,21 @@ public class FavouriteDaoImpl extends AbstractDAOImpl<FavouriteDTO> implements F
             update(favourite);
         }
     }
+
+    @Override
+    public List<FavouriteDTO> getUserFavourites(Long userId, Date fromDate, int maxResults) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
+                "WHERE data.user.id = :userId AND data.infoRD is null AND data.infoCD >= :fromDate";
+
+        TypedQuery<FavouriteDTO> query = em.createQuery(queryTxt, FavouriteDTO.class)
+                .setMaxResults(maxResults)
+                .setParameter("fromDate", fromDate)
+                .setParameter("userId", userId);
+
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            return Collections.emptyList();
+        }
+    }
 }

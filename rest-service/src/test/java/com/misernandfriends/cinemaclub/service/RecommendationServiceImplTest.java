@@ -131,4 +131,11 @@ public class RecommendationServiceImplTest {
                 .getJSONObject(0);
     }
 
+
+    @Test
+    public void getMovieBaseOnTaste() {
+        UserDTO user = userRepository.findByUsername("1035499").get();
+        recommendationService.getMovieBaseOnTaste(user);
+    }
+
 }

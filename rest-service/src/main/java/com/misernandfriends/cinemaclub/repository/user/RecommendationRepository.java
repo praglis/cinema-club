@@ -12,4 +12,6 @@ public interface RecommendationRepository extends AbstractRepository<Recommendat
     List<RecommendationDTO> getByUser(Long userId, String type);
 
     List<RecommendationDTO> getRecommendation(Long userId, String type, int maxResult);
+
+    List<Long> getSimilarUser(List<String> moviesUrl, Long exceptUserId);
 }
