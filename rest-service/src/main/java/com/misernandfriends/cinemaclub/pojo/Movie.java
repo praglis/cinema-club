@@ -1,51 +1,54 @@
 package com.misernandfriends.cinemaclub.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class Movie {
-    @SerializedName("poster_path")
+    @JsonProperty("poster_path")
     private String posterPath;
 
-    @SerializedName("adult")
+    @JsonProperty("adult")
     private Boolean adult;
 
-    @SerializedName("overview")
+    @JsonProperty("overview")
     private String overview;
 
-    @SerializedName("release_date")
+    @JsonProperty("release_date")
     private String releaseDate;
 
-    @SerializedName("genre_ids")
-    private Integer[] genreIds;
+    @JsonProperty("genre_ids")
+    private List<Integer> genreIds;
 
-    @SerializedName("id")
+    @JsonProperty("id")
     private Integer id;
 
-    @SerializedName("original_title")
+    @JsonProperty("original_title")
     private String originalTitle;
 
-    @SerializedName("original_language")
+    @JsonProperty("original_language")
     private String originalLanguage;
 
-    @SerializedName("title")
+    @JsonProperty("title")
     private String title;
 
-    @SerializedName("backdrop_path")
+    @JsonProperty("backdrop_path")
     private String backdropPath;
 
-    @SerializedName("popularity")
-    private String popularity;
+    @JsonProperty("popularity")
+    private Double popularity;
 
-    @SerializedName("vote_count")
-    private String voteCount;
+    @JsonProperty("vote_count")
+    private Integer voteCount;
 
-    @SerializedName("video")
+    @JsonProperty("video")
     private Boolean hasVideo;
 
-    @SerializedName("vote_average")
-    private String averageVote;
+    @JsonProperty("vote_average")
+    private Double averageVote;
 }

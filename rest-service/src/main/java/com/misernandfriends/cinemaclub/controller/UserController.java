@@ -1,13 +1,15 @@
 package com.misernandfriends.cinemaclub.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.Recommendation;
 import com.misernandfriends.cinemaclub.pojo.User;
-import com.misernandfriends.cinemaclub.serviceInterface.MailService;
-import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
-import com.misernandfriends.cinemaclub.serviceInterface.UserService;
-import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
+import com.misernandfriends.cinemaclub.serviceInterface.*;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,16 @@ public class UserController {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private MoviesFetchServiceLocal moviesFetchService;
+
+    @Autowired
+    private RecommendationService recommendationService;
+
+    @PostMapping("/usr/update")
+    public ResponseEntity editProfile() {
+        return ResponseEntity.ok("Dzien dobry");
+    }
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -155,5 +167,17 @@ public class UserController {
         } else {
             return true;
         }
+    }
+
+    @GetMapping("/user/preferences")
+    public ResponseEntity getPreferences(@RequestParam String type, @RequestParam(required = false) Integer page) throws JsonProcessingException {
+        Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userOptional.isPresent()) {
+            return ErrorResponse.createError("User doesn't not exists");
+        }
+        Recommendation body = new Recommendation();
+        body.setMovies(moviesFetchService.getRecommendedMovies(userOptional.get(), page, type));
+        body.setRecommendation_values(recommendationService.getValues(userOptional.get(), type));
+        return ResponseEntity.ok(body);
     }
 }

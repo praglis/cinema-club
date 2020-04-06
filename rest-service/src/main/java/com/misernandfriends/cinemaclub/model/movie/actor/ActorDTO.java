@@ -31,4 +31,13 @@ public class ActorDTO implements Serializable {
     @Column(name = "ACT_API_URL", nullable = false)
     private String apiUrl;
 
+    @Column(name = "ACT_NAME")
+    private String name;
+
+    public static ActorDTO newInstance(String castId, String name) {
+        ActorDTO object = new ActorDTO();
+        object.setApiUrl(castId);
+        object.setName(name);
+        return object;
+    }
 }

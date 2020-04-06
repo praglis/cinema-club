@@ -1,0 +1,1 @@
+ALTER TABLE mov_actors ADD COLUMN act_name varchar(255);

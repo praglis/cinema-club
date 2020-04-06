@@ -1,0 +1,3 @@
+INSERT INTO SYS_DIC_ITEMS(dit_id, dit_info_cd, dit_name, dit_value, dit_dic_id) VALUES (nextval('seq_sys_dit_id'), CURRENT_TIMESTAMP, 'MOVIES_CREW_API_URL', 'https://api.themoviedb.org/3/movie/{{QUERY}}/credits?{{MOVIES_API_KEY}}', (SELECT DIC_ID FROM sys_dictionaries WHERE dic_domain = 'API_URLS'));
+INSERT INTO SYS_DIC_ITEMS(dit_id, dit_info_cd, dit_name, dit_value, dit_dic_id) VALUES (nextval('seq_sys_dit_id'), CURRENT_TIMESTAMP, 'MOVIES_DISCOVER_API_URL', 'https://api.themoviedb.org/3/discover/movie?{{MOVIES_API_KEY}}&{{MOVIES_API_LANGUAGE}}', (SELECT DIC_ID FROM sys_dictionaries WHERE dic_domain = 'API_URLS'));
+

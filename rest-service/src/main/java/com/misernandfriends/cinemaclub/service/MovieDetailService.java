@@ -28,4 +28,10 @@ public class MovieDetailService implements MovieFetchServiceLocal {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(uri, String.class);
     }
+
+    public String getMovieCreditsById(Integer id) {
+        String uri = new UrlHelper(CacheValue._API_URLS.MOVIES_CREW_API_URL).setQuery(id.toString()).build();
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(uri, String.class);
+    }
 }
