@@ -139,4 +139,16 @@ public class UserController {
     public List<String> getUsers(){
         return userService.getAllUsers();
     }
+
+    @GetMapping("/check")
+    @ResponseBody
+    public Boolean checkLoggedUser(){
+        String name = securityService.findLoggedInUsername();
+        if(name == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 }
