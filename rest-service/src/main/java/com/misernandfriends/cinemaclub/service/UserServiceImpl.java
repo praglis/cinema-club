@@ -65,13 +65,11 @@ public class UserServiceImpl implements UserService {
     public void updateProfile(UserDTO user, Optional userFormDB) {
         if (userFormDB.isPresent()) {
             UserDTO userToUpdate = ((UserDTO) (userFormDB.get()));
-//            userToUpdate.setUsername(user.getUsername());
             userToUpdate.setName(user.getName());
             userToUpdate.setSurname(user.getSurname());
             userToUpdate.setBirthday(user.getBirthday());
             userToUpdate.setPhoneNo(user.getPhoneNo());
             userToUpdate.setAddress(user.getAddress());
-//            userToUpdate.setEmail(user.getEmail());
             userRepository.update(userToUpdate);
         }
     }
