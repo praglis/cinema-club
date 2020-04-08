@@ -32,7 +32,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-
     @Override
     @Transactional
     public void register(UserDTO user) {
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setEmailConfirmed(false);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Optional<RoleDTO> userRole = roleRepository.findByName(RoleEnum.USER.getValue());
-        if(userRole.isPresent()) {
+        if (userRole.isPresent()) {
             user.setRoles(Arrays.asList(userRole.get()));
         } else {
             RoleDTO role = new RoleDTO();
@@ -56,9 +55,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void changePassword(UserDTO user, String password){
+    public void changePassword(UserDTO user, String password) {
         user.setPassword(bCryptPasswordEncoder.encode(password));
         userRepository.update(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(UserDTO user, Optional userFormDB) {
+        if (userFormDB.isPresent()) {
+            UserDTO userToUpdate = ((UserDTO) (userFormDB.get()));
+            userToUpdate.setName(user.getName());
+            userToUpdate.setSurname(user.getSurname());
+            userToUpdate.setBirthday(user.getBirthday());
+            userToUpdate.setPhoneNo(user.getPhoneNo());
+            userToUpdate.setAddress(user.getAddress());
+            userRepository.update(userToUpdate);
+        }
     }
 
     @Override
