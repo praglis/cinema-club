@@ -43,11 +43,13 @@ public class UserController {
         return new ResponseEntity<>(body, HttpStatus.OK);
     }
 
-    @GetMapping("/user/update")
-    public void editProfile(@RequestBody UserDTO user) {
+    @PostMapping("/user/update")
+    public ResponseEntity editProfile(@RequestBody UserDTO user) {
         String currentPrincipalName = securityService.findLoggedInUsername();
+        System.out.println("Name:" + currentPrincipalName);
         Optional<UserDTO> userFromDB = userService.findByUsername(currentPrincipalName);
         userService.updateProfile(user, userFromDB);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
@@ -136,18 +138,17 @@ public class UserController {
     }
 
     @GetMapping("/getUsers")
-    public List<String> getUsers(){
+    public List<String> getUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/check")
     @ResponseBody
-    public Boolean checkLoggedUser(){
+    public Boolean checkLoggedUser() {
         String name = securityService.findLoggedInUsername();
-        if(name == null){
+        if (name == null) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
