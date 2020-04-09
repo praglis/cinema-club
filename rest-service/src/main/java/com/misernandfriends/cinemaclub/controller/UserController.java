@@ -1,7 +1,9 @@
 package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
+import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.User;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
@@ -35,12 +37,16 @@ public class UserController {
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
-    public ResponseEntity user() {
+    public ResponseEntity<User> user() {
         String currentPrincipalName = securityService.findLoggedInUsername();
         Optional<UserDTO> user = userService.findByUsername(currentPrincipalName);
-        Map<String, Optional<UserDTO>> body = new HashMap<>();
-        body.put("username", user);
-        return new ResponseEntity<>(body, HttpStatus.OK);
+
+        User response = new User();
+        if (user.isPresent()) {
+            response = response.toUserResponse(user.get());
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/user/update")

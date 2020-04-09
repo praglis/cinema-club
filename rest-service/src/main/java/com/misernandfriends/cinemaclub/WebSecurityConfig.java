@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .authorizeRequests()
-                .antMatchers("/movies/best", "/movies/popular",
+                .antMatchers(  "/movies/best","/movies/popular",
                         "/movie/get", "/movie/get/search", "/movie/get/reviews/nyt",
                         "/movie/get/reviews/guardian", "/changePassword", "/cinema/*", "/cinema/*/premiers", "/home",
                         "/welcome", "/reviews/*", "/user/update", "/user")

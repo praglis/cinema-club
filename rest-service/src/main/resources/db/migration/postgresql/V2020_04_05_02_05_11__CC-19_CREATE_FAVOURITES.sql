@@ -1,0 +1,15 @@
+CREATE TABLE USR_FAVOURITES (
+    FVR_ID int primary key,
+    FVR_USR_ID int not null,
+    FVR_MOV_ID int not null,
+    FVR_INFO_CD date not null,
+    FVR_INFO_RD date,
+    FOREIGN KEY (FVR_USR_ID) REFERENCES USR_USERS (USR_ID),
+    FOREIGN KEY (FVR_MOV_ID) REFERENCES MOV_MOVIES (MOV_ID)
+);
+
+CREATE SEQUENCE seq_usr_fvr_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;

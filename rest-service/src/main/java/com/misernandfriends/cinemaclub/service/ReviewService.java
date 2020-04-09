@@ -73,7 +73,7 @@ public class ReviewService implements ReviewServiceLocal {
         Optional<GuardianResult> optional = allMatching.getResponse().getResults().stream().filter(e -> e.getWebTitle().contains(title + " review ")).findFirst();
 
         if (optional.isPresent()) {
-            uri = optional.get().getApiUrl() + CacheValue._API_URLS.GUARDIAN_API_KEY + "&show-fields=byline,trailText";
+            uri = optional.get().getApiUrl() + "?" + new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_KEY).build() + "&show-fields=byline,trailText";
             return restTemplate.getForObject(uri, String.class);
         }
 
