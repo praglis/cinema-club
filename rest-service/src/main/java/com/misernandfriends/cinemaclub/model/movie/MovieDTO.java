@@ -29,7 +29,7 @@ public class MovieDTO implements Serializable {
     @Column(name = "MOV_INFO_CD", nullable = false)
     private Date infoCD;
 
-    @Column(name = "MOV_INFO_RD", nullable = false)
+    @Column(name = "MOV_INFO_RD")
     private Date infoRD;
 
     @Column(name = "MOV_API_URL", nullable = false)
