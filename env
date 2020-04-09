@@ -1,0 +1,6 @@
+SERVER_IP=172.17.0.1
+                        WEB_URL=http://10.8.0.1:4200
+                        DB_URL=jdbc:postgresql://172.17.0.1:5432/postgres
+                        DB_DATABASE=postgres
+                        DB_USERNAME=admin
+                        DB_PASSWORD=admin
