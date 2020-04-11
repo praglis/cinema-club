@@ -39,8 +39,15 @@ public class ReviewController {
     @PutMapping("userReview")
     public ResponseEntity addUserReview(@RequestBody UserReview userReview) {
         Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+
         if (!userOptional.isPresent()) {
             return ErrorResponse.createError("User doesn't not exists");
+        }
+        else{
+            UserDTO userDTO = userOptional.get();
+            if (userDTO.getStatus().equals("L")){
+                return ErrorResponse.createError("Your account is blocked");
+            }
         }
         reviewService.addUserReview(userReview, userOptional.get());
         return ResponseEntity.noContent().build();

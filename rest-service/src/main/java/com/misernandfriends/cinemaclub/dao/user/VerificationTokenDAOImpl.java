@@ -33,6 +33,20 @@ public class VerificationTokenDAOImpl extends AbstractDAOImpl<VerificationTokenD
     }
 
     @Override
+    public Optional<VerificationTokenDTO> getByUserIdForDelete(Long userId, String type) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
+                "data.user.id = :userId AND data.tokenType = :type";
+        TypedQuery<VerificationTokenDTO> query = em.createQuery(queryTxt, VerificationTokenDTO.class)
+                .setParameter("userId", userId)
+                .setParameter("type", type);
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
     public void setAsUsed(Long id, String type) {
         Date currDate = DateTimeUtil.getCurrentDate();
         String queryTxt = "UPDATE " + getEntityName() + " data SET data.infoRD = :date WHERE " +
