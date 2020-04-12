@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,8 +14,13 @@ import java.util.List;
 @AllArgsConstructor
 public class Recommendation {
 
-    private List<String> recommendation_values;
+    @JsonProperty("recommendation_values")
+    private List<String> recomVariable;
 
+    @JsonProperty("movies")
     private MoviesList movies;
+
+    @JsonProperty("recommendations")
+    private Boolean recommendationsPresent;
 
 }

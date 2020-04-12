@@ -52,7 +52,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             JSONObject castObject = cast.getJSONObject(i);
             String castId = String.valueOf(castObject.getInt("id"));
             adjustRecommendation(user, castId, RecommendationDTO.Type.Actor);
-            if (!actorRepository.getById(Long.parseLong(castId)).isPresent()) {
+            if (!actorRepository.getByUrlApi(castId).isPresent()) {
                 actorRepository.create(ActorDTO.newInstance(castId, castObject.getString("name")));
             }
         }
@@ -64,7 +64,7 @@ public class RecommendationServiceImpl implements RecommendationService {
             }
             String crewId = String.valueOf(crewObject.getInt("id"));
             adjustRecommendation(user, crewId, RecommendationDTO.Type.Director);
-            if (!actorRepository.getById(Long.parseLong(crewId)).isPresent()) {
+            if (!actorRepository.getByUrlApi(crewId).isPresent()) {
                 actorRepository.create(ActorDTO.newInstance(crewId, crewObject.getString("name")));
             }
         }

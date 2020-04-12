@@ -164,7 +164,8 @@ public class UserController {
         }
         Recommendation body = new Recommendation();
         body.setMovies(moviesFetchService.getRecommendedMovies(userOptional.get(), page, type));
-        body.setRecommendation_values(recommendationService.getValues(userOptional.get(), type));
+        body.setRecomVariable(recommendationService.getValues(userOptional.get(), type));
+        body.setRecommendationsPresent(body.getRecomVariable().size() != 0);
         return ResponseEntity.ok(body);
     }
 }

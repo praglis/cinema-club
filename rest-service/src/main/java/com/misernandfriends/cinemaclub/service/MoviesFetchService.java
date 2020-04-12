@@ -74,7 +74,7 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
             currentList.getMovies().addAll(result.getMovies());
             reduceRecommendationList(currentList, 20);
         }
-        if (currentList.getMovies().size() < 20) {
+        if (currentList.getMovies().size() < 20 && !currentList.getTotalPages().equals(page)) {
             getRecommendedMovies(currentList, ++page, uri, favoriteMovies);
         }
         return currentList;
