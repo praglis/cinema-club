@@ -1,15 +1,11 @@
 package com.misernandfriends.cinemaclub.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
-import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Recommendation;
 import com.misernandfriends.cinemaclub.pojo.User;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,11 +37,6 @@ public class UserController {
 
     @Autowired
     private RecommendationService recommendationService;
-
-    @PostMapping("/usr/update")
-    public ResponseEntity editProfile() {
-        return ResponseEntity.ok("Dzien dobry");
-    }
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -162,11 +153,7 @@ public class UserController {
     @ResponseBody
     public Boolean checkLoggedUser() {
         String name = securityService.findLoggedInUsername();
-        if (name == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return name != null;
     }
 
     @GetMapping("/user/preferences")

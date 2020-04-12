@@ -20,9 +20,9 @@ public class EventDTO implements Serializable {
     private static final long serialVersionUID = -3819612654392314495L;
 
     public interface Status {
-        public static final String ACTIVE = "A";
-        public static final String INACTIVE = "I";
-        public static final String SUSPENDED = "S";
+        String ACTIVE = "A";
+        String INACTIVE = "I";
+        String SUSPENDED = "S";
     }
 
     @Id

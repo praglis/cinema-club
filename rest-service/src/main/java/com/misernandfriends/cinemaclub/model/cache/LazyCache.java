@@ -2,7 +2,6 @@ package com.misernandfriends.cinemaclub.model.cache;
 
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryDTO;
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryItemDTO;
-import com.misernandfriends.cinemaclub.utils.CacheParser;
 
 import java.util.HashMap;
 import java.util.NoSuchElementException;

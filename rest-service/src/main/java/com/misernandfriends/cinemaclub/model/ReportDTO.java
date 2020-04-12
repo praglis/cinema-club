@@ -17,11 +17,11 @@ public class ReportDTO implements Serializable {
     private static final long serialVersionUID = 5428445031484557055L;
 
     public interface STATUS {
-        public static final String NEW = "N";
-        public static final String ASSIGNED = "A";
-        public static final String IN_PROGRESS = "P";
-        public static final String CLOSED = "C";
-        public static final String INVALID = "I";
+        String NEW = "N";
+        String ASSIGNED = "A";
+        String IN_PROGRESS = "P";
+        String CLOSED = "C";
+        String INVALID = "I";
     }
 
     @Id

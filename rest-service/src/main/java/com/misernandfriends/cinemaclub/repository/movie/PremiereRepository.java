@@ -10,9 +10,9 @@ import java.util.Map;
 
 public interface PremiereRepository extends AbstractRepository<PremiereDTO> {
 
-    public List<CinemaDTO> getCinemasForMovie(Long movieId);
+    List<CinemaDTO> getCinemasForMovie(Long movieId);
 
-    public List<MovieDTO> getMoviesForCinema(Long cinemaId);
+    List<MovieDTO> getMoviesForCinema(Long cinemaId);
 
     boolean isPremierePresent(PremiereDTO premiere);
 

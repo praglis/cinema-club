@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface UserReviewRepository extends AbstractRepository<UserReviewDTO> {
 
-    public List<UserReviewDTO> getUserReviews(Long userId);
+    List<UserReviewDTO> getUserReviews(Long userId);
 
-    public List<UserReviewDTO> getUserReviews(Long userId, int maxResults);
+    List<UserReviewDTO> getUserReviews(Long userId, int maxResults);
 
     List<UserReviewDTO> getUserMovieReviews(String movieUrl);
 

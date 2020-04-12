@@ -18,11 +18,11 @@ public class RecommendationDTO implements Serializable {
 
     public interface Type {
 
-        public static String Category = "C";
-        public static String Actor = "A";
-        public static String Director = "D";
+        String Category = "C";
+        String Actor = "A";
+        String Director = "D";
 
-        public static String getQueryParameter(String type) {
+        static String getQueryParameter(String type) {
             switch (type){
                 case Category:
                     return LazyCache.getValue(CacheValue._QUERY_PARAM.WITH_GENRES);
