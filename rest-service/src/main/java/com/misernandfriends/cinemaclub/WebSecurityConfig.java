@@ -34,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .authorizeRequests()
-                .antMatchers("/movies/*", "/movie/*", "/user/*",
+                .antMatchers("/movie/*", "/user/*",
                         "/changePassword", "/cinema/*", "/home",
                         "/welcome", "/reviews/*")
                 .hasAnyAuthority(RoleEnum.USER.getValue(), RoleEnum.ADMIN.getValue())
@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**").permitAll()
-                .antMatchers("/register", "/login", "/resetPassword", "/verifyuser").permitAll()
+                .antMatchers("/register", "/login", "/resetPassword", "/verifyuser", "/movies/questionnaire").permitAll()
                 .antMatchers("/admin/**", "/admin/", "/admin", "/getUsers").hasAuthority(RoleEnum.ADMIN.getValue())
                 .and().csrf().disable();
     }

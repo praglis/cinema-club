@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.pojo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MoviesList {
     @JsonProperty("page")
     @SerializedName("page")

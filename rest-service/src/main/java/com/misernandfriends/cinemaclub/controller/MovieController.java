@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.controller;
 
+import com.misernandfriends.cinemaclub.pojo.Genres;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,10 @@ public class MovieController {
     @GetMapping("movie/get/search")
     public String getMovieByQuery(@RequestParam(value = "query") String query) {
         return movieService.getMovieByQuery(query);
+    }
+
+    @GetMapping("movie/get/genres")
+    public Genres getAllGenres() {
+        return movieService.getAllGenres();
     }
 }

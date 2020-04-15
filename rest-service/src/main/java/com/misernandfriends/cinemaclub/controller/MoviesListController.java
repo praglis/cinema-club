@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.controller;
 
+import com.misernandfriends.cinemaclub.pojo.QuestionnaireMovieResponse;
 import com.misernandfriends.cinemaclub.serviceInterface.MoviesFetchServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,5 +22,10 @@ public class MoviesListController {
     @GetMapping("movies/popular")
     public String getPopularMovies(@RequestParam(value = "page", required = false) Integer page) {
         return moviesService.getPopularMovies(page);
+    }
+
+    @GetMapping("movies/questionnaire")
+    public QuestionnaireMovieResponse getQuestionnaireMovies() {
+        return moviesService.getQuestionnaireMovies();
     }
 }
