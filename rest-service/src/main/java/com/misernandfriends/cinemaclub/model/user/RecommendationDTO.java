@@ -3,7 +3,6 @@ package com.misernandfriends.cinemaclub.model.user;
 
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +30,7 @@ public class RecommendationDTO implements Serializable {
                 case Director:
                     return LazyCache.getValue(CacheValue._QUERY_PARAM.WITH_CREW);
                 default:
-                    throw new ValueException("No query parameter found for " + type);
+                    throw new RuntimeException("No query parameter found for " + type);
             }
         }
 
