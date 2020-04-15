@@ -1,8 +1,8 @@
 package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
-import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.BugReport;
 import com.misernandfriends.cinemaclub.pojo.User;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
@@ -34,6 +34,10 @@ public class UserController {
     @Autowired
     private MailService mailService;
 
+    @PostMapping("/report/bug")
+    public void sendBugReport(@RequestBody BugReport bugReport) {
+        mailService.sendBugReport(bugReport);
+    }
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
