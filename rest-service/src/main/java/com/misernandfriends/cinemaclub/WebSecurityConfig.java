@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and()
                 .authorizeRequests()
                 .antMatchers("/movies/*", "/movie/*", "/user/*",
-                        "/changePassword", "/cinema/*", "/home",
+                        "/changePassword", "/cinema/*", "/home", "/locations",
                         "/welcome", "/reviews/*")
                 .hasAnyAuthority(RoleEnum.USER.getValue(), RoleEnum.ADMIN.getValue())
                 .antMatchers("/v2/api-docs",
