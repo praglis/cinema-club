@@ -9,4 +9,5 @@ public interface ActorRepository extends AbstractRepository<ActorDTO> {
 
     Optional<ActorDTO> getByUrlApi(String url);
 
+    String getNameByUrlApi(String apiUrl);
 }

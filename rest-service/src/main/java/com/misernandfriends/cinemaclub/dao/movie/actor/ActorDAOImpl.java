@@ -29,4 +29,14 @@ public class ActorDAOImpl extends AbstractDAOImpl<ActorDTO> implements ActorRepo
             return Optional.empty();
         }
     }
+
+    @Override
+    public String getNameByUrlApi(String apiUrl) {
+        Optional<ActorDTO> actorOptional = getByUrlApi(apiUrl);
+        if (actorOptional.isPresent()) {
+            return actorOptional.get().getName();
+        } else {
+            return "";
+        }
+    }
 }

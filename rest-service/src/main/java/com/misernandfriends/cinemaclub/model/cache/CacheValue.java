@@ -4,7 +4,9 @@ public enum CacheValue {
 
     API_URLS(_API_URLS.class),
     EMAIL_CONFIGURATION(_EMAIL_CONFIGURATION.class),
-    USER_REVIEW(_USER_REVIEW.class);
+    USER_REVIEW(_USER_REVIEW.class),
+    QUERY_PARAM(_QUERY_PARAM.class),
+    GENRES(_GENRES.class);
 
     private Class<? extends Enum> value;
 
@@ -31,6 +33,8 @@ public enum CacheValue {
         MOVIES_API_LANGUAGE,
         MOVIES_API_URL_TOP_RATED,
         MOVIES_API_URL_MOST_POPULAR,
+        MOVIES_CREW_API_URL,
+        MOVIES_DISCOVER_API_URL,
 
         /** New York Times Reviews Configuration */
         NYT_API_URL,
@@ -59,5 +63,15 @@ public enum CacheValue {
 
     public enum _USER_REVIEW implements EnumCache {
         CAN_LIKE_SELF_COMMENT
+    }
+
+    public enum _QUERY_PARAM implements EnumCache {
+        WITH_GENRES,
+        WITH_CAST,
+        WITH_CREW
+    }
+
+    public enum _GENRES implements EnumCache {
+        GENRES
     }
 }
