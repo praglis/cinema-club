@@ -15,6 +15,9 @@ public class UrlHelper {
         result = LazyCache.getValue(cacheValue);
     }
 
+    public UrlHelper(String url) {
+        result = url;
+    }
 
     public UrlHelper setQuery(String query) {
         replace("{{QUERY}}", query);
@@ -37,10 +40,20 @@ public class UrlHelper {
             if (index > 0) {
                 index += 2;
                 String valueToReplace = result.substring(index, result.indexOf("}}"));
-                result = result.replace("{{" + valueToReplace + "}}", cacheRegion.getValue(valueToReplace));
+                String value = getValueFor(valueToReplace);
+                result = result.replace("{{" + valueToReplace + "}}", value);
             }
             index = result.indexOf("{{");
         } while (index != -1);
+    }
+
+    private String getValueFor(String valueToReplace) {
+        String[] parts = valueToReplace.split("\\.");
+        if (parts.length == 1) {
+            return cacheRegion.getValue(valueToReplace);
+        }
+        CacheValue cacheRegion = CacheValue.valueOf(parts[0]);
+        return cacheRegion.getValue(parts[1]);
     }
 
     public UrlHelper addQuery(String name, String value) {

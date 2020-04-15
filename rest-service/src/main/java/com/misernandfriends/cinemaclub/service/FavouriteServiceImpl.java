@@ -7,6 +7,7 @@ import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
 import com.misernandfriends.cinemaclub.repository.user.FavouriteRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
+import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
 import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,9 @@ public class FavouriteServiceImpl implements FavouriteService {
 
     @Autowired
     private SecurityService securityService;
+
+    @Autowired
+    private RecommendationService recommendationService;
 
     @Override
     public List<FavouriteDTO> getUserFavourites(Long id) {
@@ -63,6 +67,7 @@ public class FavouriteServiceImpl implements FavouriteService {
         favouriteDTO.setMovie(movie);
         favouriteDTO.setUser(existingUser.get());
         favouriteRepository.create(favouriteDTO);
+        recommendationService.processMovieAsync(existingUser.get(), movie);
     }
 
     @Override

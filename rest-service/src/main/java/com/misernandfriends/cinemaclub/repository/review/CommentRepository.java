@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CommentRepository extends AbstractRepository<CommentDTO> {
 
-    public List<CommentDTO> getUserComments(Long userId);
+    List<CommentDTO> getUserComments(Long userId);
 
-    public List<CommentDTO> getUserComments(Long userId, int maxResults);
+    List<CommentDTO> getUserComments(Long userId, int maxResults);
 
 }

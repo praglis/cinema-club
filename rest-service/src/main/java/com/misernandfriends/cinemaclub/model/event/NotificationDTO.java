@@ -17,13 +17,13 @@ public class NotificationDTO implements Serializable {
     private static final long serialVersionUID = -2285030564208708033L;
 
     public interface Status {
-        public static String SEND = "S";    // Notification has been send
-        public static String TO_SEND = "T"; // Notification has not been send yet
+        String SEND = "S";    // Notification has been send
+        String TO_SEND = "T"; // Notification has not been send yet
     }
 
     public interface Type {
-        public static String EVENT = "E";
-        public static String PREMIERE = "P";
+        String EVENT = "E";
+        String PREMIERE = "P";
     }
 
     @Id
