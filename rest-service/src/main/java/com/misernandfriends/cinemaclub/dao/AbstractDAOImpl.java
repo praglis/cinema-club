@@ -56,7 +56,7 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     @Transactional
     @Override
     public void delete(T entity) {
-        em.remove(entity);
+        em.remove(em.merge(entity));
     }
 
     @Override

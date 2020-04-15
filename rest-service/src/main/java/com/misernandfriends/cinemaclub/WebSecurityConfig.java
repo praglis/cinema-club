@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html",
                         "/webjars/**").permitAll()
                 .antMatchers("/register", "/login", "/resetPassword", "/verifyuser").permitAll()
-                .antMatchers("/admin/**", "/admin/", "/admin").hasAuthority(RoleEnum.ADMIN.getValue())
+                .antMatchers("/admin/**", "/admin/", "/admin", "/getUsers").hasAuthority(RoleEnum.ADMIN.getValue())
                 .and().csrf().disable();
     }
 

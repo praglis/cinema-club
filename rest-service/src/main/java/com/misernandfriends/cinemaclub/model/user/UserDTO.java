@@ -26,6 +26,7 @@ public class UserDTO implements Serializable {
         public final String ACTIVE = "A";
         public final String NOT_VERIFIED = "N";
         public final String BANNED = "B";
+        public final String BLOCKED = "L";
         public final String CLOSED = "C";
     }
 
