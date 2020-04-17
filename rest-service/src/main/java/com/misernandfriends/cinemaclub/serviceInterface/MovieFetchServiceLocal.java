@@ -1,5 +1,7 @@
 package com.misernandfriends.cinemaclub.serviceInterface;
 
+import com.misernandfriends.cinemaclub.pojo.Genres;
+
 public interface MovieFetchServiceLocal {
     String getMovieById(Integer page);
 
@@ -8,4 +10,6 @@ public interface MovieFetchServiceLocal {
     String getMovieByQuery(String query);
 
     String getMovieCreditsById(Integer id);
+
+    Genres getAllGenres();
 }

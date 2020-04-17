@@ -8,6 +8,7 @@ public enum CacheValue {
     QUERY_PARAM(_QUERY_PARAM.class),
     GENRES(_GENRES.class);
 
+
     private Class<? extends Enum> value;
 
     CacheValue(Class<? extends Enum> value) {
@@ -36,6 +37,7 @@ public enum CacheValue {
         MOVIES_CREW_API_URL,
         MOVIES_DISCOVER_API_URL,
 
+        MOVIES_API_GENRES_URL,
         /** New York Times Reviews Configuration */
         NYT_API_URL,
         NYT_API_URL_QUERY,

@@ -7,10 +7,8 @@ import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Movie;
 import com.misernandfriends.cinemaclub.pojo.MoviesList;
-import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.MoviesFetchServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
+import com.misernandfriends.cinemaclub.pojo.QuestionnaireMovieResponse;
+import com.misernandfriends.cinemaclub.serviceInterface.*;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
     private RecommendationService recommendationService;
 
     @Autowired
-    private MovieServiceLocal movieServiceLocal;
+    private QuestionnaireMovieService questionnaireMovieService;
 
     @Autowired
     private FavouriteService favouriteService;
@@ -60,6 +58,12 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
                 .addQuery(criteriaParamName, getRecommendationValueAsString(list))
                 .build();
         return getRecommendedMovies(null, page, uri, favoriteMovies);
+    }
+
+    @Override
+    public QuestionnaireMovieResponse getQuestionnaireMovies() {
+        QuestionnaireMovieResponse questionnaireMoviesResponse = questionnaireMovieService.getQuestionnaireMovies();
+        return questionnaireMoviesResponse;
     }
 
     private MoviesList getRecommendedMovies(MoviesList currentList, int page, String uri, List<Long> favoriteMovies) {

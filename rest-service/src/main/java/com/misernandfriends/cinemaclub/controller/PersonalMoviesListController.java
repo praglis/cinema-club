@@ -3,10 +3,14 @@ package com.misernandfriends.cinemaclub.controller;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.misernandfriends.cinemaclub.model.movie.FavouriteDTO;
+import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
+import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Favourite;
 import com.misernandfriends.cinemaclub.pojo.Movie;
-import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
+import com.misernandfriends.cinemaclub.pojo.MoviesList;
+import com.misernandfriends.cinemaclub.pojo.QuestionnairePostBody;
+import com.misernandfriends.cinemaclub.repository.user.UserRepository;
+import com.misernandfriends.cinemaclub.serviceInterface.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,15 @@ public class PersonalMoviesListController {
 
     @Autowired
     private MovieFetchServiceLocal movieService;
+
+    @Autowired
+    private RecommendationService recommendationService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SecurityService securityService;
 
     @GetMapping("user/favourites")
     public ResponseEntity<String> getFavouriteMovies(@RequestParam(value = "user") Long id) {
@@ -78,6 +91,30 @@ public class PersonalMoviesListController {
         }
 
         return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("user/questionnaire")
+    public ResponseEntity<String> addMoviesFromQuestionnaire(@RequestBody QuestionnairePostBody body) {
+
+        Optional<UserDTO> existingUser = userRepository.getById(body.getUserId());
+
+        if (!existingUser.isPresent()) {
+            return new ResponseEntity<>("User does not exists", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!existingUser.get().getUsername().equals(securityService.findLoggedInUsername())) {
+            return new ResponseEntity<>("User is not logged in\"", HttpStatus.BAD_REQUEST);
+        }
+
+        for (Movie movie: body.getMovies()) {
+            MovieDTO movieDTO= new MovieDTO();
+            movieDTO.setApiUrl(movie.getId().toString());
+            movieDTO.setTitle(movie.getTitle());
+
+            recommendationService.processMovie(existingUser.get(), movieDTO);
+        }
+
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @DeleteMapping("user/favourites")
