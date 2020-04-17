@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.pojo;
 
+import com.misernandfriends.cinemaclub.model.AddressDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class User {
     private Date birthday;
     private String email;
     private String phoneNo;
-    private String address;
+    private AddressDTO address;
 
     public User toUserResponse(UserDTO userDTO) {
         this.id = userDTO.getId();
@@ -32,7 +33,7 @@ public class User {
         this.birthday = userDTO.getBirthday();
         this.email = userDTO.getEmail();
         this.phoneNo = userDTO.getPhoneNo();
-        this.address = userDTO.getAddress().toString();
+        this.address = userDTO.getAddress();
 
         return this;
     }
