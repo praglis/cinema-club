@@ -52,6 +52,7 @@ public class ReviewService implements ReviewServiceLocal {
     @Override
     public String getGuardianMovieReview(String title) {
         ObjectMapper m = new ObjectMapper();
+        title = title.replaceAll("[:'’]", "");
 
         String uri = new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_URL_QUERY).setQuery(title).build();
         RestTemplate restTemplate = new RestTemplate();
@@ -70,7 +71,8 @@ public class ReviewService implements ReviewServiceLocal {
             return "";
         }
 
-        Optional<GuardianResult> optional = allMatching.getResponse().getResults().stream().filter(e -> e.getWebTitle().contains(title + " review ")).findFirst();
+        String finalTitle = title;
+        Optional<GuardianResult> optional = allMatching.getResponse().getResults().stream().filter(e -> e.getWebTitle().contains(finalTitle + " review ")).findFirst();
 
         if (optional.isPresent()) {
             uri = optional.get().getApiUrl() + "?" + new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_KEY).build() + "&show-fields=byline,trailText";
