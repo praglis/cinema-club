@@ -12,6 +12,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements UserReviewRepository {
@@ -47,6 +48,20 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
         TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
                 .setParameter("movieId", movieUrl);
         return query.getResultList();
+    }
+
+    @Override
+    public Optional<UserReviewDTO> getUserReviewById(Long reviewId) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
+                "data.id = :reviewId";
+
+        TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
+                .setParameter("reviewId", reviewId);
+        try {
+            return Optional.of(query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

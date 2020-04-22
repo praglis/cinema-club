@@ -3,10 +3,10 @@ package com.misernandfriends.cinemaclub.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
+import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.pojo.GuardianResponse;
 import com.misernandfriends.cinemaclub.pojo.GuardianResult;
 import com.misernandfriends.cinemaclub.pojo.UserReview;
@@ -14,8 +14,8 @@ import com.misernandfriends.cinemaclub.repository.cinema.CinemaRepository;
 import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -150,5 +150,10 @@ public class ReviewService implements ReviewServiceLocal {
     @Override
     public List<UserReviewDTO> getUserReviews(String movieUrl) {
         return userReviewRepository.getUserMovieReviews(movieUrl);
+    }
+
+    @Override
+    public UserReviewDTO getUserReviewById(Long reviewId) {
+        return userReviewRepository.getUserReviewById(reviewId).get();
     }
 }

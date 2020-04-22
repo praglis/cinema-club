@@ -10,11 +10,11 @@ import java.util.Date;
 @Setter
 public class CommentReport {
     @SerializedName("commentId")
-    private String reporterUsername;
+    private String commentId;
 
     @SerializedName("reportDate")
     private Date reportDate;
 
     @SerializedName("reportReason")
-    private String bugDescription;
+    private String reportReason;
 }

@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
+import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.*;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
@@ -36,6 +37,9 @@ public class UserController {
 
     @Autowired
     private RecommendationService recommendationService;
+
+    @Autowired
+    private ReviewServiceLocal reviewServiceLocal;
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -176,6 +180,14 @@ public class UserController {
     @PostMapping("/report/user")
     public void reportUser(@RequestBody CommentReport commentReport) {
         UserReport userReport = new UserReport(commentReport);
-        mailService.sendUserReport();
+
+        UserReviewDTO userReviewDTO = reviewServiceLocal.getUserReviewById(Long.valueOf(commentReport.getCommentId()));
+        String currentLoggedUsername = securityService.findLoggedInUsername();
+
+        userReport.setReportedComment(userReviewDTO.getStatement());
+        userReport.setReportedUsername(userReviewDTO.getInfoCU().getUsername());
+        userReport.setReportingUsername(currentLoggedUsername);
+
+        mailService.sendUserReport(userReport);
     }
 }

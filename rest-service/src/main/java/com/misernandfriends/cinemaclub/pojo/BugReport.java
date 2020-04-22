@@ -10,7 +10,7 @@ import java.util.Date;
 @Setter
 public class BugReport {
     @SerializedName("reporter")
-    private String reporterUsername;
+    private String reporter;
 
     @SerializedName("reportDate")
     private Date reportDate;

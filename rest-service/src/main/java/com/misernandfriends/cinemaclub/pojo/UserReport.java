@@ -14,4 +14,10 @@ public class UserReport {
     private String reportedComment;
     private Date reportDate;
     private String reportReason;
+
+
+    public UserReport(CommentReport commentReport) {
+        this.reportDate = commentReport.getReportDate();
+        this.reportReason = commentReport.getReportReason();
+    }
 }
