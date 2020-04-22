@@ -116,7 +116,7 @@ public class MailServiceImpl implements MailService {
             }
 
             List<String> emailList = userService.getAllAdminEmails();
-            String bodyText = "Bug description:" + bugReport.getBugDescription() + "Reported by " + bugReport.getReporterUsername() + " on " + bugReport.getReportDate();
+            String bodyText = "Bug description: <<" + bugReport.getBugDescription() + ">>\nReported by " + bugReport.getReporterUsername() + " on " + bugReport.getReportDate();
             System.out.println("BugReport:" + bodyText);
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));

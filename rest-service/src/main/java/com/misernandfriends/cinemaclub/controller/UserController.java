@@ -3,9 +3,7 @@ package com.misernandfriends.cinemaclub.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.pojo.BugReport;
-import com.misernandfriends.cinemaclub.pojo.Recommendation;
-import com.misernandfriends.cinemaclub.pojo.User;
+import com.misernandfriends.cinemaclub.pojo.*;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,10 +31,6 @@ public class UserController {
     @Autowired
     private MailService mailService;
 
-    @PostMapping("/report/bug")
-    public void sendBugReport(@RequestBody BugReport bugReport) {
-        mailService.sendBugReport(bugReport);
-    }
     @Autowired
     private MoviesFetchServiceLocal moviesFetchService;
 
@@ -172,5 +166,16 @@ public class UserController {
         body.setRecomVariable(recommendationService.getValues(userOptional.get(), type));
         body.setRecommendationsPresent(body.getRecomVariable().size() != 0);
         return ResponseEntity.ok(body);
+    }
+
+    @PostMapping("/report/bug")
+    public void sendBugReport(@RequestBody BugReport bugReport) {
+        mailService.sendBugReport(bugReport);
+    }
+
+    @PostMapping("/report/user")
+    public void reportUser(@RequestBody CommentReport commentReport) {
+        UserReport userReport = new UserReport(commentReport);
+        mailService.sendUserReport();
     }
 }
