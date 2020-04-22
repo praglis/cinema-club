@@ -1,16 +1,12 @@
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
-import com.misernandfriends.cinemaclub.model.movie.FavouriteDTO;
-import com.misernandfriends.cinemaclub.model.user.FavoriteMovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Movie;
 import com.misernandfriends.cinemaclub.pojo.MoviesList;
-import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.MoviesFetchServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
+import com.misernandfriends.cinemaclub.pojo.QuestionnaireMovieResponse;
+import com.misernandfriends.cinemaclub.serviceInterface.*;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +23,10 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
     private RecommendationService recommendationService;
 
     @Autowired
-    private MovieServiceLocal movieServiceLocal;
+    private QuestionnaireMovieService questionnaireMovieService;
 
     @Autowired
-    private FavouriteService favouriteService;
+    private PersonalListService personalListService;
 
     @Override
     public String getBestRatedMovies(Integer page) {
@@ -51,7 +47,7 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
 
     @Override
     public MoviesList getRecommendedMovies(UserDTO user, Integer page, String type) {
-        List<Long> favoriteMovies = favouriteService.getUserFavourites(user.getId())
+        List<Long> favoriteMovies = personalListService.getUserFavourites(user.getId())
                 .stream().map(favouriteDTO -> Long.parseLong(favouriteDTO.getMovie().getApiUrl())).collect(Collectors.toList());
         String criteriaParamName = RecommendationDTO.Type.getQueryParameter(type);
         page = (page == null || page <= 0) ? 1 : page;
@@ -60,6 +56,12 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
                 .addQuery(criteriaParamName, getRecommendationValueAsString(list))
                 .build();
         return getRecommendedMovies(null, page, uri, favoriteMovies);
+    }
+
+    @Override
+    public QuestionnaireMovieResponse getQuestionnaireMovies() {
+        QuestionnaireMovieResponse questionnaireMoviesResponse = questionnaireMovieService.getQuestionnaireMovies();
+        return questionnaireMoviesResponse;
     }
 
     private MoviesList getRecommendedMovies(MoviesList currentList, int page, String uri, List<Long> favoriteMovies) {
