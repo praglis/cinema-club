@@ -17,6 +17,8 @@ public interface ReviewServiceLocal {
 
     List<UserReviewDTO> getUserReviews(String movieUrl);
 
+    UserReviewDTO getUserReviewById(Long reviewId);
+
     void editUserReview(UserReview userReviewData, UserDTO user);
 
     void removeUserReview(Long reviewId, UserDTO user);

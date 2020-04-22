@@ -7,11 +7,16 @@ import java.util.Optional;
 
 public interface UserService {
     void register(UserDTO user);
+
     void changePassword(UserDTO user, String password);
 
     void updateProfile(UserDTO user, Optional userFormDB);
 
     Optional<UserDTO> findByUsername(String username);
+
     Optional<UserDTO> findByEmail(String email);
+
     List<String> getAllUsers();
+
+    List<String> getAllAdminEmails();
 }

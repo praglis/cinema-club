@@ -5,7 +5,10 @@ import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
+import com.misernandfriends.cinemaclub.pojo.BugReport;
+import com.misernandfriends.cinemaclub.pojo.UserReport;
 import com.misernandfriends.cinemaclub.serviceInterface.MailService;
+import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import com.misernandfriends.cinemaclub.serviceInterface.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Properties;
 
 @Service
@@ -23,6 +27,8 @@ public class MailServiceImpl implements MailService {
     @Autowired
     private VerificationTokenService verificationTokenService;
 
+    @Autowired
+    private UserService userService;
 
     private Session session;
 
@@ -103,4 +109,55 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    @Override
+    public void sendBugReport(BugReport bugReport) {
+        try {
+            if (!customProperties.getMailOptions().getEnable()) {
+                return;
+            }
+
+            List<String> emailList = userService.getAllAdminEmails();
+            String bodyText = "Bug description: <<" + bugReport.getBugDescription() + ">>\nReported by " + bugReport.getReporter() + " on " + bugReport.getReportDate();
+            System.out.println("BugReport:" + bodyText);
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));
+            message.setSubject("Bug report ");
+            message.setContent(bodyText, "text/html; charset=utf-8");
+            for (String email : emailList) {
+                message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(email));
+                System.out.println("recipent:" + email);
+            }
+            Transport.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendUserReport(UserReport userReport) {
+        try {
+            if (!customProperties.getMailOptions().getEnable()) {
+                return;
+            }
+
+            List<String> emailList = userService.getAllAdminEmails();
+
+            String bodyText = "Reported comment: <<" + userReport.getReportedComment() + ">>\n" +
+                    "Comment author: " + userReport.getReportedUsername() + "\n" +
+                    "Report reason: <<" + userReport.getReportReason() + ">>\n" +
+                    "Reported by " + userReport.getReportingUsername() + " on " + userReport.getReportDate();
+            System.out.println("UserReport:\n" + bodyText);
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(customProperties.getMailOptions().getEmail()));
+            message.setSubject("User report");
+            message.setContent(bodyText, "text/html; charset=utf-8");
+            for (String email : emailList) {
+                message.addRecipients(Message.RecipientType.CC, InternetAddress.parse(email));
+                System.out.println("recipent:" + email);
+            }
+            Transport.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
 }

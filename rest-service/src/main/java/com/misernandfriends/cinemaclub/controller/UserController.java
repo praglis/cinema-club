@@ -2,9 +2,9 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
+import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.pojo.Recommendation;
-import com.misernandfriends.cinemaclub.pojo.User;
+import com.misernandfriends.cinemaclub.pojo.*;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +37,9 @@ public class UserController {
 
     @Autowired
     private RecommendationService recommendationService;
+
+    @Autowired
+    private ReviewServiceLocal reviewServiceLocal;
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -167,5 +170,24 @@ public class UserController {
         body.setRecomVariable(recommendationService.getValues(userOptional.get(), type));
         body.setRecommendationsPresent(body.getRecomVariable().size() != 0);
         return ResponseEntity.ok(body);
+    }
+
+    @PostMapping("/report/bug")
+    public void sendBugReport(@RequestBody BugReport bugReport) {
+        mailService.sendBugReport(bugReport);
+    }
+
+    @PostMapping("/report/user")
+    public void reportUser(@RequestBody CommentReport commentReport) {
+        UserReport userReport = new UserReport(commentReport);
+
+        UserReviewDTO userReviewDTO = reviewServiceLocal.getUserReviewById(Long.valueOf(commentReport.getCommentId()));
+        String currentLoggedUsername = securityService.findLoggedInUsername();
+
+        userReport.setReportedComment(userReviewDTO.getStatement());
+        userReport.setReportedUsername(userReviewDTO.getInfoCU().getUsername());
+        userReport.setReportingUsername(currentLoggedUsername);
+
+        mailService.sendUserReport(userReport);
     }
 }

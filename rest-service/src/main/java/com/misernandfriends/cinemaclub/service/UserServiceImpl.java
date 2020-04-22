@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,5 +90,19 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> userDTOList = userRepository.findAll();
         List<String> userNames = userDTOList.stream().map(UserDTO::getUsername).collect(Collectors.toList());
         return userNames;
+    }
+
+    @Override
+    public List<String> getAllAdminEmails() {
+        List<UserDTO> userDTOList = userRepository.findAll();
+        List<String> adminEmails = new LinkedList<>();
+
+        for (UserDTO userDTO : userDTOList) {
+            boolean isAdmin = userDTO.getRoles().stream()
+                    .anyMatch(r -> r.getName().equals("ADMIN"));
+            if (isAdmin) adminEmails.add(userDTO.getEmail());
+        }
+
+        return adminEmails;
     }
 }
