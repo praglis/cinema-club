@@ -37,4 +37,10 @@ public class MovieDTO implements Serializable {
 
     @Column(name = "MOV_TITLE", nullable = false)
     private String title;
+
+    @Column(name = "MOV_AVG_RATING")
+    private Double movieRating = 0D;
+
+    @Column(name = "MOV_COUNT_RATING")
+    private Long votesNumber = 0L;
 }

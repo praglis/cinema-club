@@ -65,4 +65,20 @@ public class Movie {
     @JsonProperty("vote_average")
     @SerializedName("vote_average")
     private Double averageVote;
+
+    @JsonProperty("rating")
+    @SerializedName("rating")
+    private Double rating;
+
+    @JsonProperty("numberOfVotes")
+    @SerializedName("numberOfVotes")
+    private Long numberOfVotes;
+
+    @JsonProperty("crews")
+    @SerializedName("crews")
+    private List<Crew> crews;
+
+    @JsonProperty("casts")
+    @SerializedName("casts")
+    private List<Cast> casts;
 }
