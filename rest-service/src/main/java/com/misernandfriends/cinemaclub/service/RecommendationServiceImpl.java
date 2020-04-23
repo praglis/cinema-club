@@ -5,6 +5,9 @@ import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.actor.ActorDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.Cast;
+import com.misernandfriends.cinemaclub.pojo.Credits;
+import com.misernandfriends.cinemaclub.pojo.Crew;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
@@ -45,27 +48,27 @@ public class RecommendationServiceImpl implements RecommendationService {
             String genreId = String.valueOf(genres.getJSONObject(i).getInt("id"));
             adjustRecommendation(user, genreId, RecommendationDTO.Type.Category);
         }
-        JSONObject credits = new JSONObject(movieDetail.getMovieCreditsById(Integer.valueOf(movie.getApiUrl())));
-        JSONArray cast = credits.getJSONArray("cast");
-        JSONArray crew = credits.getJSONArray("crew");
-        for (int i = 0; i < cast.length() && i < 5; i++) {
-            JSONObject castObject = cast.getJSONObject(i);
-            String castId = String.valueOf(castObject.getInt("id"));
+        Credits credits = movieDetail.getMovieCreditsById(Integer.valueOf(movie.getApiUrl()));
+        List<Cast> cast = credits.getCast();
+        List<Crew> crew = credits.getCrew();
+        for (int i = 0; i < cast.size() && i < 5; i++) {
+            Cast castObject = cast.get(i);
+            String castId = String.valueOf(castObject.getId());
             adjustRecommendation(user, castId, RecommendationDTO.Type.Actor);
             if (!actorRepository.getByUrlApi(castId).isPresent()) {
-                actorRepository.create(ActorDTO.newInstance(castId, castObject.getString("name")));
+                actorRepository.create(ActorDTO.newInstance(castId, castObject.getName()));
             }
         }
 
-        for (int i = 0; i < crew.length(); i++) {
-            JSONObject crewObject = crew.getJSONObject(i);
-            if (!"Directing".equals(crewObject.getString("department"))) {
+        for (int i = 0; i < crew.size(); i++) {
+            Crew crewObject = crew.get(i);
+            if (!"Directing".equals(crewObject.getDepartment())) {
                 continue;
             }
-            String crewId = String.valueOf(crewObject.getInt("id"));
+            String crewId = String.valueOf(crewObject.getId());
             adjustRecommendation(user, crewId, RecommendationDTO.Type.Director);
             if (!actorRepository.getByUrlApi(crewId).isPresent()) {
-                actorRepository.create(ActorDTO.newInstance(crewId, crewObject.getString("name")));
+                actorRepository.create(ActorDTO.newInstance(crewId, crewObject.getName()));
             }
         }
     }

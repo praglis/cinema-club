@@ -73,4 +73,12 @@ public class Movie {
     @JsonProperty("numberOfVotes")
     @SerializedName("numberOfVotes")
     private Long numberOfVotes;
+
+    @JsonProperty("crews")
+    @SerializedName("crews")
+    private List<Crew> crews;
+
+    @JsonProperty("casts")
+    @SerializedName("casts")
+    private List<Cast> casts;
 }
