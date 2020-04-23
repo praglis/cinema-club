@@ -2,7 +2,9 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.Credits;
 import com.misernandfriends.cinemaclub.pojo.Genres;
+import com.misernandfriends.cinemaclub.pojo.Movie;
 import com.misernandfriends.cinemaclub.pojo.Rate;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,11 @@ public class MovieController {
 
     @GetMapping("movie/get")
     public ResponseEntity getMovieDetail(@RequestParam(value = "id") Integer id) {
-        return ResponseEntity.ok(movieService.getMovieById(id));
+        Movie movie = movieService.getMovieById(id);
+        Credits credits = movieService.getMovieCreditsById(id);
+        movie.setCasts(credits.getCast());
+        movie.setCrews(credits.getCrew());
+        return ResponseEntity.ok(movie);
     }
 
     @GetMapping("movie/get/reviews/nyt")
