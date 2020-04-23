@@ -1,11 +1,14 @@
 package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.pojo.Genres;
+import com.misernandfriends.cinemaclub.pojo.MovieSearchCriteria;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +39,11 @@ public class MovieController {
     @GetMapping("movie/get/search")
     public String getMovieByQuery(@RequestParam(value = "query") String query) {
         return movieService.getMovieByQuery(query);
+    }
+
+    @PostMapping("movies/get")
+    public String getMoviesByCriteria(@RequestBody MovieSearchCriteria criteria) {
+        return movieService.getMovies(criteria);
     }
 
     @GetMapping("movie/get/genres")
