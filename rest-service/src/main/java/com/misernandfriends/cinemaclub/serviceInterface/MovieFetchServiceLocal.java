@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.serviceInterface;
 
 import com.misernandfriends.cinemaclub.pojo.Credits;
 import com.misernandfriends.cinemaclub.pojo.Genres;
+import com.misernandfriends.cinemaclub.pojo.MovieSearchCriteria;
 import com.misernandfriends.cinemaclub.pojo.Movie;
 
 public interface MovieFetchServiceLocal {
@@ -14,4 +15,6 @@ public interface MovieFetchServiceLocal {
     Credits getMovieCreditsById(Integer id);
 
     Genres getAllGenres();
+
+    String getMovies(MovieSearchCriteria criteria);
 }
