@@ -13,7 +13,6 @@ import com.misernandfriends.cinemaclub.pojo.Crew;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
-import com.misernandfriends.cinemaclub.serviceInterface.FavouriteService;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
@@ -25,8 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
 @Service
@@ -88,18 +90,29 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     @Override
-    public void getMovieBaseOnTaste(UserDTO user) {
+    public List<MovieDTO> getMovieBaseOnTaste(UserDTO user) {
         int maxResults = 100;
+        int maxMovies = 50;
 
         List<FavouriteDTO> favourites = favouriteRepository.getUserFavourites(user.getId(), DateTimeUtil.minusDate(DateTimeUtil.getCurrentDate(), 1, Calendar.MONTH), maxResults);
-        ;
         List<String> moviesUrls = favourites.stream().map(favouriteDTO -> favouriteDTO.getMovie().getApiUrl()).collect(Collectors.toList());
         if (moviesUrls.size() < 100) {
             List<UserRatingDTO> rating = userRatingRepository.getUserBestRatedMovies(user.getId(), maxResults - moviesUrls.size());
             moviesUrls.addAll(rating.stream().map(userRatingDTO -> userRatingDTO.getMovie().getApiUrl()).collect(Collectors.toList()));
         }
-        List<Long> similarTaste = recommendationRepository.getSimilarUser(moviesUrls, user.getId());
 
+        Long moviesNumber;
+        LongAdder adder = new LongAdder();
+        Map<Long, Integer> similarTaste = recommendationRepository.getSimilarUser(moviesUrls, user.getId());
+        similarTaste.forEach((aLong, integer) -> adder.add(integer));
+        moviesNumber = adder.longValue();
+
+        List<MovieDTO> movies = new ArrayList<>();
+        for (Long userId : similarTaste.keySet()) {
+            int moviesToAdd = (int) ((similarTaste.get(userId) / moviesNumber) * 50);
+            movies.addAll(recommendationRepository.findBestMoviesForBy(user.getId(), userId, moviesToAdd));
+        }
+        return movies;
     }
 
     @Override

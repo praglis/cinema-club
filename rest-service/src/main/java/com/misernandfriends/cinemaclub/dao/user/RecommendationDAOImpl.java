@@ -1,20 +1,19 @@
 package com.misernandfriends.cinemaclub.dao.user;
 
 import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
+import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
-import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class RecommendationDAOImpl extends AbstractDAOImpl<RecommendationDTO> implements RecommendationRepository {
-
 
     @Override
     protected Class<RecommendationDTO> getEntityClazz() {
@@ -59,20 +58,33 @@ public class RecommendationDAOImpl extends AbstractDAOImpl<RecommendationDTO> im
     }
 
     @Override
-    public List<Long> getSimilarUser(List<String> moviesUrl, Long exceptUserId) {
+    public Map<Long, Integer> getSimilarUser(List<String> moviesUrl, Long exceptUserId) {
         String queryTxt = "SELECT data.user.id, COUNT(data.movie.id) FROM FavoriteMovieDTO data " +
                 "WHERE data.user.id <> :withoutUser AND data.movie.apiUrl IN (:moviesUrls) " +
                 "GROUP BY data.user.id " +
                 "ORDER BY COUNT(data.movie.id) DESC";
-        Query query = em.createQuery(queryTxt)
+        TypedQuery<Object[]> query = em.createQuery(queryTxt, Object[].class)
                 .setParameter("moviesUrls", moviesUrl)
                 .setParameter("withoutUser", exceptUserId)
                 .setMaxResults(5);
         List<Object[]> resultList = query.getResultList();
-        List<Long> users = new ArrayList<>();
+        HashMap<Long, Integer> values = new HashMap<>();
         for (Object[] o : resultList) {
-            users.add((Long) o[1]);
+            values.put((Long) o[1], (Integer) o[0]);
         }
-        return users;
+        return values;
+    }
+
+    @Override
+    public List<MovieDTO> findBestMoviesForBy(Long id, Long userId, int moviesToAdd) {
+        String queryTxt = "SELECT data.movie FROM UserRatingDTO data " +
+                "WHERE data.user.id IN :userId AND data.movie.id NOT IN (SELECT fav.movie.id FROM FavoriteMovieDTO fav " +
+                "WHERE fav.user.id = :masterUser) " +
+                "ORDER BY data.rating DESC";
+        TypedQuery<MovieDTO> query = em.createQuery(queryTxt, MovieDTO.class)
+                .setMaxResults(moviesToAdd)
+                .setParameter("userId", userId)
+                .setParameter("masterUser", moviesToAdd);
+        return null;
     }
 }
