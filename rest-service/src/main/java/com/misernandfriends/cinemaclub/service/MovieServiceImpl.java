@@ -142,8 +142,4 @@ public class MovieServiceImpl implements MovieServiceLocal {
             return null;
         }
     }
-
-    private MovieDTO createMovieByQuery(String movieByQuery) {
-        return createMovieByQuery(movieByQuery, null);
-    }
 }

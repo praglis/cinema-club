@@ -11,6 +11,7 @@ import com.misernandfriends.cinemaclub.pojo.Cast;
 import com.misernandfriends.cinemaclub.pojo.Credits;
 import com.misernandfriends.cinemaclub.pojo.Crew;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
+import com.misernandfriends.cinemaclub.repository.user.FavouriteRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
