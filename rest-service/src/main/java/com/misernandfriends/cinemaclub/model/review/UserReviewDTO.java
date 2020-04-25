@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,7 +28,7 @@ public class UserReviewDTO implements Serializable {
     @Column(name = "URV_INFO_CD", nullable = false)
     private Date infoCD;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "URV_INFO_CU", nullable = false)
     private UserDTO infoCU;
 
@@ -61,4 +62,7 @@ public class UserReviewDTO implements Serializable {
 
     @Column(name = "URV_LIKES")
     private Long likes;
+
+    @ManyToMany(mappedBy = "reviewDTOS")
+    private List<UserDTO> userLikes;
 }

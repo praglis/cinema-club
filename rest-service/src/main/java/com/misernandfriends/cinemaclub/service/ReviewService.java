@@ -9,11 +9,14 @@ import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.GuardianResponse;
 import com.misernandfriends.cinemaclub.pojo.GuardianResult;
+import com.misernandfriends.cinemaclub.pojo.UserLikes;
 import com.misernandfriends.cinemaclub.pojo.UserReview;
 import com.misernandfriends.cinemaclub.repository.cinema.CinemaRepository;
 import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.ReviewServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.SecurityService;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService implements ReviewServiceLocal {
@@ -34,6 +38,13 @@ public class ReviewService implements ReviewServiceLocal {
 
     @Autowired
     private MovieServiceLocal movieServiceLocal;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    SecurityService securityService;
+
 
     @Override
     public String getNYTCriticsPicksReview() {
@@ -120,8 +131,21 @@ public class ReviewService implements ReviewServiceLocal {
                 userReviewDTO.getInfoCU().getId().equals(user.getId())) {
             throw new ApplicationException("You cannot like comment that you wrote!");
         }
-        userReviewDTO.setLikes(userReviewDTO.getLikes() + 1);
+
+        int adder;
+        List<UserReviewDTO> userReviewDTOS = user.getReviewDTOS();
+        if(userReviewDTO.getUserLikes().contains(user)){
+            userReviewDTOS.remove(userReviewDTO);
+            adder = -1;
+        } else {
+            userReviewDTOS.add(userReviewDTO);
+            adder = 1;
+        }
+        user.setReviewDTOS(userReviewDTOS);
+        userReviewDTO.setLikes(userReviewDTO.getUserLikes().stream().count() + adder);
         userReviewRepository.update(userReviewDTO);
+        userRepository.update(user);
+
     }
 
     @Override
@@ -148,8 +172,25 @@ public class ReviewService implements ReviewServiceLocal {
     }
 
     @Override
-    public List<UserReviewDTO> getUserReviews(String movieUrl) {
-        return userReviewRepository.getUserMovieReviews(movieUrl);
+    public List<UserLikes> getUserReviews(String movieUrl, UserDTO userDTO) {
+        List<UserReviewDTO> userDTOS = userReviewRepository.getUserMovieReviews(movieUrl);
+
+        List<UserLikes> userLikes = userDTOS.stream()
+                .map(userReviewDTO -> {
+                    UserLikes userLikes1 =  new UserLikes();
+                    userLikes1.setLikes(userReviewDTO.getLikes());
+                    userLikes1.setId(userReviewDTO.getId());
+                    userLikes1.setInfoCD(userReviewDTO.getInfoCD());
+                    userLikes1.setInfoCU(userReviewDTO.getInfoCU());
+                    userLikes1.setStatement(userReviewDTO.getStatement());
+                    if(userDTO.getReviewDTOS().contains(userReviewDTO)){
+                        userLikes1.setLiked(true);
+                    } else {
+                      userLikes1.setLiked(false);
+                    }
+                    return userLikes1; })
+                .collect(Collectors.toList());
+        return userLikes;
     }
 
     @Override

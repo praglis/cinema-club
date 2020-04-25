@@ -46,12 +46,14 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public void verifyChangePasswordToken(UserDTO user, String token) {
         VerificationResult result = verifyToken(user, token, VerificationTokenDTO.Type.PASSWORD_VERIFICATION);
         switch (result) {
+            case OK:
+                break;
             case NOT_MATCH:
                 throw new ApplicationException("Provided token not match actual token");
             case RESENT:
                 throw new ApplicationException("Link has expire, new link has been sent to your email.");
             default:
-                throw new ApplicationException("Link is not working propoerly");
+                throw new ApplicationException("Link is not working properly");
         }
     }
 
