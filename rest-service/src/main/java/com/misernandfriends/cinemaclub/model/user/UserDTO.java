@@ -90,7 +90,7 @@ public class UserDTO implements Serializable {
     private Long points;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "USERS_ROLES",
             joinColumns = @JoinColumn(

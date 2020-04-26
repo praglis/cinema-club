@@ -63,6 +63,6 @@ public class UserReviewDTO implements Serializable {
     @Column(name = "URV_LIKES")
     private Long likes;
 
-    @ManyToMany(mappedBy = "reviewDTOS")
+    @ManyToMany(mappedBy = "reviewDTOS", fetch = FetchType.LAZY)
     private List<UserDTO> userLikes;
 }
