@@ -17,4 +17,6 @@ public interface RecommendationService {
     List<RecommendationDTO> getRecommendation(UserDTO user, String type, int maxResult);
 
     List<String> getValues(UserDTO userDTO, String type);
+
+    void refreshSimilarMovies(UserDTO userDTO);
 }

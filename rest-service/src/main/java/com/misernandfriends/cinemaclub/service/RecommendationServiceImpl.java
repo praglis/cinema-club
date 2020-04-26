@@ -7,28 +7,23 @@ import com.misernandfriends.cinemaclub.model.movie.actor.ActorDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
-import com.misernandfriends.cinemaclub.pojo.Cast;
-import com.misernandfriends.cinemaclub.pojo.Credits;
-import com.misernandfriends.cinemaclub.pojo.Crew;
+import com.misernandfriends.cinemaclub.model.user.UserSimilarMovieDTO;
+import com.misernandfriends.cinemaclub.pojo.*;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import com.misernandfriends.cinemaclub.repository.user.FavouriteRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserSimilarMovieRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
 import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
@@ -57,12 +52,14 @@ public class RecommendationServiceImpl implements RecommendationService {
     @Autowired
     private FavouriteRepository favouriteRepository;
 
+    @Autowired
+    private UserSimilarMovieRepository userSimilarMovieRepository;
+
     @Override
     public void processMovie(UserDTO user, MovieDTO movie) {
-        JSONArray genres = new JSONObject(movieDetail.getMovieById(Integer.parseInt(movie.getApiUrl())))
-                .getJSONArray("genres");
-        for (int i = 0; i < genres.length(); i++) {
-            String genreId = String.valueOf(genres.getJSONObject(i).getInt("id"));
+        List<Genre> genres = movieDetail.getMovieById(Integer.parseInt(movie.getApiUrl())).getGenres();
+        for (int i = 0; i < genres.size(); i++) {
+            String genreId = String.valueOf(genres.get(i).getId());
             adjustRecommendation(user, genreId, RecommendationDTO.Type.Category);
         }
         Credits credits = movieDetail.getMovieCreditsById(Integer.valueOf(movie.getApiUrl()));
@@ -92,26 +89,42 @@ public class RecommendationServiceImpl implements RecommendationService {
 
     @Override
     public List<MovieDTO> getMovieBaseOnTaste(UserDTO user) {
+        List<MovieDTO> movies = userSimilarMovieRepository.getForUser(user.getId());
+        if (!movies.isEmpty()) {
+            return movies;
+        }
         int maxResults = 100;
         int maxMovies = 50;
 
         List<FavouriteDTO> favourites = favouriteRepository.getUserFavourites(user.getId(), DateTimeUtil.minusDate(DateTimeUtil.getCurrentDate(), 1, Calendar.MONTH), maxResults);
         List<String> moviesUrls = favourites.stream().map(favouriteDTO -> favouriteDTO.getMovie().getApiUrl()).collect(Collectors.toList());
-        if (moviesUrls.size() < 100) {
+        if (moviesUrls.size() < maxResults) {
             List<UserRatingDTO> rating = userRatingRepository.getUserBestRatedMovies(user.getId(), maxResults - moviesUrls.size());
             moviesUrls.addAll(rating.stream().map(userRatingDTO -> userRatingDTO.getMovie().getApiUrl()).collect(Collectors.toList()));
         }
 
         Long moviesNumber;
         LongAdder adder = new LongAdder();
+        if(moviesUrls.isEmpty()) {
+            return Collections.emptyList();
+        }
         Map<Long, Integer> similarTaste = recommendationRepository.getSimilarUser(moviesUrls, user.getId());
         similarTaste.forEach((aLong, integer) -> adder.add(integer));
         moviesNumber = adder.longValue();
 
-        List<MovieDTO> movies = new ArrayList<>();
+        movies = new ArrayList<>();
         for (Long userId : similarTaste.keySet()) {
-            int moviesToAdd = (int) ((similarTaste.get(userId) / moviesNumber) * 50);
+            int moviesToAdd = (int) ((similarTaste.get(userId) / (double) moviesNumber) * maxMovies);
             movies.addAll(recommendationRepository.findBestMoviesForBy(user.getId(), userId, moviesToAdd));
+        }
+
+        Date date = DateTimeUtil.getCurrentDate();
+        for (MovieDTO movie : movies) {
+            UserSimilarMovieDTO similar = new UserSimilarMovieDTO();
+            similar.setMovie(movie);
+            similar.setUser(user);
+            similar.setInfoCD(date);
+            userSimilarMovieRepository.create(similar);
         }
         return movies;
     }
@@ -139,6 +152,11 @@ public class RecommendationServiceImpl implements RecommendationService {
                     .map(recom -> actorRepository.getNameByUrlApi(recom.getValue()))
                     .collect(Collectors.toList());
         }
+    }
+
+    @Override
+    public void refreshSimilarMovies(UserDTO userDTO) {
+        userSimilarMovieRepository.clearForUser(userDTO.getId());
     }
 
     private void adjustRecommendation(UserDTO user, String castId, String actor) {

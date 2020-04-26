@@ -20,6 +20,7 @@ public class RecommendationDTO implements Serializable {
         String Category = "C";
         String Actor = "A";
         String Director = "D";
+        String Similar = "S";
 
         static String getQueryParameter(String type) {
             switch (type){
