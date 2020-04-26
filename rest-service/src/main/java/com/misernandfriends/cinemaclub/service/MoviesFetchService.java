@@ -3,8 +3,6 @@ package com.misernandfriends.cinemaclub.service;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
-import com.misernandfriends.cinemaclub.model.movie.FavouriteDTO;
-import com.misernandfriends.cinemaclub.model.user.FavoriteMovieDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Movie;
 import com.misernandfriends.cinemaclub.pojo.MoviesList;
@@ -33,9 +31,6 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
 
     @Autowired
     private MovieServiceLocal movieServiceLocal;
-
-    @Autowired
-    private FavouriteService favouriteService;
 
     @Autowired
     private MovieFetchServiceLocal movieFetchServiceLocal;
