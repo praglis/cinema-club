@@ -56,10 +56,10 @@ public class UserController {
     }
 
     @PostMapping("/user/update")
-    public void editProfile(@RequestBody UserDTO user) {
+    public ResponseEntity editProfile(@RequestBody UserDTO user) {
         String currentPrincipalName = securityService.findLoggedInUsername();
         Optional<UserDTO> userFromDB = userService.findByUsername(currentPrincipalName);
-        userService.updateProfile(user, userFromDB);
+        return userService.updateProfile(user, userFromDB);
     }
 
     @PostMapping("/login")
@@ -140,11 +140,16 @@ public class UserController {
         if (!userExists.isPresent()) {
             return ErrorResponse.createError("User don't exists");
         }
-        mailService.sendChangePasswordEmail(userExists.get());
+        return userService.resetPassword(user);
+    }
 
-        Map<String, String> body = new HashMap<>();
-        body.put("username", user.getUsername());
-        return new ResponseEntity<>(body, HttpStatus.OK);
+    @GetMapping("/resetPasswordWithLoggedUser")
+    public ResponseEntity resetPasswordWithLoggedUser() {
+        Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userDTO.isPresent()) {
+            return ErrorResponse.createError("User don't exists");
+        }
+        return userService.resetPassword(userDTO.get());
     }
 
     @GetMapping("/getUsers")

@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.model.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.misernandfriends.cinemaclub.model.AddressDTO;
 import com.misernandfriends.cinemaclub.model.event.EventDTO;
+import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -89,7 +90,7 @@ public class UserDTO implements Serializable {
     private Long points;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "USERS_ROLES",
             joinColumns = @JoinColumn(
@@ -97,6 +98,16 @@ public class UserDTO implements Serializable {
             inverseJoinColumns = @JoinColumn(
                     name = "ROL_ID", referencedColumnName = "ROL_ID"))
     private List<RoleDTO> roles;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "USERS_REVIEWS",
+            joinColumns = @JoinColumn(
+                    name = "USR_ID", referencedColumnName = "USR_ID"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "URV_ID", referencedColumnName = "URV_ID"))
+    private List<UserReviewDTO> reviewDTOS;
 
     @Transient
     private String passwordConfirm;

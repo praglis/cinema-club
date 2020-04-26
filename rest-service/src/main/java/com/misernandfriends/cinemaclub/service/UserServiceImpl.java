@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.service;
 
+import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.enums.RoleEnum;
 import com.misernandfriends.cinemaclub.model.user.RoleDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
@@ -9,14 +10,13 @@ import com.misernandfriends.cinemaclub.serviceInterface.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.UserService;
 import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,16 +63,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateProfile(UserDTO user, Optional userFormDB) {
+    public ResponseEntity updateProfile(UserDTO user, Optional userFormDB) {
+
+        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+            return ErrorResponse.createError("Username already taken");
+        }
+        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+            return ErrorResponse.createError("Email already taken");
+        }
         if (userFormDB.isPresent()) {
             UserDTO userToUpdate = ((UserDTO) (userFormDB.get()));
             userToUpdate.setName(user.getName());
+            userToUpdate.setEmail(user.getEmail());
             userToUpdate.setSurname(user.getSurname());
             userToUpdate.setBirthday(user.getBirthday());
             userToUpdate.setPhoneNo(user.getPhoneNo());
             userToUpdate.setAddress(user.getAddress());
             userRepository.update(userToUpdate);
         }
+
+        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -104,5 +114,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return adminEmails;
+    }
+
+    @Override
+    public ResponseEntity resetPassword(UserDTO userDTO){
+
+        mailService.sendChangePasswordEmail(userDTO);
+
+        Map<String, String> body = new HashMap<>();
+        body.put("username", userDTO.getUsername());
+        return new ResponseEntity<>(body, HttpStatus.OK);
     }
 }

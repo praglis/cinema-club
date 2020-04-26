@@ -26,6 +26,8 @@ public class ReviewController {
     @Autowired
     private UserService userService;
 
+
+
     @GetMapping("NYTCriticsPicks")
     public String getNYTCriticsPicksReview() {
         return reviewService.getNYTCriticsPicksReview();
@@ -33,7 +35,11 @@ public class ReviewController {
 
     @GetMapping("userReview/{movieId}")
     public ResponseEntity getUserReviews(@PathVariable String movieId) {
-        return ResponseEntity.ok(reviewService.getUserReviews(movieId));
+        Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userOptional.isPresent()) {
+            return ErrorResponse.createError("User doesn't not exists");
+        }
+        return ResponseEntity.ok(reviewService.getUserReviews(movieId, userOptional.get()));
     }
 
     @PutMapping("userReview")
