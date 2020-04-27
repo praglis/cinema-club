@@ -10,6 +10,7 @@ import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class MovieServiceImpl implements MovieServiceLocal {
             return movieOptional.get();
         }
         String movieByQuery = movieDetailService.getMovieByQuery(movieName);
-        return createMovieByQuery(movieByQuery);
+        return createMovieByQuery(movieByQuery, movieName);
     }
 
     @Override
@@ -97,23 +98,44 @@ public class MovieServiceImpl implements MovieServiceLocal {
         return null;
     }
 
-    private MovieDTO createMovieByQuery(String movieByQuery) {
+    private MovieDTO createMovieByQuery(String movieByQuery, String movieName) {
         JSONObject json;
         try {
             json = new JSONObject(movieByQuery);
+            JSONObject movieObj = null;
             if (json.has("total_results") && json.getInt("total_results") == 0) {
+                log.debug("Cant find movie: {}", movieByQuery);
                 return null;
             }
-            JSONObject movieObj = json;
             if (json.has("results")) {
+                JSONArray array = json.getJSONArray("results");
                 movieObj = json
                         .getJSONArray("results")
                         .getJSONObject(0);
+                if (movieName != null) {
+                    for (int i = 1; i < array.length(); i++) {
+                        JSONObject obj = array.getJSONObject(i);
+                        if (obj.getString("title").equals(movieName)
+                                || obj.getString("original_title").equals(movieName)) {
+                            movieObj = obj;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (json.has("total_results") && json.getInt("total_results") == 0 || movieObj == null) {
+                log.debug("Cant find movie: {}", movieByQuery);
+                return null;
             }
             MovieDTO movie = new MovieDTO();
             movie.setTitle(movieObj.getString("title"));
             movie.setApiUrl(String.valueOf(movieObj.getInt("id")));
+            Optional<MovieDTO> movieExists = movieRepository.getByTitle(movie.getTitle());
+            if (movieExists.isPresent()) {
+                return movieExists.get();
+            }
             movieRepository.create(movie);
+            log.info("Creating new movie, id={}, name={}, apiUrl={}", movie.getId(), movie.getTitle(), movie.getApiUrl());
             return movie;
         } catch (JSONException e) {
             log.error("Can't find movie", e);

@@ -131,4 +131,14 @@ public class RecommendationServiceImplTest {
                 .getJSONObject(0);
     }
 
+
+    @Test
+    public void getMovieBaseOnTaste() {
+        long start = System.currentTimeMillis();
+        UserDTO user = userRepository.findByUsername("1035499").get();
+        List<MovieDTO> movieBaseOnTaste = recommendationService.getMovieBaseOnTaste(user);
+        Assert.assertFalse(movieBaseOnTaste.isEmpty());
+        System.out.println("Time: " + (System.currentTimeMillis() - start));
+    }
+
 }

@@ -16,4 +16,6 @@ public interface AbstractRepository<T extends Serializable> {
     Optional<T> getById(long id);
 
     List<T> getAll();
+
+    void flush();
 }

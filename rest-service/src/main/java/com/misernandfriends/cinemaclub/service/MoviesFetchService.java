@@ -1,6 +1,7 @@
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
+import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.Movie;
@@ -28,6 +29,12 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
     @Autowired
     private PersonalListService personalListService;
 
+    @Autowired
+    private MovieServiceLocal movieServiceLocal;
+
+    @Autowired
+    private MovieFetchServiceLocal movieFetchServiceLocal;
+
     @Override
     public String getBestRatedMovies(Integer page) {
         page = (page == null || page <= 0) ? 1 : page;
@@ -47,6 +54,21 @@ public class MoviesFetchService implements MoviesFetchServiceLocal {
 
     @Override
     public MoviesList getRecommendedMovies(UserDTO user, Integer page, String type) {
+        if (RecommendationDTO.Type.Similar.equals(type)) {
+            int pagePerRequest = 20;
+            if (page == null || page == 0) {
+                page = 1;
+            }
+            List<MovieDTO> movieBaseOnTaste = recommendationService.getMovieBaseOnTaste(user);
+            MoviesList moviesList = new MoviesList();
+            moviesList.setPage(page);
+            moviesList.setTotalPages(movieBaseOnTaste.size());
+            moviesList.setTotalResults(movieBaseOnTaste.size());
+            for (int i = page * pagePerRequest - pagePerRequest; i < movieBaseOnTaste.size() && i < page * pagePerRequest; i++) {
+                moviesList.getMovies().add(movieFetchServiceLocal.getMovieById(Integer.parseInt(movieBaseOnTaste.get(i).getApiUrl())));
+            }
+            return moviesList;
+        }
         List<Long> favoriteMovies = personalListService.getUserFavourites(user.getId())
                 .stream().map(favouriteDTO -> Long.parseLong(favouriteDTO.getMovie().getApiUrl())).collect(Collectors.toList());
         String criteriaParamName = RecommendationDTO.Type.getQueryParameter(type);

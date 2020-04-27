@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
+import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.*;
 import com.misernandfriends.cinemaclub.serviceInterface.*;
@@ -174,7 +175,20 @@ public class UserController {
         body.setMovies(moviesFetchService.getRecommendedMovies(userOptional.get(), page, type));
         body.setRecomVariable(recommendationService.getValues(userOptional.get(), type));
         body.setRecommendationsPresent(body.getRecomVariable().size() != 0);
+        if(RecommendationDTO.Type.Similar.equals(type)) {
+            body.setRecommendationsPresent(true);
+        }
         return ResponseEntity.ok(body);
+    }
+
+    @PostMapping("/user/preferences/refresh")
+    public ResponseEntity refreshPreferences() {
+        Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userOptional.isPresent()) {
+            return ErrorResponse.createError("User doesn't not exists");
+        }
+        recommendationService.refreshSimilarMovies(userOptional.get());
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/report/bug")

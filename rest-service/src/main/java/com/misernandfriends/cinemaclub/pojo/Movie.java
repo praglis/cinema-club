@@ -1,6 +1,7 @@
 package com.misernandfriends.cinemaclub.pojo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,9 +27,9 @@ public class Movie {
     @SerializedName("release_date")
     private String releaseDate;
 
-    @JsonProperty("genre_ids")
-    @SerializedName("genre_ids")
-    private List<Integer> genreIds;
+    @JsonProperty("genres")
+    @SerializedName("genres")
+    private List<Genre> genres;
 
     @JsonProperty("id")
     @SerializedName("id")
@@ -81,4 +82,12 @@ public class Movie {
     @JsonProperty("casts")
     @SerializedName("casts")
     private List<Cast> casts;
+
+    @JsonProperty("budget")
+    @SerializedName("budget")
+    private Integer budget;
+
+    @JsonProperty("production_companies")
+    @SerializedName("production_companies")
+    private Object productionCompanies;
 }

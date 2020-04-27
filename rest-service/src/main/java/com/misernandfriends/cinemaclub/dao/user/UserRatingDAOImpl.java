@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public class UserRatingDAOImpl extends AbstractDAOImpl<UserRatingDTO> implements UserRatingRepository {
@@ -41,5 +42,16 @@ public class UserRatingDAOImpl extends AbstractDAOImpl<UserRatingDTO> implements
         }catch (NoResultException e){
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<UserRatingDTO> getUserBestRatedMovies(Long userId, int maxResult) {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
+                "data.user.id = :userId " +
+                "ORDER BY data.rating DESC";
+        TypedQuery<UserRatingDTO> query = em.createQuery(queryTxt, UserRatingDTO.class)
+                .setMaxResults(maxResult)
+                .setParameter("userId", userId);
+        return query.getResultList();
     }
 }

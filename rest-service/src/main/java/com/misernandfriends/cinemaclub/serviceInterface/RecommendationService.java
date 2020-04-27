@@ -10,9 +10,13 @@ public interface RecommendationService {
 
     void processMovie(UserDTO user, MovieDTO movie);
 
+    List<MovieDTO> getMovieBaseOnTaste(UserDTO user);
+
     void processMovieAsync(UserDTO user, MovieDTO movie);
 
     List<RecommendationDTO> getRecommendation(UserDTO user, String type, int maxResult);
 
     List<String> getValues(UserDTO userDTO, String type);
+
+    void refreshSimilarMovies(UserDTO userDTO);
 }
