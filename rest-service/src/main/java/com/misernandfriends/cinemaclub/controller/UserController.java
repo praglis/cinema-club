@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
+import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.*;
@@ -41,6 +42,8 @@ public class UserController {
 
     @Autowired
     private ReviewServiceLocal reviewServiceLocal;
+
+
 
     //Przykład do pobierania aktualnego usera
     @GetMapping("/user")
@@ -208,5 +211,16 @@ public class UserController {
         userReport.setReportingUsername(currentLoggedUsername);
 
         mailService.sendUserReport(userReport);
+    }
+
+    @GetMapping("/badge")
+    public BadgeDTO getUserBadge(){
+        Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userDTO.isPresent()) {
+            return null;
+        }
+        else{
+            return userService.getBadge(userDTO.get());
+        }
     }
 }
