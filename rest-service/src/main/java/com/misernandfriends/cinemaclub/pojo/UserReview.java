@@ -22,4 +22,7 @@ public class UserReview {
 
     @SerializedName("reviewId")
     private Long reviewId;
+
+    @SerializedName("parentReviewId")
+    private Long parentReviewId;
 }

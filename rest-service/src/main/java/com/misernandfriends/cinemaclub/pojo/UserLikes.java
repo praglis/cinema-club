@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,5 +17,6 @@ public class UserLikes {
     private Date infoCD;
     private UserDTO infoCU;
     private boolean isLiked;
+    private List<UserLikes> replies;
 
 }
