@@ -207,14 +207,14 @@ public class ReviewService implements ReviewServiceLocal {
     }
 
     private UserLikes toUserLikes(UserReviewDTO review, UserDTO user) {
-        UserLikes userLikes1 = new UserLikes();
-        userLikes1.setLikes(review.getLikes());
-        userLikes1.setId(review.getId());
-        userLikes1.setInfoCD(review.getInfoCD());
-        userLikes1.setInfoCU(review.getInfoCU());
-        userLikes1.setStatement(review.getStatement());
-        userLikes1.setLiked(user.getReviewDTOS().contains(review));
-        return userLikes1;
+        UserLikes userLike = new UserLikes();
+        userLike.setLikes(review.getLikes());
+        userLike.setId(review.getId());
+        userLike.setInfoCD(review.getInfoCD());
+        userLike.setInfoCU(review.getInfoCU());
+        userLike.setStatement(review.getStatement());
+        userLike.setLiked(user.getReviewDTOS().contains(review));
+        return userLike;
     }
 
 
