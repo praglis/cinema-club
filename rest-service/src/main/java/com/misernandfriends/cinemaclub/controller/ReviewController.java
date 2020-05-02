@@ -27,7 +27,6 @@ public class ReviewController {
     private UserService userService;
 
 
-
     @GetMapping("NYTCriticsPicks")
     public String getNYTCriticsPicksReview() {
         return reviewService.getNYTCriticsPicksReview();
@@ -49,11 +48,9 @@ public class ReviewController {
         if (!userOptional.isPresent()) {
             return ErrorResponse.createError("User doesn't not exists");
         }
-        else{
-            UserDTO userDTO = userOptional.get();
-            if (userDTO.getStatus().equals("L")){
-                return ErrorResponse.createError("Your account is blocked");
-            }
+        UserDTO userDTO = userOptional.get();
+        if (userDTO.getStatus().equals("L")) {
+            return ErrorResponse.createError("Your account is blocked");
         }
         reviewService.addUserReview(userReview, userOptional.get());
         return ResponseEntity.noContent().build();

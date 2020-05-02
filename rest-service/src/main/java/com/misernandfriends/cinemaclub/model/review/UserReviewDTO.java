@@ -65,4 +65,11 @@ public class UserReviewDTO implements Serializable {
 
     @ManyToMany(mappedBy = "reviewDTOS", fetch = FetchType.LAZY)
     private List<UserDTO> userLikes;
+
+    @Column(name = "URV_PARENT_REVIEW")
+    private Long parentReviewId;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "URV_PARENT_REVIEW", referencedColumnName = "URV_ID", insertable = false, updatable = false)
+    private UserReviewDTO parentReview;
 }
