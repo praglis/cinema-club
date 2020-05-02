@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Getter
@@ -18,12 +19,15 @@ public class BadgeDTO implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_usr_urt_id")
     private Long id;
 
+    @NotNull
     @Column(name = "BAD_NAME")
     private String name;
 
+    @NotNull
     @Column(name = "BAD_FROM")
     private Integer valueFrom;
 
+    @NotNull
     @Column(name = "BAD_TO")
     private Integer valueTo;
 }

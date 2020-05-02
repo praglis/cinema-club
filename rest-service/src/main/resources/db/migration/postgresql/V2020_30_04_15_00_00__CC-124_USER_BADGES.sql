@@ -1,8 +1,8 @@
 create table USR_BADGE(
   BAD_ID int primary key,
-  BAD_NAME varchar(255),
-  BAD_FROM int,
-  BAD_TO int
+  BAD_NAME varchar(255) not null,
+  BAD_FROM int not null,
+  BAD_TO int not null
 );
 
 insert into USR_BADGE (BAD_ID, BAD_NAME, BAD_FROM, BAD_TO) values (1,'Alus glutinosa', 0, 10);

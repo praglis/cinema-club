@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,7 +218,7 @@ public class UserController {
     public BadgeDTO getUserBadge(){
         Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
         if (!userDTO.isPresent()) {
-            return null;
+            throw new EntityNotFoundException();
         }
         else{
             return userService.getBadge(userDTO.get());
