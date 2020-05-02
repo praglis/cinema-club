@@ -141,9 +141,11 @@ public class ReviewService implements ReviewServiceLocal {
         List<UserReviewDTO> userReviewDTOS = user.getReviewDTOS();
         if (userReviewDTO.getUserLikes().contains(user)) {
             userReviewDTOS.remove(userReviewDTO);
+            user.setBadgeValue(user.getBadgeValue()-1);
             adder = -1;
         } else {
             userReviewDTOS.add(userReviewDTO);
+            user.setBadgeValue(user.getBadgeValue()+1);
             adder = 1;
         }
         user.setReviewDTOS(userReviewDTOS);
@@ -175,7 +177,9 @@ public class ReviewService implements ReviewServiceLocal {
         userReview.setInfoCU(user);
         userReview.setHighlighted(false);
         userReview.setLikes(0L);
+        user.setBadgeValue(user.getBadgeValue()+1);
         userReviewRepository.create(userReview);
+        userRepository.update(user);
     }
 
     @Override

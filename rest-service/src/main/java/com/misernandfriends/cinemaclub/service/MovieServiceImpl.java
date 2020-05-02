@@ -7,6 +7,7 @@ import com.misernandfriends.cinemaclub.pojo.Movie;
 import com.misernandfriends.cinemaclub.pojo.Rate;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class MovieServiceImpl implements MovieServiceLocal {
 
     @Autowired
     private UserRatingRepository userRatingRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public MovieDTO getMovie(String movieName) {
@@ -69,6 +73,8 @@ public class MovieServiceImpl implements MovieServiceLocal {
         ratingDTO.setMovie(movie);
         ratingDTO.setUser(user);
         ratingDTO.setRating(rate.getRate());
+        user.setBadgeValue(user.getBadgeValue()+1);
+        userRepository.update(user);
         userRatingRepository.create(ratingDTO);
         recalculateMovieRating(movie, oldRate, rate.getRate());
     }

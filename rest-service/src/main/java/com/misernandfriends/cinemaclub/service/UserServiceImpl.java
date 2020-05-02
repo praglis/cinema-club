@@ -3,9 +3,11 @@ package com.misernandfriends.cinemaclub.service;
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.enums.RoleEnum;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
+import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
 import com.misernandfriends.cinemaclub.model.user.RoleDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
+import com.misernandfriends.cinemaclub.repository.user.BadgeRepository;
 import com.misernandfriends.cinemaclub.repository.user.RoleRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
@@ -43,6 +45,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private BadgeRepository badgeRepository;
+
     @Override
     @Transactional
     public void register(UserDTO user) {
@@ -51,6 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setType("U");
         user.setEmailConfirmed(false);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setBadgeValue(0);
         Optional<RoleDTO> userRole = roleRepository.findByName(RoleEnum.USER.getValue());
         if (userRole.isPresent()) {
             user.setRoles(Arrays.asList(userRole.get()));
@@ -134,6 +140,12 @@ public class UserServiceImpl implements UserService {
         Map<String, String> body = new HashMap<>();
         body.put("username", userDTO.getUsername());
         return new ResponseEntity<>(body, HttpStatus.OK);
+    }
+
+    @Override
+    public BadgeDTO getBadge(UserDTO userDTO){
+        return badgeRepository.findBadgeFromValue(userDTO.getBadgeValue())
+                .orElse(null);
     }
 
     @Slf4j
