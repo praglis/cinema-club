@@ -116,6 +116,9 @@ public class UserDTO implements Serializable {
     @Transient
     private Set<EventDTO> events;
 
+    @Column(name = "USR_BADGE")
+    private Integer badgeValue;
+
     public UserDTO(String username, String password, String passwordConfirm) {
         this.username = username;
         this.password = password;

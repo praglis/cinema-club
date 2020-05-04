@@ -22,8 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -134,11 +139,13 @@ public class ReviewService implements ReviewServiceLocal {
 
         int adder;
         List<UserReviewDTO> userReviewDTOS = user.getReviewDTOS();
-        if(userReviewDTO.getUserLikes().contains(user)){
+        if (userReviewDTO.getUserLikes().contains(user)) {
             userReviewDTOS.remove(userReviewDTO);
+            user.setBadgeValue(user.getBadgeValue()-1);
             adder = -1;
         } else {
             userReviewDTOS.add(userReviewDTO);
+            user.setBadgeValue(user.getBadgeValue()+1);
             adder = 1;
         }
         user.setReviewDTOS(userReviewDTOS);
@@ -149,6 +156,7 @@ public class ReviewService implements ReviewServiceLocal {
     }
 
     @Override
+    @Transactional
     public void addUserReview(UserReview userReviewData, UserDTO user) {
         if (userReviewData.getReviewId() != null) {
             editUserReview(userReviewData, user);
@@ -164,34 +172,55 @@ public class ReviewService implements ReviewServiceLocal {
         } else if (userReviewData.getMovieTitle() != null) {
             userReview.setMovie(movieServiceLocal.getMovie(userReviewData.getMovieTitle()));
         }
+        userReview.setParentReviewId(userReviewData.getParentReviewId());
         userReview.setStatement(userReviewData.getReviewBody());
         userReview.setInfoCU(user);
         userReview.setHighlighted(false);
         userReview.setLikes(0L);
+        user.setBadgeValue(user.getBadgeValue()+1);
         userReviewRepository.create(userReview);
+        userRepository.update(user);
     }
 
     @Override
     public List<UserLikes> getUserReviews(String movieUrl, UserDTO userDTO) {
         List<UserReviewDTO> userDTOS = userReviewRepository.getUserMovieReviews(movieUrl);
 
+        Map<Long, List<UserLikes>> replies = new HashMap<>();
+        for (UserReviewDTO dto : userDTOS) {
+            Long parentReviewId = dto.getParentReviewId();
+            if (parentReviewId != null) {
+                if (!replies.containsKey(parentReviewId)) {
+                    replies.put(parentReviewId, new ArrayList<>());
+                }
+                replies.get(parentReviewId).add(toUserLikes(dto, userDTO));
+            }
+        }
+
         List<UserLikes> userLikes = userDTOS.stream()
+                .filter(userReviewDTO -> Objects.isNull(userReviewDTO.getParentReviewId()))
                 .map(userReviewDTO -> {
-                    UserLikes userLikes1 =  new UserLikes();
-                    userLikes1.setLikes(userReviewDTO.getLikes());
-                    userLikes1.setId(userReviewDTO.getId());
-                    userLikes1.setInfoCD(userReviewDTO.getInfoCD());
-                    userLikes1.setInfoCU(userReviewDTO.getInfoCU());
-                    userLikes1.setStatement(userReviewDTO.getStatement());
-                    if(userDTO.getReviewDTOS().contains(userReviewDTO)){
-                        userLikes1.setLiked(true);
-                    } else {
-                      userLikes1.setLiked(false);
-                    }
-                    return userLikes1; })
+                    UserLikes userLikes1 = toUserLikes(userReviewDTO, userDTO);
+                    userLikes1.setReplies(replies.get(userReviewDTO.getId()));
+                    return userLikes1;
+                })
                 .collect(Collectors.toList());
+
+
         return userLikes;
     }
+
+    private UserLikes toUserLikes(UserReviewDTO review, UserDTO user) {
+        UserLikes userLike = new UserLikes();
+        userLike.setLikes(review.getLikes());
+        userLike.setId(review.getId());
+        userLike.setInfoCD(review.getInfoCD());
+        userLike.setInfoCU(review.getInfoCU());
+        userLike.setStatement(review.getStatement());
+        userLike.setLiked(user.getReviewDTOS().contains(review));
+        return userLike;
+    }
+
 
     @Override
     public UserReviewDTO getUserReviewById(Long reviewId) {

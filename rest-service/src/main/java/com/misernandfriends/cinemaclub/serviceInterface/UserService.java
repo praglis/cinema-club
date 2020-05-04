@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.serviceInterface;
 
+import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import org.springframework.http.ResponseEntity;
 
@@ -22,4 +23,6 @@ public interface UserService {
     List<String> getAllAdminEmails();
 
     ResponseEntity resetPassword(UserDTO userDTO);
+
+    BadgeDTO getBadge(UserDTO userDTO);
 }

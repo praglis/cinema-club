@@ -43,7 +43,7 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
     @Override
     public List<UserReviewDTO> getUserMovieReviews(String movieUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
-                "data.infoRD is NULL AND data.movie.apiUrl = :movieId ORDER BY data.likes DESC, data.infoCU";
+                "data.infoRD is NULL AND data.movie.apiUrl = :movieId ORDER BY data.likes DESC, data.infoCD ";
 
         TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
                 .setParameter("movieId", movieUrl);
