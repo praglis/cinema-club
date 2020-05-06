@@ -43,7 +43,7 @@ public class CinemaDAOImpl extends AbstractDAOImpl<CinemaDTO> implements CinemaR
 
             if (params.containsKey(fieldName)) {
                 isQueryEmpty = false;
-                queryTxt.append("data.").append(fieldPath).append(" LIKE :").append(fieldName).append(" OR ");
+                queryTxt.append("LOWER(data.").append(fieldPath).append(") LIKE LOWER(:").append(fieldName).append(") OR ");
             }
         }
         if (isQueryEmpty) {
