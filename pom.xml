@@ -7,7 +7,7 @@
     <groupId>com.misernandfriends.cinemaclub</groupId>
     <artifactId>cinema-club</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.13</version>
+    <version>0.0.14</version>
 
     <build>
         <plugins>
