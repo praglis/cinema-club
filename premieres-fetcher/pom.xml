@@ -7,7 +7,7 @@
     <parent>
         <artifactId>cinema-club</artifactId>
         <groupId>com.misernandfriends.cinemaclub</groupId>
-        <version>0.0.12</version>
+        <version>0.0.13</version>
     </parent>
 
     <artifactId>premieres-fetcher</artifactId>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.misernandfriends.cinemaclub</groupId>
             <artifactId>rest-service</artifactId>
-            <version>0.0.12</version>
+            <version>0.0.13</version>
         </dependency>
 
     </dependencies>
