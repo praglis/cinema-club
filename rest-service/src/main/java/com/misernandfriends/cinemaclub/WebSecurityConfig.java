@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/movies/*", "/movie/*",
                         "/changePassword", "/cinema/*", "/home", "/locations",
                         "/user/**", "/user/preferences/refresh",
-                        "/welcome", "/reviews/*")
+                        "/welcome", "/reviews/*", "/isAdmin" )
                 .hasAnyAuthority(RoleEnum.USER.getValue(), RoleEnum.ADMIN.getValue())
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",

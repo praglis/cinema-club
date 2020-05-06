@@ -33,8 +33,8 @@ public class AdminController {
         return adminService.deleteUser(userName);
     }
 
-    @PutMapping("/highlight")
-    public ResponseEntity highlightUserReview(@RequestParam(value = "id") Long id) {
-        return adminService.highlightUserReview(id);
+    @PutMapping("/highlight/{commentId}")
+    public ResponseEntity highlightUserReview(@PathVariable Long commentId) {
+        return adminService.highlightUserReview(commentId);
     }
 }

@@ -25,4 +25,6 @@ public interface UserService {
     ResponseEntity resetPassword(UserDTO userDTO);
 
     BadgeDTO getBadge(UserDTO userDTO);
+
+    boolean isAdminUser(UserDTO userDTO);
 }

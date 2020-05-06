@@ -224,4 +224,15 @@ public class UserController {
             return userService.getBadge(userDTO.get());
         }
     }
+
+    @GetMapping("/isAdmin")
+    public boolean isAdminUser(){
+        Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userDTO.isPresent()) {
+            throw new EntityNotFoundException();
+        }
+        else{
+            return userService.isAdminUser(userDTO.get());
+        }
+    }
 }

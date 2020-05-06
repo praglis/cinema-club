@@ -24,12 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -206,7 +201,12 @@ public class ReviewService implements ReviewServiceLocal {
                 })
                 .collect(Collectors.toList());
 
-
+        Collections.sort(userLikes, new Comparator<UserLikes>() {
+            @Override
+            public int compare(UserLikes o1, UserLikes o2) {
+                return Boolean.compare(o2.getHighlighted(), o1.getHighlighted());
+            }
+        });
         return userLikes;
     }
 
@@ -218,6 +218,7 @@ public class ReviewService implements ReviewServiceLocal {
         userLike.setInfoCU(review.getInfoCU());
         userLike.setStatement(review.getStatement());
         userLike.setLiked(user.getReviewDTOS().contains(review));
+        userLike.setHighlighted(review.isHighlighted());
         return userLike;
     }
 

@@ -78,13 +78,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isAdminUser(UserDTO userDTO) {
+        List<RoleDTO> userRoles = userDTO.getRoles();
+        if(userRoles.stream().anyMatch(e -> e.getName().equals("ADMIN"))) {
+            return true;
+        } else return false;
+    }
+
+    @Override
     @Transactional
     public ResponseEntity updateProfile(UserDTO user, Optional userFormDB) {
 
-        if(userRepository.findByUsername(user.getUsername()).isPresent()){
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ErrorResponse.createError("Username already taken");
         }
-        if(userRepository.findByEmail(user.getEmail()).isPresent()){
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             return ErrorResponse.createError("Email already taken");
         }
         if (userFormDB.isPresent()) {
@@ -133,7 +141,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity resetPassword(UserDTO userDTO){
+    public ResponseEntity resetPassword(UserDTO userDTO) {
 
         mailService.sendChangePasswordEmail(userDTO);
 
@@ -143,7 +151,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BadgeDTO getBadge(UserDTO userDTO){
+    public BadgeDTO getBadge(UserDTO userDTO) {
         return badgeRepository.findBadgeFromValue(userDTO.getBadgeValue())
                 .orElse(null);
     }
@@ -217,6 +225,5 @@ public class UserServiceImpl implements UserService {
             Optional<UserDTO> byUsername = userRepository.findByUsername(userIdString);
             return byUsername.orElse(null);
         }
-
     }
 }
