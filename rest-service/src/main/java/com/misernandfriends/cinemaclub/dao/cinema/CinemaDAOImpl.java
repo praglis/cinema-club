@@ -34,19 +34,27 @@ public class CinemaDAOImpl extends AbstractDAOImpl<CinemaDTO> implements CinemaR
     @Override
     public List<CinemaDTO> searchFor(Map<String, String> params) {
         String[] table = {"name", "address.country", "address.state", "address.city", "address.streetName", "address.houseNumber"};
-
+        boolean isQueryEmpty = true;
         StringBuilder queryTxt = new StringBuilder("SELECT data FROM " + getEntityName() + " data " +
-                "WHERE data.infoRD IS NULL ");
+                "WHERE data.infoRD IS NULL AND (");
         for (String fieldPath : table) {
             String[] fieldSep = fieldPath.split("\\.");
             String fieldName = fieldSep[fieldSep.length - 1];
+
             if (params.containsKey(fieldName)) {
-                queryTxt.append(" AND ").append("data.").append(fieldPath).append(" = :").append(fieldName);
+                isQueryEmpty = false;
+                queryTxt.append("LOWER(data.").append(fieldPath).append(") LIKE LOWER(:").append(fieldName).append(") OR ");
             }
+        }
+        if (isQueryEmpty) {
+            queryTxt.delete(queryTxt.length() - 5, queryTxt.length());
+        } else {
+            queryTxt.delete(queryTxt.length() - 4, queryTxt.length());
+            queryTxt.append(")");
         }
 
         TypedQuery<CinemaDTO> query = em.createQuery(queryTxt.toString(), CinemaDTO.class);
-        params.forEach(query::setParameter);
+        params.forEach((k, v) -> query.setParameter(k, "%" + v + "%"));
 
         return query.getResultList();
     }
