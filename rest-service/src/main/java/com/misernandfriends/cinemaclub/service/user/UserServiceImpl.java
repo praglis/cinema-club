@@ -83,6 +83,14 @@ public class UserServiceImpl implements UserService {
         userRepository.update(user);
     }
 
+    @Override
+    public boolean isAdminUser(UserDTO userDTO) {
+        List<RoleDTO> userRoles = userDTO.getRoles();
+        if(userRoles.stream().anyMatch(e -> CacheValue._USER_ROLES.ADMIN.toString().equals(e.getName()))) {
+            return true;
+        } else return false;
+    }
+
     @Transactional
     @Override
     public ResponseEntity<Object> updateProfile(UserDTO user, UserDTO potentialUser) {
@@ -233,6 +241,5 @@ public class UserServiceImpl implements UserService {
             Optional<UserDTO> byUsername = userRepository.findByUsername(userIdString);
             return byUsername.orElse(null);
         }
-
     }
 }

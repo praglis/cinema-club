@@ -15,6 +15,7 @@ public interface UserService {
     Optional<UserDTO> findByUsername(String username);
     ResponseEntity<Object> updateProfile(UserDTO user, UserDTO userFormDB);
     ResponseEntity<Object> resetPassword(UserDTO userDTO);
+    boolean isAdminUser(UserDTO userDTO);
     void changePassword(UserDTO user, String password);
     void register(UserDTO user);
 }

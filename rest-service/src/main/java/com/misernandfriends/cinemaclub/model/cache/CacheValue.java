@@ -6,7 +6,8 @@ public enum CacheValue {
     EMAIL_CONFIGURATION(_EMAIL_CONFIGURATION.class),
     USER_REVIEW(_USER_REVIEW.class),
     QUERY_PARAM(_QUERY_PARAM.class),
-    GENRES(_GENRES.class);
+    GENRES(_GENRES.class),
+    USER_ROLES(_USER_ROLES.class);
 
     private Class<? extends Enum> value;
 
@@ -75,5 +76,10 @@ public enum CacheValue {
 
     public enum _GENRES implements EnumCache {
         GENRES
+    }
+
+    public enum _USER_ROLES implements EnumCache {
+        ADMIN,
+        USER
     }
 }
