@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.misernandfriends.cinemaclub.comparators.UserLikesComparator;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
@@ -24,7 +25,14 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service
@@ -201,12 +209,7 @@ public class ReviewService implements ReviewServiceLocal {
                 })
                 .collect(Collectors.toList());
 
-        Collections.sort(userLikes, new Comparator<UserLikes>() {
-            @Override
-            public int compare(UserLikes o1, UserLikes o2) {
-                return Boolean.compare(o2.getHighlighted(), o1.getHighlighted());
-            }
-        });
+        Collections.sort(userLikes, new UserLikesComparator());
         return userLikes;
     }
 
