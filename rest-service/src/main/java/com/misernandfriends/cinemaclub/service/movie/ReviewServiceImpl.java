@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.service.movie;
 
+import com.misernandfriends.cinemaclub.comparators.UserLikesComparator;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
@@ -208,6 +209,7 @@ public class ReviewServiceImpl implements ReviewService {
         return userReviews.stream()
                 .filter(review -> Objects.isNull(review.getParentReviewId()))
                 .map(userReview -> userReview.toUserLikes(user, replies))
+                .sorted(new UserLikesComparator())
                 .collect(Collectors.toList());
     }
 

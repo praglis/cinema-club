@@ -253,12 +253,11 @@ public class UserController {
 
     @GetMapping("/isAdmin")
     public boolean isAdminUser(){
-        Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
-        if (!userDTO.isPresent()) {
+        Optional<UserDTO> user = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!user.isPresent()) {
             throw new EntityNotFoundException();
-        }
-        else{
-            return userService.isAdminUser(userDTO.get());
+        } else {
+            return userService.isAdminUser(user.get());
         }
     }
 }

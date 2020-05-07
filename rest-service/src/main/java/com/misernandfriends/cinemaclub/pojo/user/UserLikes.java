@@ -10,7 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class UserLikes {
-
     private Long id;
     private Long likes;
     private String statement;
@@ -19,6 +18,4 @@ public class UserLikes {
     private boolean isLiked;
     private List<UserLikes> replies;
     private Boolean highlighted;
-
-
 }

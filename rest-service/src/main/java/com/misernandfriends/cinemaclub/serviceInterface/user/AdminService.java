@@ -9,4 +9,5 @@ public interface AdminService {
     ResponseEntity<Object> banUser(String userName);
     ResponseEntity<Object> blockUser(String userName);
     ResponseEntity<Object> deleteUser(String userName);
+    ResponseEntity<Object> highlightUserReview(Long id);
 }

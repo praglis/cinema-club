@@ -1,6 +1,7 @@
 package com.misernandfriends.cinemaclub.service.user;
 
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
+import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.enums.RoleEnum;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
@@ -84,11 +85,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isAdminUser(UserDTO userDTO) {
-        List<RoleDTO> userRoles = userDTO.getRoles();
-        if(userRoles.stream().anyMatch(e -> CacheValue._USER_ROLES.ADMIN.toString().equals(e.getName()))) {
-            return true;
-        } else return false;
+    public boolean isAdminUser(UserDTO user) {
+        return user
+                .getRoles()
+                .stream()
+                .anyMatch(e -> CacheValue._USER_ROLES.ADMINISTRATOR.toString().equals(e.getName()));
     }
 
     @Transactional

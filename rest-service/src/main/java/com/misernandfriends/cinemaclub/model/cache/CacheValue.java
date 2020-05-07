@@ -79,7 +79,7 @@ public enum CacheValue {
     }
 
     public enum _USER_ROLES implements EnumCache {
-        ADMIN,
+        ADMINISTRATOR,
         USER
     }
 }

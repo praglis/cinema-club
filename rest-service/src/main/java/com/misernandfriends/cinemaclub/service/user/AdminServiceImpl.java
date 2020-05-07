@@ -1,7 +1,9 @@
 package com.misernandfriends.cinemaclub.service.user;
 
+import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
+import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.repository.user.VerificationTokenRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.user.AdminService;
@@ -18,10 +20,12 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final UserReviewRepository userReviewRepository;
 
-    public AdminServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
+    public AdminServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, UserReviewRepository userReviewRepository) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
+        this.userReviewRepository = userReviewRepository;
     }
 
     @Override
@@ -83,6 +87,20 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.ok().build();
         } else {
             log.error("User with name " + userName + "does not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> highlightUserReview(Long id) {
+        Optional<UserReviewDTO> userReview = userReviewRepository.getUserReviewById(id);
+        if(userReview.isPresent()) {
+            UserReviewDTO review = userReview.get();
+            review.setHighlighted(!review.isHighlighted());
+            userReviewRepository.update(review);
+            return ResponseEntity.ok().build();
+        } else {
+            log.error("Review with id " + id + "does not exists");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
