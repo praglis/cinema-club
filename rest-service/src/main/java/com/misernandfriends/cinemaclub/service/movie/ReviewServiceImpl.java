@@ -17,6 +17,7 @@ import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieServiceLocal;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.ReviewService;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
+import com.misernandfriends.cinemaclub.utils.UrlParamEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -69,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public GuardianResult getGuardianMovieReview(String movieTitle) {
-        String uri = new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_URL_QUERY).setQuery(movieTitle).build();
+        String uri = new UrlHelper(CacheValue._API_URLS.GUARDIAN_API_URL_QUERY).setQuery(UrlParamEncoder.encode(movieTitle)).build();
         RestTemplate restTemplate = new RestTemplate();
         GuardianResponse guardianResponse = restTemplate.getForObject(uri, GuardianResponse.class);
 
@@ -79,7 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         for (GuardianResult review : guardianResponse.getResponse().getResults()) {
-            if (review.getWebTitle().equals(movieTitle)) {
+            if (review.getWebTitle().contains(movieTitle)) {
                 return review;
             }
         }
