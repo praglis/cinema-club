@@ -2,6 +2,7 @@ package com.misernandfriends.cinemaclub.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.misernandfriends.cinemaclub.comparators.UserLikesComparator;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
@@ -29,7 +30,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Service
@@ -206,7 +209,7 @@ public class ReviewService implements ReviewServiceLocal {
                 })
                 .collect(Collectors.toList());
 
-
+        Collections.sort(userLikes, new UserLikesComparator());
         return userLikes;
     }
 
@@ -218,6 +221,7 @@ public class ReviewService implements ReviewServiceLocal {
         userLike.setInfoCU(review.getInfoCU());
         userLike.setStatement(review.getStatement());
         userLike.setLiked(user.getReviewDTOS().contains(review));
+        userLike.setHighlighted(review.isHighlighted());
         return userLike;
     }
 

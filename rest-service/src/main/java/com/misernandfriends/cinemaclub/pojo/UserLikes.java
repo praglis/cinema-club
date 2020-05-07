@@ -18,5 +18,6 @@ public class UserLikes {
     private UserDTO infoCU;
     private boolean isLiked;
     private List<UserLikes> replies;
+    private Boolean highlighted;
 
 }

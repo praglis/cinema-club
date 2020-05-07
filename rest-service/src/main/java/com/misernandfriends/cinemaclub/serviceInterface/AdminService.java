@@ -9,4 +9,5 @@ public interface AdminService {
     ResponseEntity blockUser(String userName);
     ResponseEntity activeUser(String userName);
     ResponseEntity deleteUser(String userName);
+    ResponseEntity highlightUserReview(Long id);
 }

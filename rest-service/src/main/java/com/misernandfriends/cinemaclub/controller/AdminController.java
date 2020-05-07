@@ -32,4 +32,9 @@ public class AdminController {
     public ResponseEntity deleteUser(@RequestParam(value = "userName") String userName) {
         return adminService.deleteUser(userName);
     }
+
+    @PutMapping("/highlight/{commentId}")
+    public ResponseEntity highlightUserReview(@PathVariable Long commentId) {
+        return adminService.highlightUserReview(commentId);
+    }
 }

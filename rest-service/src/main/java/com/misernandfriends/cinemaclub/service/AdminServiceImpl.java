@@ -1,7 +1,10 @@
 package com.misernandfriends.cinemaclub.service;
 
+import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.model.user.VerificationTokenDTO;
+import com.misernandfriends.cinemaclub.pojo.UserReview;
+import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.repository.user.VerificationTokenRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.AdminService;
@@ -22,6 +25,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
+
+    @Autowired
+    private UserReviewRepository userReviewRepository;
 
     @Override
     public ResponseEntity banUser(String userName) {
@@ -87,6 +93,20 @@ public class AdminServiceImpl implements AdminService {
             log.error("User with name " + userName + "does not exists");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
+        }
+    }
+
+    @Override
+    public ResponseEntity highlightUserReview(Long id) {
+        Optional<UserReviewDTO> userReviewDTO = userReviewRepository.getUserReviewById(id);
+        if(userReviewDTO.isPresent()) {
+            UserReviewDTO reviewDTO = userReviewDTO.get();
+            reviewDTO.setHighlighted(!reviewDTO.isHighlighted());
+            userReviewRepository.update(reviewDTO);
+            return ResponseEntity.ok().build();
+        } else {
+            log.error("Review with id " + id + "does not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
