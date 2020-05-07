@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub;
 
+import com.misernandfriends.cinemaclub.config.CustomProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -36,18 +36,6 @@ public class FavouriteDaoImpl extends AbstractDAOImpl<FavouriteDTO> implements F
     }
 
     @Override
-    public List<FavouriteDTO> findAll() {
-        String queryTxt = "SELECT data FROM " + getEntityName() + " data ";
-        TypedQuery<FavouriteDTO> query = em.createQuery(queryTxt, FavouriteDTO.class);
-
-        try {
-            return query.getResultList();
-        } catch (NoResultException e) {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     public Optional<FavouriteDTO> getByUrl(Long userId, String apiUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
                 "WHERE data.user.id = :userId AND data.movie.apiUrl = :url AND data.infoRD IS NULL";

@@ -71,9 +71,4 @@ public abstract class AbstractDAOImpl<T extends Serializable> implements Abstrac
     }
 
     protected abstract Class<T> getEntityClazz();
-
-    @Override
-    public void flush() {
-        em.flush();
-    }
 }

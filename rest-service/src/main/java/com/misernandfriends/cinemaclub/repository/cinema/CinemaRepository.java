@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface CinemaRepository extends AbstractRepository<CinemaDTO> {
     Optional<CinemaDTO> getByName(String name);
-
     List<CinemaDTO> searchFor(Map<String, String> params);
 }

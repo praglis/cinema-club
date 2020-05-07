@@ -36,18 +36,6 @@ public class PlanToWatchDaoImpl extends AbstractDAOImpl<PlanToWatchMovieDTO> imp
     }
 
     @Override
-    public List<PlanToWatchMovieDTO> findAll() {
-        String queryTxt = "SELECT data FROM " + getEntityName() + " data ";
-        TypedQuery<PlanToWatchMovieDTO> query = em.createQuery(queryTxt, PlanToWatchMovieDTO.class);
-
-        try {
-            return query.getResultList();
-        } catch (NoResultException e) {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     public Optional<PlanToWatchMovieDTO> getByUrl(Long userId, String apiUrl) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data " +
                 "WHERE data.user.id = :userId AND data.movie.apiUrl = :url AND data.infoRD IS NULL";

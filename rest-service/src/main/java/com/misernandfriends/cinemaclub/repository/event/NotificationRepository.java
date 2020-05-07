@@ -6,7 +6,5 @@ import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 import java.util.List;
 
 public interface NotificationRepository extends AbstractRepository<NotificationDTO> {
-
     List<NotificationDTO> getUserFutureNotifications(Long userId);
-
 }

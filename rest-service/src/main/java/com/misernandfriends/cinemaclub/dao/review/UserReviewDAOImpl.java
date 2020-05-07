@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,25 +18,6 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
     @Override
     protected Class<UserReviewDTO> getEntityClazz() {
         return UserReviewDTO.class;
-    }
-
-    @Override
-    public List<UserReviewDTO> getUserReviews(Long userId) {
-        return null;
-    }
-
-    @Override
-    public List<UserReviewDTO> getUserReviews(Long userId, int maxResults) {
-        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
-                "data.infoCU.id = :userId AND data.infoRD IS NULL ORDER BY data.likes DESC, data.infoCU";
-        TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class)
-                .setParameter("userId", userId)
-                .setMaxResults(maxResults);
-        try {
-            return query.getResultList();
-        } catch (NoResultException e) {
-            return Collections.emptyList();
-        }
     }
 
     @Override

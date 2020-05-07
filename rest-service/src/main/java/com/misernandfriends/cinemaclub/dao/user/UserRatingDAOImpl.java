@@ -18,19 +18,6 @@ public class UserRatingDAOImpl extends AbstractDAOImpl<UserRatingDTO> implements
     }
 
     @Override
-    public double getAvgRatingForMovie(Long movieId) {
-        String queryTxt = "SELECT AVG(data.rating) FROM " + getEntityName() + " data WHERE " +
-                "data.movie.id = :movieId";
-        TypedQuery<Double> query = em.createQuery(queryTxt, Double.class)
-                .setParameter("movieId", movieId);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return 0D;
-        }
-    }
-
-    @Override
     public Optional<UserRatingDTO> getByUser(Long userId, String movieApi) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
                 "data.user.id = :userId AND data.movie.apiUrl = :movieId";

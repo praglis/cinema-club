@@ -3,6 +3,7 @@ package com.misernandfriends.cinemaclub.model.review;
 import com.misernandfriends.cinemaclub.model.cinema.CinemaDTO;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.user.UserLikes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -63,8 +65,8 @@ public class UserReviewDTO implements Serializable {
     @Column(name = "URV_LIKES")
     private Long likes;
 
-    @ManyToMany(mappedBy = "reviewDTOS", fetch = FetchType.LAZY)
-    private List<UserDTO> userLikes;
+    @ManyToMany(mappedBy = "reviews", fetch = FetchType.LAZY)
+    private List<UserDTO> likedBy;
 
     @Column(name = "URV_PARENT_REVIEW")
     private Long parentReviewId;
@@ -72,4 +74,22 @@ public class UserReviewDTO implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "URV_PARENT_REVIEW", referencedColumnName = "URV_ID", insertable = false, updatable = false)
     private UserReviewDTO parentReview;
+
+    public UserLikes toUserLikes(UserDTO user, Map<Long, List<UserLikes>> replies) {
+        UserLikes reviewResponse = toUserLikes(user);
+        reviewResponse.setReplies(replies.get(getId()));
+        return reviewResponse;
+    }
+
+    public UserLikes toUserLikes(UserDTO user) {
+        UserLikes reviewResponse = new UserLikes();
+        reviewResponse.setLikes(getLikes());
+        reviewResponse.setId(getId());
+        reviewResponse.setInfoCD(getInfoCD());
+        reviewResponse.setInfoCU(getInfoCU());
+        reviewResponse.setStatement(getStatement());
+        reviewResponse.setLiked(user.getReviews().contains(this));
+
+        return reviewResponse;
+    }
 }

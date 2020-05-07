@@ -6,7 +6,5 @@ import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 import java.util.List;
 
 public interface EventRepository extends AbstractRepository<EventDTO> {
-
     List<EventDTO> getUserEvents(Long userId);
-
 }

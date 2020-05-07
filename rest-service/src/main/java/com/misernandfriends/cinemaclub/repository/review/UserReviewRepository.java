@@ -8,14 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserReviewRepository extends AbstractRepository<UserReviewDTO> {
-
-    List<UserReviewDTO> getUserReviews(Long userId);
-
-    List<UserReviewDTO> getUserReviews(Long userId, int maxResults);
-
     List<UserReviewDTO> getUserMovieReviews(String movieUrl);
-
     Optional<UserReviewDTO> getUserReviewById(Long reviewId);
-
     void delete(UserReviewDTO userReviewDTO, UserDTO user);
 }

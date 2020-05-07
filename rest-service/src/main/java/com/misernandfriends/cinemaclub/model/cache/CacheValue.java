@@ -8,7 +8,6 @@ public enum CacheValue {
     QUERY_PARAM(_QUERY_PARAM.class),
     GENRES(_GENRES.class);
 
-
     private Class<? extends Enum> value;
 
     CacheValue(Class<? extends Enum> value) {

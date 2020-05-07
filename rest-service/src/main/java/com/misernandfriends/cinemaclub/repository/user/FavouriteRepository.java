@@ -9,9 +9,7 @@ import java.util.Optional;
 
 public interface FavouriteRepository extends AbstractRepository<FavouriteDTO> {
     List<FavouriteDTO> getUserFavourites(Long userId);
-    List<FavouriteDTO> findAll();
+    List<FavouriteDTO> getUserFavourites(Long userId, Date fromDate, int maxResults);
     Optional<FavouriteDTO> getByUrl(Long userId, String apiUrl);
     void deleteFavourite(Long userId, String movieUrl);
-
-    List<FavouriteDTO> getUserFavourites(Long userId, Date fromDate, int maxResults);
 }

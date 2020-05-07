@@ -7,9 +7,6 @@ import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 import java.util.List;
 
 public interface UserSimilarMovieRepository extends AbstractRepository<UserSimilarMovieDTO> {
-
     List<MovieDTO> getForUser(Long userId);
-
     void clearForUser(Long userId);
-
 }

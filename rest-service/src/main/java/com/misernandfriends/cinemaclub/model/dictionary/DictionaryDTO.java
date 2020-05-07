@@ -28,7 +28,6 @@ public class DictionaryDTO implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "dictionary")
     private List<DictionaryItemDTO> items;
 
-
     public String getValue(EnumCache itemName) {
         DictionaryItemDTO item = get(itemName);
         if (item != null) {

@@ -17,8 +17,8 @@ public class NotificationDTO implements Serializable {
     private static final long serialVersionUID = -2285030564208708033L;
 
     public interface Status {
-        String SEND = "S";    // Notification has been send
-        String TO_SEND = "T"; // Notification has not been send yet
+        String SEND = "S";
+        String TO_SEND = "T";
     }
 
     public interface Type {

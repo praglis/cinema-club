@@ -6,8 +6,6 @@ import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 import java.util.Optional;
 
 public interface ActorRepository extends AbstractRepository<ActorDTO> {
-
     Optional<ActorDTO> getByUrlApi(String url);
-
     String getNameByUrlApi(String apiUrl);
 }

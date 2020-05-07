@@ -6,10 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class AddressDAOImpl extends AbstractDAOImpl<AddressDTO> implements AddressRepository {
-
     @Override
     protected Class<AddressDTO> getEntityClazz() {
         return AddressDTO.class;
     }
-
 }
