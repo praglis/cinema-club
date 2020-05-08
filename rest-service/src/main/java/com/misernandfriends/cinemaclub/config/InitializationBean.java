@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.config;
 
-import com.misernandfriends.cinemaclub.serviceInterface.config.DictionaryServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.config.DictionaryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitializationBean implements InitializingBean {
 
-    private final DictionaryServiceLocal dictionaryServiceLocal;
+    private final DictionaryService dictionaryService;
 
-    public InitializationBean(DictionaryServiceLocal dictionaryServiceLocal) {
-        this.dictionaryServiceLocal = dictionaryServiceLocal;
+    public InitializationBean(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         log.info("Loading dictionaries");
-        dictionaryServiceLocal.reloadDictionaries();
+        dictionaryService.reloadDictionaries();
         log.info("Dictionaries loaded");
     }
 }

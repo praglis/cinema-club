@@ -12,7 +12,7 @@ import com.misernandfriends.cinemaclub.pojo.user.User;
 import com.misernandfriends.cinemaclub.pojo.user.UserReport;
 import com.misernandfriends.cinemaclub.serviceInterface.config.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.config.SecurityService;
-import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchServiceImpl;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.ReviewService;
 import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
 import com.misernandfriends.cinemaclub.serviceInterface.user.UserService;
@@ -37,11 +37,11 @@ public class UserController {
     private final SecurityService securityService;
     private final VerificationTokenService verificationTokenService;
     private final MailService mailService;
-    private final MoviesFetchServiceImpl moviesFetchService;
+    private final MoviesFetchService moviesFetchService;
     private final RecommendationService recommendationService;
     private final ReviewService reviewService;
 
-    public UserController(UserService userService, SecurityService securityService, VerificationTokenService verificationTokenService, MailService mailService, MoviesFetchServiceImpl moviesFetchService, RecommendationService recommendationService, ReviewService reviewService) {
+    public UserController(UserService userService, SecurityService securityService, VerificationTokenService verificationTokenService, MailService mailService, MoviesFetchService moviesFetchService, RecommendationService recommendationService, ReviewService reviewService) {
         this.userService = userService;
         this.securityService = securityService;
         this.verificationTokenService = verificationTokenService;
@@ -70,7 +70,8 @@ public class UserController {
         Optional<UserDTO> userFromDB = userService.findByUsername(currentPrincipalName);
 
         if (userFromDB.isPresent()) {
-            return userService.updateProfile(user, userFromDB.get());
+            userService.updateProfile(user, userFromDB.get());
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -165,7 +166,8 @@ public class UserController {
             return ErrorResponse.createError("User does not exist");
         }
 
-        return userService.resetPassword(user);
+        userService.resetPassword(user);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/resetPasswordWithLoggedUser")
@@ -176,7 +178,8 @@ public class UserController {
             return ErrorResponse.createError("User does not exist");
         }
 
-        return userService.resetPassword(userDTO.get());
+        userService.resetPassword(userDTO.get());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users")

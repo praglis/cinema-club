@@ -1,13 +1,14 @@
 package com.misernandfriends.cinemaclub.serviceInterface.user;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 @Service
 public interface AdminService {
-    ResponseEntity<Object> activeUser(String userName);
-    ResponseEntity<Object> banUser(String userName);
-    ResponseEntity<Object> blockUser(String userName);
-    ResponseEntity<Object> deleteUser(String userName);
-    ResponseEntity<Object> highlightUserReview(Long id);
+    void activeUser(String userName) throws EntityNotFoundException;
+    void banUser(String userName) throws EntityNotFoundException;
+    void blockUser(String userName) throws EntityNotFoundException;
+    void deleteUser(String userName) throws EntityNotFoundException;
+    void highlightUserReview(Long id) throws EntityNotFoundException;
 }

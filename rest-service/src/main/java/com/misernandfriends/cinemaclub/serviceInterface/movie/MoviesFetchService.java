@@ -5,7 +5,7 @@ import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.rec.QuestionnaireMovieResponse;
 import org.springframework.cache.annotation.Cacheable;
 
-public interface MoviesFetchServiceImpl {
+public interface MoviesFetchService {
     @Cacheable("best")
     MoviesList getBestRatedMovies(Integer page);
 

@@ -3,12 +3,12 @@ package com.misernandfriends.cinemaclub.pojo.movie;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
-import com.misernandfriends.cinemaclub.pojo.movie.Genre;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Cast;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Crew;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -95,6 +95,13 @@ public class Movie {
     private Object productionCompanies;
 
     public MovieDTO toMovieDTO() {
-        return null;
+        MovieDTO movie = new MovieDTO();
+        movie.setTitle(getTitle());
+        movie.setVotesNumber(getNumberOfVotes());
+        movie.setMovieRating(getAverageVote());
+        movie.setInfoCD(new Date());
+        movie.setApiUrl(getId().toString());
+
+        return movie;
     }
 }

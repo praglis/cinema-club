@@ -8,7 +8,7 @@ import com.misernandfriends.cinemaclub.pojo.movie.Movie;
 import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.rec.QuestionnaireMovieResponse;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
-import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchServiceImpl;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.PersonalListService;
 import com.misernandfriends.cinemaclub.serviceInterface.rec.QuestionnaireMovieService;
 import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MoviesFetchService implements MoviesFetchServiceImpl {
+public class MoviesFetchServiceImpl implements MoviesFetchService {
 
     private static final Integer MAX_MOVIES_IN_RECOMMENDATION_LIST = 20;
 
@@ -30,7 +30,7 @@ public class MoviesFetchService implements MoviesFetchServiceImpl {
     private final PersonalListService personalListService;
     private final MovieDetailService movieFetchServiceLocal;
 
-    public MoviesFetchService(RecommendationService recommendationService, QuestionnaireMovieService questionnaireMovieService, PersonalListService personalListService, MovieDetailService movieFetchServiceLocal) {
+    public MoviesFetchServiceImpl(RecommendationService recommendationService, QuestionnaireMovieService questionnaireMovieService, PersonalListService personalListService, MovieDetailService movieFetchServiceLocal) {
         this.recommendationService = recommendationService;
         this.questionnaireMovieService = questionnaireMovieService;
         this.personalListService = personalListService;

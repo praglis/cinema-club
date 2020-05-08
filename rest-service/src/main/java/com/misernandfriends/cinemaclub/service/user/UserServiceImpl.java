@@ -18,7 +18,6 @@ import com.misernandfriends.cinemaclub.serviceInterface.user.UserService;
 import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -94,24 +93,22 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public ResponseEntity<Object> updateProfile(UserDTO user, UserDTO potentialUser) {
+    public void updateProfile(UserDTO user, UserDTO potentialUser) {
 
         if (user.getName() != null &&
                 potentialUser.getName() != null &&
-                !user.getName().equals(potentialUser.getName())) {
-            if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-                log.error("Username already taken");
-                throw new ApplicationException("Username already taken");
-            }
+                !user.getName().equals(potentialUser.getName()) &&
+                userRepository.findByUsername(user.getUsername()).isPresent()) {
+            log.error("Username already taken");
+            throw new ApplicationException("Username already taken");
         }
 
         if (user.getEmail() != null &&
                 potentialUser.getEmail() != null &&
-                !user.getEmail().equals(potentialUser.getEmail())) {
-            if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-                log.error("Email already taken");
-                throw new ApplicationException("Email already taken");
-            }
+                !user.getEmail().equals(potentialUser.getEmail()) &&
+                userRepository.findByEmail(user.getEmail()).isPresent()) {
+            log.error("Email already taken");
+            throw new ApplicationException("Email already taken");
         }
 
         potentialUser.setName(user.getName());
@@ -121,8 +118,6 @@ public class UserServiceImpl implements UserService {
         potentialUser.setPhoneNo(user.getPhoneNo());
         potentialUser.setAddress(user.getAddress());
         userRepository.update(potentialUser);
-
-        return ResponseEntity.ok().build();
     }
 
     @Override
@@ -158,10 +153,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<Object> resetPassword(UserDTO userDTO) {
+    public void resetPassword(UserDTO userDTO) {
         mailService.sendChangePasswordEmail(userDTO);
-
-        return ResponseEntity.ok().build();
     }
 
     @Override

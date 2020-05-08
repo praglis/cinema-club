@@ -2,7 +2,7 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.rec.QuestionnaireMovieResponse;
-import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchServiceImpl;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class MoviesListController {
 
-    private final MoviesFetchServiceImpl moviesService;
+    private final MoviesFetchService moviesService;
 
-    public MoviesListController(MoviesFetchServiceImpl moviesService) {
+    public MoviesListController(MoviesFetchService moviesService) {
         this.moviesService = moviesService;
     }
 

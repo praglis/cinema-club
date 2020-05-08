@@ -17,26 +17,31 @@ public class AdminController {
 
     @PutMapping("/ban")
     public ResponseEntity<Object> banUser(@RequestParam(value = "userName") String userName) {
-        return adminService.banUser(userName);
+        adminService.banUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/block")
     public ResponseEntity<Object> blockUser(@RequestParam(value = "userName") String userName) {
-        return adminService.blockUser(userName);
+        adminService.blockUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/active")
     public ResponseEntity<Object> activeUser(@RequestParam(value = "userName") String userName) {
-        return adminService.activeUser(userName);
+        adminService.activeUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@RequestParam(value = "userName") String userName) {
-        return adminService.deleteUser(userName);
+        adminService.deleteUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/highlight/{commentId}")
-    public ResponseEntity highlightUserReview(@PathVariable Long commentId) {
-        return adminService.highlightUserReview(commentId);
+    public ResponseEntity<Object> highlightUserReview(@PathVariable Long commentId) {
+        adminService.highlightUserReview(commentId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,5 +1,5 @@
 package com.misernandfriends.cinemaclub.serviceInterface.config;
 
-public interface DictionaryServiceLocal {
+public interface DictionaryService {
     void reloadDictionaries();
 }

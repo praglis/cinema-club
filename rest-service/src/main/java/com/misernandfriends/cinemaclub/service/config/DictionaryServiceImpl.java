@@ -5,7 +5,7 @@ import com.misernandfriends.cinemaclub.model.cache.LazyCache;
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryDTO;
 import com.misernandfriends.cinemaclub.model.dictionary.DictionaryItemDTO;
 import com.misernandfriends.cinemaclub.repository.dictionary.DictionaryRepository;
-import com.misernandfriends.cinemaclub.serviceInterface.config.DictionaryServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.config.DictionaryService;
 import com.misernandfriends.cinemaclub.utils.CacheParser;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class DictionaryServiceImpl implements DictionaryServiceLocal {
+public class DictionaryServiceImpl implements DictionaryService {
 
     private final DictionaryRepository dictionaryRepository;
 
