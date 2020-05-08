@@ -2,7 +2,7 @@ package com.misernandfriends.cinemaclub.model.enums;
 
 public enum RoleEnum {
     USER("USER"),
-    ADMIN("ADMIN");
+    ADMIN("ADMINISTRATOR");
 
     String value;
 

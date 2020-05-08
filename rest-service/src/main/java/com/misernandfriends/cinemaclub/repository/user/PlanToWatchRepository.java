@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface PlanToWatchRepository extends AbstractRepository<PlanToWatchMovieDTO> {
     List<PlanToWatchMovieDTO> getUserPlanToWatch(Long userId);
-    List<PlanToWatchMovieDTO> findAll();
     Optional<PlanToWatchMovieDTO> getByUrl(Long userId, String apiUrl);
     void deletePlanToWatch(Long userId, String movieUrl);
 }

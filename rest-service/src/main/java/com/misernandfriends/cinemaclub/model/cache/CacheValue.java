@@ -9,7 +9,6 @@ public enum CacheValue {
     GENRES(_GENRES.class),
     USER_ROLES(_USER_ROLES.class);
 
-
     private Class<? extends Enum> value;
 
     CacheValue(Class<? extends Enum> value) {
@@ -80,7 +79,7 @@ public enum CacheValue {
     }
 
     public enum _USER_ROLES implements EnumCache {
-        ADMIN,
+        ADMINISTRATOR,
         USER
     }
 }

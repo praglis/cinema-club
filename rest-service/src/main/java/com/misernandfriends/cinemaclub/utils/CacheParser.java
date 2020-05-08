@@ -8,23 +8,21 @@ import java.util.Map;
 
 public class CacheParser {
 
-    private String rawValue;
+    private final Map<String, String> values = new HashMap<>();
 
     private boolean needInitialization;
 
     private Class<? extends InitializableCache> initializationClass;
 
-    private Map<String, String> values = new HashMap<>();
-
     public CacheParser(String value) {
-        rawValue = value;
         convertValue(value);
     }
 
     private void convertValue(String value) {
         if (value.length() < 5) {
-            return; // @value is simple value
+            return;
         }
+
         String content = value.substring(2, value.length() - 2);
         String[] parts = content.split(";");
         String[] masterPart = parts[0].split("=");
@@ -33,31 +31,33 @@ public class CacheParser {
         } else {
             return;
         }
+
         if (masterPart.length == 1) {
             throw new RuntimeException(formatException(value, "Master cache value doesnt have assigned class!"));
         }
-        if (needInitialization) {
-            Class<?> potentialClass = null;
-            try {
-                potentialClass = Class.forName(masterPart[1]);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+
+        Class<?> potentialClass = null;
+        try {
+            potentialClass = Class.forName(masterPart[1]);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (potentialClass == null) {
+            throw new RuntimeException(formatException(value, String.format("Can't find class %s", masterPart[1])));
+        }
+
+        if (Arrays.stream(potentialClass.getInterfaces()).noneMatch(aClass -> aClass == InitializableCache.class)) {
+            throw new RuntimeException(formatException(value, String.format("Class %s should implements %s", potentialClass, InitializableCache.class)));
+        }
+
+        initializationClass = (Class<? extends InitializableCache>) potentialClass;
+        for (int i = 1; i < parts.length; i++) {
+            String[] valuePart = parts[i].split("=");
+            if (valuePart.length == 1) {
+                throw new RuntimeException(formatException(value, String.format("%d has wrong format (KEY=VALUE)", i + 1)));
             }
-            if (potentialClass == null) {
-                throw new RuntimeException(formatException(value, String.format("Can't find class %s", masterPart[1])));
-            }
-            if (Arrays.stream(potentialClass.getInterfaces()).noneMatch(aClass -> aClass == InitializableCache.class)) {
-                throw new RuntimeException(formatException(value, String.format("Class %s should implements %s", potentialClass, InitializableCache.class)));
-            }
-            //noinspection unchecked
-            initializationClass = (Class<? extends InitializableCache>) potentialClass;
-            for (int i = 1; i < parts.length; i++) {
-                String[] valuePart = parts[i].split("=");
-                if (valuePart.length == 1) {
-                    throw new RuntimeException(formatException(value, String.format("%d has wrong format (KEY=VALUE)", i + 1)));
-                }
-                values.put(valuePart[0], valuePart[1]);
-            }
+            values.put(valuePart[0], valuePart[1]);
         }
     }
 
@@ -75,9 +75,5 @@ public class CacheParser {
 
     public Map<String, String> getValues() {
         return values;
-    }
-
-    public String getRawValue() {
-        return rawValue;
     }
 }

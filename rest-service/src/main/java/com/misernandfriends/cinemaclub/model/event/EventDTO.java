@@ -67,7 +67,7 @@ public class EventDTO implements Serializable {
     private UserDTO owner;
 
     @Column(name = "EVN_OPEN", nullable = false)
-    private Boolean open = false; //public
+    private Boolean open = false;
 
     @ManyToMany
     @Transient

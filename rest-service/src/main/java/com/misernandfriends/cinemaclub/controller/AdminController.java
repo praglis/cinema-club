@@ -1,7 +1,6 @@
 package com.misernandfriends.cinemaclub.controller;
 
-import com.misernandfriends.cinemaclub.serviceInterface.AdminService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.misernandfriends.cinemaclub.serviceInterface.user.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,31 +9,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("admin")
 public class AdminController {
 
-    @Autowired
-    private AdminService adminService;
+    private final AdminService adminService;
+
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @PutMapping("/ban")
-    public ResponseEntity banUser(@RequestParam(value = "userName") String userName) {
-        return adminService.banUser(userName);
+    public ResponseEntity<Object> banUser(@RequestParam(value = "userName") String userName) {
+        adminService.banUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/block")
-    public ResponseEntity blockUser(@RequestParam(value = "userName") String userName) {
-        return adminService.blockUser(userName);
+    public ResponseEntity<Object> blockUser(@RequestParam(value = "userName") String userName) {
+        adminService.blockUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/active")
-    public ResponseEntity activeUser(@RequestParam(value = "userName") String userName) {
-        return adminService.activeUser(userName);
+    public ResponseEntity<Object> activeUser(@RequestParam(value = "userName") String userName) {
+        adminService.activeUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteUser(@RequestParam(value = "userName") String userName) {
-        return adminService.deleteUser(userName);
+    public ResponseEntity<Object> deleteUser(@RequestParam(value = "userName") String userName) {
+        adminService.deleteUser(userName);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/highlight/{commentId}")
-    public ResponseEntity highlightUserReview(@PathVariable Long commentId) {
-        return adminService.highlightUserReview(commentId);
+    public ResponseEntity<Object> highlightUserReview(@PathVariable Long commentId) {
+        adminService.highlightUserReview(commentId);
+        return ResponseEntity.ok().build();
     }
 }

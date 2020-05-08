@@ -1,6 +1,6 @@
 package com.misernandfriends.cinemaclub.comparators;
 
-import com.misernandfriends.cinemaclub.pojo.UserLikes;
+import com.misernandfriends.cinemaclub.pojo.user.UserLikes;
 
 import java.util.Comparator;
 

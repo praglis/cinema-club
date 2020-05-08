@@ -6,7 +6,7 @@ import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.PremiereDTO;
 import com.misernandfriends.cinemaclub.repository.cinema.CinemaRepository;
 import com.misernandfriends.cinemaclub.repository.movie.PremiereRepository;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieServiceLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.list.SetUniqueList;
 import org.jsoup.Jsoup;
@@ -121,7 +121,7 @@ public class HeliosPremiersFetcher {
             PremiereDTO premiere = new PremiereDTO();
             premiere.setCinema(cinema);
             premiere.setDate(s.getPremiereDate());
-            MovieDTO movie = movieService.getMovie(s.getMovieTitle());
+            MovieDTO movie = movieService.getMovieData(s.getMovieTitle());
             if (movie == null) {
                 log.warn("Can't find movie by title: {}", s.getMovieTitle());
                 continue;

@@ -11,14 +11,10 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class ErrorResponse extends ResponseEntity implements Serializable {
+public class ErrorResponse extends ResponseEntity<Object> implements Serializable {
 
-    ErrorResponse(Object object) {
+    public ErrorResponse(Object object) {
         super(object, HttpStatus.BAD_REQUEST);
-    }
-
-    ErrorResponse(HttpStatus httpStatus, Object object) {
-        super(object, httpStatus);
     }
 
     public static ErrorResponse createError(String message) {

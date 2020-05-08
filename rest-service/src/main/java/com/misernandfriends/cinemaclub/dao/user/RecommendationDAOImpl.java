@@ -4,7 +4,6 @@ import com.misernandfriends.cinemaclub.dao.AbstractDAOImpl;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
-import com.misernandfriends.cinemaclub.utils.DateTimeUtil;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;

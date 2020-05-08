@@ -24,9 +24,8 @@ public class UrlHelper {
         return this;
     }
 
-    public UrlHelper replace(String target, String value) {
+    public void replace(String target, String value) {
         this.result = result.replace(target, value);
-        return this;
     }
 
     public String build() {

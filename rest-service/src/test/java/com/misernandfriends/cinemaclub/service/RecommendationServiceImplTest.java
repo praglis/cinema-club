@@ -1,16 +1,17 @@
+/*
 package com.misernandfriends.cinemaclub.service;
 
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.pojo.MoviesList;
+import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieFetchServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.MovieServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.MoviesFetchServiceLocal;
-import com.misernandfriends.cinemaclub.serviceInterface.RecommendationService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieServiceLocal;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MoviesFetchServiceImpl;
+import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
 import lombok.SneakyThrows;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,10 +56,10 @@ public class RecommendationServiceImplTest {
     private EntityManagerFactory entityFactory;
 
     @Autowired
-    private MovieFetchServiceLocal movieFetchService;
+    private MovieDetailService movieFetchService;
 
     @Autowired
-    private MoviesFetchServiceLocal moviesFetchService;
+    private MoviesFetchServiceImpl moviesFetchService;
 
     private EntityManager entityManager;
 
@@ -88,7 +89,7 @@ public class RecommendationServiceImplTest {
     @Test
     public void processMovieCheckGenres() {
         UserDTO user = userRepository.findByUsername("Recommendation").get();
-        MovieDTO movie = movieService.getMovie("Troy");
+        MovieDTO movie = movieService.getMovieData("Troy");
         recommendationService.processMovie(user, movie);
 
         JSONObject movieObject = getMovieAsJSONObject("Troy");
@@ -111,8 +112,8 @@ public class RecommendationServiceImplTest {
     @Test
     public void processMovieNewFavoriteMovies() throws JSONException {
         UserDTO user = userRepository.findByUsername("Recommendation").get();
-        MovieDTO movie1 = movieService.getMovie("World War Z");
-        MovieDTO movie2 = movieService.getMovie("2012");
+        MovieDTO movie1 = movieService.getMovieData("World War Z");
+        MovieDTO movie2 = movieService.getMovieData("2012");
         recommendationService.processMovie(user, movie1);
         recommendationService.processMovie(user, movie2);
 
@@ -141,4 +142,4 @@ public class RecommendationServiceImplTest {
         System.out.println("Time: " + (System.currentTimeMillis() - start));
     }
 
-}
+}*/

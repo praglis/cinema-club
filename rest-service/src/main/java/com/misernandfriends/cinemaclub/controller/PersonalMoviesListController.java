@@ -1,17 +1,18 @@
 package com.misernandfriends.cinemaclub.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.misernandfriends.cinemaclub.model.movie.FavouriteDTO;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.PlanToWatchMovieDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.pojo.Favourite;
-import com.misernandfriends.cinemaclub.pojo.Movie;
-import com.misernandfriends.cinemaclub.pojo.QuestionnairePostBody;
+import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
+import com.misernandfriends.cinemaclub.pojo.movie.userlist.Favourite;
+import com.misernandfriends.cinemaclub.pojo.movie.Movie;
+import com.misernandfriends.cinemaclub.pojo.rec.QuestionnairePostBody;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
-import com.misernandfriends.cinemaclub.serviceInterface.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.misernandfriends.cinemaclub.serviceInterface.config.SecurityService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.PersonalListService;
+import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,49 +31,56 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class PersonalMoviesListController {
 
-    @Autowired
-    private PersonalListService personalListService;
+    private final PersonalListService personalListService;
+    private final MovieDetailService movieService;
+    private final RecommendationService recommendationService;
+    private final UserRepository userRepository;
+    private final SecurityService securityService;
 
-    @Autowired
-    private MovieFetchServiceLocal movieService;
-
-    @Autowired
-    private RecommendationService recommendationService;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private SecurityService securityService;
+    public PersonalMoviesListController(PersonalListService personalListService, MovieDetailService movieService, RecommendationService recommendationService, UserRepository userRepository, SecurityService securityService) {
+        this.personalListService = personalListService;
+        this.movieService = movieService;
+        this.recommendationService = recommendationService;
+        this.userRepository = userRepository;
+        this.securityService = securityService;
+    }
 
     @GetMapping("user/favourites")
-    public ResponseEntity<String> getFavouriteMovies(@RequestParam(value = "user") Long id) {
+    public ResponseEntity<MoviesList> getFavouriteMovies(@RequestParam(value = "user") Long id) {
         List<FavouriteDTO> favourites = personalListService.getUserFavourites(id);
-        List<Movie> favouritesResponse = new ArrayList<>();
+        List<Movie> favouriteMovies = new ArrayList<>();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for(FavouriteDTO favourite : favourites) {
-            String movieJSON = movieService.getMovieByLongId(Long.valueOf(favourite.getMovie().getApiUrl()));
-            Movie movie = gson.fromJson(movieJSON, Movie.class);
-            favouritesResponse.add(movie);
+        for (FavouriteDTO favourite : favourites) {
+            Movie movie = movieService.getMovieByLongId(Long.valueOf(favourite.getMovie().getApiUrl()));
+            favouriteMovies.add(movie);
         }
 
-        return new ResponseEntity<>(gson.toJson(favouritesResponse), HttpStatus.OK);
+        MoviesList moviesList = new MoviesList();
+        moviesList.setMovies(favouriteMovies);
+        moviesList.setPage(1);
+        moviesList.setTotalPages(1);
+        moviesList.setTotalResults(favouriteMovies.size());
+
+        return new ResponseEntity<>(moviesList, HttpStatus.OK);
     }
 
     @GetMapping("user/plantowatch")
-    public ResponseEntity<String> getPlanToWatchMovies(@RequestParam(value = "user") Long id) {
+    public ResponseEntity<MoviesList> getPlanToWatchMovies(@RequestParam(value = "user") Long id) {
         List<PlanToWatchMovieDTO> planToWatch = personalListService.getUserPlanToWatch(id);
-        List<Movie> planToWatchResponse = new ArrayList<>();
+        List<Movie> planToWatchMovies = new ArrayList<>();
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for(PlanToWatchMovieDTO ptw : planToWatch) {
-            String movieJSON = movieService.getMovieByLongId(Long.valueOf(ptw.getMovie().getApiUrl()));
-            Movie movie = gson.fromJson(movieJSON, Movie.class);
-            planToWatchResponse.add(movie);
+        for (PlanToWatchMovieDTO ptw : planToWatch) {
+            Movie movie = movieService.getMovieByLongId(Long.valueOf(ptw.getMovie().getApiUrl()));
+            planToWatchMovies.add(movie);
         }
 
-        return new ResponseEntity<>(gson.toJson(planToWatchResponse), HttpStatus.OK);
+        MoviesList moviesList = new MoviesList();
+        moviesList.setMovies(planToWatchMovies);
+        moviesList.setPage(1);
+        moviesList.setTotalPages(1);
+        moviesList.setTotalResults(planToWatchMovies.size());
+
+        return new ResponseEntity<>(moviesList, HttpStatus.OK);
     }
 
     @GetMapping("user/favourites/short")
@@ -108,7 +116,7 @@ public class PersonalMoviesListController {
     }
 
     @PostMapping("user/favourites")
-    public ResponseEntity<String> addFavouriteMovie(@RequestBody Favourite favourite) {
+    public ResponseEntity<Object> addFavouriteMovie(@RequestBody Favourite favourite) {
         List<FavouriteDTO> favourites = personalListService.getUserFavourites(favourite.getUserId());
 
         Optional<FavouriteDTO> existing = favourites
@@ -118,14 +126,14 @@ public class PersonalMoviesListController {
 
         if (!existing.isPresent()) {
             personalListService.createFavourite(favourite.getUserId(), favourite.getMovieTitle(), favourite.getMovieUrl());
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("user/plantowatch")
-    public ResponseEntity<String> addPlanToWatchMovie(@RequestBody Favourite favourite) {
+    public ResponseEntity<Object> addPlanToWatchMovie(@RequestBody Favourite favourite) {
         List<PlanToWatchMovieDTO> favourites = personalListService.getUserPlanToWatch(favourite.getUserId());
 
         Optional<PlanToWatchMovieDTO> existing = favourites
@@ -135,14 +143,14 @@ public class PersonalMoviesListController {
 
         if (!existing.isPresent()) {
             personalListService.createPlanToWatch(favourite.getUserId(), favourite.getMovieTitle(), favourite.getMovieUrl());
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("user/questionnaire")
-    public ResponseEntity<String> addMoviesFromQuestionnaire(@RequestBody QuestionnairePostBody body) {
+    public ResponseEntity<Object> addMoviesFromQuestionnaire(@RequestBody QuestionnairePostBody body) {
 
         Optional<UserDTO> existingUser = userRepository.getById(body.getUserId());
 
@@ -154,19 +162,19 @@ public class PersonalMoviesListController {
             return new ResponseEntity<>("User is not logged in\"", HttpStatus.BAD_REQUEST);
         }
 
-        for (Movie movie: body.getMovies()) {
-            MovieDTO movieDTO= new MovieDTO();
+        for (Movie movie : body.getMovies()) {
+            MovieDTO movieDTO = new MovieDTO();
             movieDTO.setApiUrl(movie.getId().toString());
             movieDTO.setTitle(movie.getTitle());
 
             recommendationService.processMovie(existingUser.get(), movieDTO);
         }
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @DeleteMapping("user/favourites")
-    public ResponseEntity<String> removeFavouriteMovie(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {
+    public ResponseEntity<Object> removeFavouriteMovie(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {
         List<FavouriteDTO> favourites = personalListService.getUserFavourites(userId);
         Optional<FavouriteDTO> existing = favourites
                 .stream()
@@ -175,14 +183,14 @@ public class PersonalMoviesListController {
 
         if (existing.isPresent()) {
             personalListService.deleteFavourite(userId, movieId.toString());
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("user/plantowatch")
-    public ResponseEntity<String> removePlanToWatchMovie(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {
+    public ResponseEntity<Object> removePlanToWatchMovie(@RequestParam("userId") Long userId, @RequestParam("movieId") Long movieId) {
         List<PlanToWatchMovieDTO> favourites = personalListService.getUserPlanToWatch(userId);
         Optional<PlanToWatchMovieDTO> existing = favourites
                 .stream()
@@ -191,9 +199,9 @@ public class PersonalMoviesListController {
 
         if (existing.isPresent()) {
             personalListService.deletePlanToWatch(userId, movieId.toString());
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
