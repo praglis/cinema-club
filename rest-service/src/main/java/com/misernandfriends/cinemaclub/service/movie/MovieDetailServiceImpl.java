@@ -3,12 +3,9 @@ package com.misernandfriends.cinemaclub.service.movie;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
+import com.misernandfriends.cinemaclub.pojo.movie.*;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
-import com.misernandfriends.cinemaclub.pojo.movie.Genres;
-import com.misernandfriends.cinemaclub.pojo.movie.Movie;
-import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
-import com.misernandfriends.cinemaclub.pojo.movie.MovieSearchCriteria;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -104,5 +101,24 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         String url = helper.build();
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(url, MoviesList.class);
+    }
+
+    @Override
+    public VideoResults getKeyForTrailer(Integer movieId){
+        String uri = new UrlHelper(CacheValue._API_URLS.MOVIES_API_URL_VIDEO).setQuery(movieId.toString()).build();
+        RestTemplate restTemplate = new RestTemplate();
+        Video video = restTemplate.getForObject(uri, Video.class);
+        if (video == null) {
+            log.error("Videos for movie does not exists");
+            throw new ApplicationException("Videos for movie does not exists");
+        }
+
+        VideoResults videoResults =  video.getResults()
+                .stream()
+                .filter(vR -> vR.getType().equals("Trailer"))
+                .findFirst()
+                .orElse(null);
+
+        return videoResults;
     }
 }
