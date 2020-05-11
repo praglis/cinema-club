@@ -3,7 +3,12 @@ package com.misernandfriends.cinemaclub.service.movie;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
-import com.misernandfriends.cinemaclub.pojo.movie.*;
+import com.misernandfriends.cinemaclub.pojo.movie.Genres;
+import com.misernandfriends.cinemaclub.pojo.movie.Movie;
+import com.misernandfriends.cinemaclub.pojo.movie.MovieSearchCriteria;
+import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
+import com.misernandfriends.cinemaclub.pojo.movie.Video;
+import com.misernandfriends.cinemaclub.pojo.movie.VideoResults;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
@@ -118,6 +123,11 @@ public class MovieDetailServiceImpl implements MovieDetailService {
                 .filter(vR -> vR.getType().equals("Trailer"))
                 .findFirst()
                 .orElse(null);
+
+        if(videoResults == null) {
+            log.error("Videos for movie does not exists");
+            throw new ApplicationException("Videos for movie does not exists");
+        }
 
         return videoResults;
     }

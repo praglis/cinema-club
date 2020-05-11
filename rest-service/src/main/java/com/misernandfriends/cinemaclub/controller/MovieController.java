@@ -2,7 +2,11 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.pojo.movie.*;
+import com.misernandfriends.cinemaclub.pojo.movie.Genres;
+import com.misernandfriends.cinemaclub.pojo.movie.Movie;
+import com.misernandfriends.cinemaclub.pojo.movie.MovieSearchCriteria;
+import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
+import com.misernandfriends.cinemaclub.pojo.movie.VideoResults;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
 import com.misernandfriends.cinemaclub.pojo.movie.review.Rate;
 import com.misernandfriends.cinemaclub.pojo.movie.review.guardian.GuardianResult;
@@ -14,7 +18,13 @@ import com.misernandfriends.cinemaclub.serviceInterface.movie.ReviewService;
 import com.misernandfriends.cinemaclub.serviceInterface.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 

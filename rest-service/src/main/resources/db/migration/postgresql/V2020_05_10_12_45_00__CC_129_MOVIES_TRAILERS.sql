@@ -1,1 +1,1 @@
-insert into sys_dic_items (dit_id ,dit_info_cd, dit_name, dit_value, dit_dic_id) values (nextval('seq_sys_dit_id'),CURRENT_TIMESTAMP, 'MOVIES_API_URL_VIDEO', 'https://api.themoviedb.org/3/movie/{{QUERY}}/videos?{{MOVIES_API_KEY}}', 50);
+insert into sys_dic_items (dit_id ,dit_info_cd, dit_name, dit_value, dit_dic_id) values (nextval('seq_sys_dit_id'),CURRENT_TIMESTAMP, 'MOVIES_API_URL_VIDEO', 'https://api.themoviedb.org/3/movie/{{QUERY}}/videos?{{MOVIES_API_KEY}}', (SELECT DIC_ID FROM SYS_DICTIONARIES WHERE DIC_DOMAIN = 'API_URLS'));
