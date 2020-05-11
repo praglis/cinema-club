@@ -37,6 +37,7 @@ public enum CacheValue {
         MOVIES_API_URL_DISCOVER,
         MOVIES_CREW_API_URL,
         MOVIES_DISCOVER_API_URL,
+        MOVIES_API_URL_VIDEO,
 
         MOVIES_API_GENRES_URL,
         /** New York Times Reviews Configuration */
