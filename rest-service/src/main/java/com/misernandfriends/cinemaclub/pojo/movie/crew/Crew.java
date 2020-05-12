@@ -36,4 +36,16 @@ public class Crew {
     @JsonProperty("profile_path")
     @SerializedName("profile_path")
     private String profilePath;
+
+    @JsonProperty("popularity")
+    @SerializedName("popularity")
+    private String popularity;
+
+    @JsonProperty("title")
+    @SerializedName("title")
+    private String title;
+
+    @JsonProperty("poster_path")
+    @SerializedName("poster_path")
+    private String posterPath;
 }
