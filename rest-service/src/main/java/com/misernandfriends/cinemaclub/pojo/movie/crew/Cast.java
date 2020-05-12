@@ -41,4 +41,16 @@ public class Cast {
     @SerializedName("profile_path")
     private String profilePath;
 
+    @JsonProperty("title")
+    @SerializedName("title")
+    private String title;
+
+    @JsonProperty("popularity")
+    @SerializedName("popularity")
+    private Double popularity;
+
+    @JsonProperty("poster_path")
+    @SerializedName("poster_path")
+    private String posterPath;
+
 }
