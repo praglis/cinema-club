@@ -9,6 +9,7 @@ import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.movie.VideoResults;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
 import com.misernandfriends.cinemaclub.pojo.movie.review.Rate;
+import com.misernandfriends.cinemaclub.pojo.movie.crew.Person;
 import com.misernandfriends.cinemaclub.pojo.movie.review.guardian.GuardianResult;
 import com.misernandfriends.cinemaclub.pojo.movie.review.nyt.NYTReview;
 import com.misernandfriends.cinemaclub.serviceInterface.config.SecurityService;
@@ -97,5 +98,28 @@ public class MovieController {
 
         movieServiceLocal.rateMovie(movieId, rate, user.get());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("person/get/{personId}")
+    public Person getPerson(@PathVariable Long personId) {
+        Person person = movieService.getPerson(personId);
+        if (person.getGender().equals(2)) {
+            person.setGenderName("Male");
+        } else if (person.getGender().equals(1)) {
+            person.setGenderName("Female");
+        } else {
+            person.setGenderName("Undefined");
+        }
+        return person;
+    }
+
+    @GetMapping("person/get/{personId}/credits")
+    public Credits getPersonCredits(@PathVariable Long personId) {
+        Credits credits = movieService.getPersonCreditsById(personId);
+        credits.getCast().sort((o1, o2) -> -1 * o1.getPopularity().compareTo(o2.getPopularity()));
+        credits.getCrew().sort((o1, o2) -> -1 * o1.getPopularity().compareTo(o2.getPopularity()));
+        credits.setCast(credits.getCast().subList(0, Math.min(credits.getCast().size(), 20)));
+        credits.setCrew(credits.getCrew().subList(0, Math.min(credits.getCrew().size(), 20)));
+        return credits;
     }
 }
