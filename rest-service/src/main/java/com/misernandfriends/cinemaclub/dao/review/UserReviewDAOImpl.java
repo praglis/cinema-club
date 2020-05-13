@@ -31,6 +31,15 @@ public class UserReviewDAOImpl extends AbstractDAOImpl<UserReviewDTO> implements
     }
 
     @Override
+    public List<UserReviewDTO> getAllUserMovieReviews() {
+        String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
+                "data.infoRD is NULL ORDER BY data.likes DESC, data.infoCD ";
+
+        TypedQuery<UserReviewDTO> query = em.createQuery(queryTxt, UserReviewDTO.class);
+        return query.getResultList();
+    }
+
+    @Override
     public Optional<UserReviewDTO> getUserReviewById(Long reviewId) {
         String queryTxt = "SELECT data FROM " + getEntityName() + " data WHERE " +
                 "data.id = :reviewId";
