@@ -10,6 +10,7 @@ import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.movie.Video;
 import com.misernandfriends.cinemaclub.pojo.movie.VideoResults;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
+import com.misernandfriends.cinemaclub.pojo.movie.crew.Person;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
 import com.misernandfriends.cinemaclub.utils.UrlHelper;
@@ -130,5 +131,20 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         }
 
         return videoResults;
+    }
+
+    @Override
+    public Person getPerson(Long id) {
+        UrlHelper helper = new UrlHelper(CacheValue._API_URLS.MOVIES_API_PERSON_URL).setQuery(String.valueOf(id)
+        );
+        RestTemplate template = new RestTemplate();
+        return template.getForObject(helper.build(), Person.class);
+    }
+
+    @Override
+    public Credits getPersonCreditsById(Long id) {
+        String uri = new UrlHelper(CacheValue._API_URLS.MOVIES_API_PERSON_MOVIE_URL).setQuery(id.toString()).build();
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(uri, Credits.class);
     }
 }
