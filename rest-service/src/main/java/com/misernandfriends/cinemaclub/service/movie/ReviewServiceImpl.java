@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.service.movie;
 
+import com.misernandfriends.cinemaclub.comparators.ReplyComparator;
 import com.misernandfriends.cinemaclub.comparators.UserLikesComparator;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
@@ -8,10 +9,10 @@ import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.movie.review.guardian.GuardianResponse;
 import com.misernandfriends.cinemaclub.pojo.movie.review.guardian.GuardianResult;
-import com.misernandfriends.cinemaclub.pojo.user.UserLikes;
-import com.misernandfriends.cinemaclub.pojo.user.UserReview;
 import com.misernandfriends.cinemaclub.pojo.movie.review.nyt.NYTResponse;
 import com.misernandfriends.cinemaclub.pojo.movie.review.nyt.NYTReview;
+import com.misernandfriends.cinemaclub.pojo.user.UserLikes;
+import com.misernandfriends.cinemaclub.pojo.user.UserReview;
 import com.misernandfriends.cinemaclub.repository.cinema.CinemaRepository;
 import com.misernandfriends.cinemaclub.repository.review.UserReviewRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
@@ -24,12 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -205,6 +201,8 @@ public class ReviewServiceImpl implements ReviewService {
                 replies.get(parentReviewId).add(review.toUserLikes(user));
             }
         }
+
+        replies.forEach((userReviewId, replyList) -> replies.get(userReviewId).sort(new ReplyComparator()));
 
         return userReviews.stream()
                 .filter(review -> Objects.isNull(review.getParentReviewId()))
