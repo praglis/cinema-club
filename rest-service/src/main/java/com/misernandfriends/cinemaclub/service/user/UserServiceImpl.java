@@ -7,10 +7,10 @@ import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
 import com.misernandfriends.cinemaclub.model.user.RoleDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
+import com.misernandfriends.cinemaclub.model.user.UserMovieRatingDTO;
 import com.misernandfriends.cinemaclub.repository.user.BadgeRepository;
 import com.misernandfriends.cinemaclub.repository.user.RoleRepository;
-import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserMovieRatingRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.config.MailService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.RatingLoaderService;
@@ -169,11 +169,11 @@ public class UserServiceImpl implements UserService {
     public static class RatingLoaderServiceImpl implements RatingLoaderService {
 
         private final UserRepository userRepository;
-        private final UserRatingRepository userRatingRepository;
+        private final UserMovieRatingRepository userMovieRatingRepository;
 
-        public RatingLoaderServiceImpl(UserRepository userRepository, UserRatingRepository userRatingRepository) {
+        public RatingLoaderServiceImpl(UserRepository userRepository, UserMovieRatingRepository userMovieRatingRepository) {
             this.userRepository = userRepository;
-            this.userRatingRepository = userRatingRepository;
+            this.userMovieRatingRepository = userMovieRatingRepository;
         }
 
         @Async
@@ -196,11 +196,11 @@ public class UserServiceImpl implements UserService {
                     log.warn("Cant find movie with id {}", parts[1]);
                     continue;
                 }
-                UserRatingDTO userRating = new UserRatingDTO();
+                UserMovieRatingDTO userRating = new UserMovieRatingDTO();
                 userRating.setMovie(movie);
                 userRating.setRating(Integer.parseInt(parts[2]));
                 userRating.setUser(user);
-                userRatingRepository.create(userRating);
+                userMovieRatingRepository.create(userRating);
             }
             log.info("Processing file {} ended int {}", file, (System.currentTimeMillis() - startDate));
         }

@@ -98,7 +98,7 @@ public class Movie {
         MovieDTO movie = new MovieDTO();
         movie.setTitle(getTitle());
         movie.setVotesNumber(getNumberOfVotes());
-        movie.setMovieRating(getAverageVote());
+        movie.setRating(getAverageVote());
         movie.setInfoCD(new Date());
         movie.setApiUrl(getId().toString());
 
