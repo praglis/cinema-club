@@ -212,6 +212,28 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<UserLikes> getAllUserReviews(UserDTO user) {
+        List<UserReviewDTO> userReviews = userReviewRepository.getAllUserMovieReviews();
+
+        Map<Long, List<UserLikes>> replies = new HashMap<>();
+        for (UserReviewDTO review : userReviews) {
+            Long parentReviewId = review.getParentReviewId();
+            if (parentReviewId != null) {
+                if (!replies.containsKey(parentReviewId)) {
+                    replies.put(parentReviewId, new ArrayList<>());
+                }
+                replies.get(parentReviewId).add(review.toUserLikes(user));
+            }
+        }
+
+        return userReviews.stream()
+                .filter(review -> Objects.isNull(review.getParentReviewId()))
+                .map(userReview -> userReview.toUserLikes(user, replies))
+                .sorted(new UserLikesComparator())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserReviewDTO getUserReviewById(Long reviewId) {
         return userReviewRepository.getUserReviewById(reviewId).orElse(null);
     }

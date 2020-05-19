@@ -38,6 +38,16 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getUserReviews(movieId, userOptional.get()));
     }
 
+    @GetMapping("userReviewAll")
+    public ResponseEntity<Object> getAllUserReviews() {
+        Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());
+        if (!userOptional.isPresent()) {
+            log.error("User doesn't exist");
+            return ErrorResponse.createError("User doesn't exist");
+        }
+        return ResponseEntity.ok(reviewService.getAllUserReviews(userOptional.get()));
+    }
+
     @PutMapping("userReview")
     public ResponseEntity<Object> addUserReview(@RequestBody UserReview userReview) {
         Optional<UserDTO> userOptional = userService.findByUsername(securityService.findLoggedInUsername());

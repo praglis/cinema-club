@@ -14,6 +14,7 @@ public interface ReviewService {
     UserReviewDTO getUserReviewById(Long reviewId);
     GuardianResult getGuardianMovieReview(String title);
     List<UserLikes> getUserReviews(String movieUrl, UserDTO userDTO);
+    List<UserLikes> getAllUserReviews(UserDTO userDTO);
     void addUserReview(UserReview userReview, UserDTO user);
     void editUserReview(UserReview userReviewData, UserDTO user);
     void likeReview(Long reviewId, UserDTO user);
