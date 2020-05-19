@@ -1,13 +1,12 @@
 package com.misernandfriends.cinemaclub.repository.user;
 
-import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
 import com.misernandfriends.cinemaclub.repository.AbstractRepository;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 
-import java.util.List;
-
-public interface UserRatingRepository extends AbstractRepository<UserRatingDTO> {
-    Optional<UserRatingDTO> getByUser(Long userId, String movieApi);
-    List<UserRatingDTO> getUserBestRatedMovies(Long id, int maxResult);
+public interface UserRatingRepository<T extends Serializable> extends AbstractRepository<T> {
+    Optional<T> getByUser(Long userId, String referenceValue);
+    List<T> getUserBestRated(Long id, int maxResult);
 }

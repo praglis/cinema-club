@@ -6,16 +6,16 @@ import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.movie.actor.ActorDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
+import com.misernandfriends.cinemaclub.model.user.UserMovieRatingDTO;
 import com.misernandfriends.cinemaclub.model.user.UserSimilarMovieDTO;
+import com.misernandfriends.cinemaclub.pojo.movie.Genre;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Cast;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Credits;
 import com.misernandfriends.cinemaclub.pojo.movie.crew.Crew;
-import com.misernandfriends.cinemaclub.pojo.movie.Genre;
 import com.misernandfriends.cinemaclub.repository.movie.actor.ActorRepository;
 import com.misernandfriends.cinemaclub.repository.user.FavouriteRepository;
 import com.misernandfriends.cinemaclub.repository.user.RecommendationRepository;
-import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserMovieRatingRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserSimilarMovieRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
 import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
@@ -43,18 +43,18 @@ public class RecommendationServiceImpl implements RecommendationService {
     private final MovieDetailService movieDetail;
     private final RecommendationRepository recommendationRepository;
     private final ActorRepository actorRepository;
-    private final UserRatingRepository userRatingRepository;
+    private final UserMovieRatingRepository userMovieRatingRepository;
     private final FavouriteRepository favouriteRepository;
     private final UserSimilarMovieRepository userSimilarMovieRepository;
 
     public RecommendationServiceImpl(MovieDetailService movieDetail, RecommendationRepository recommendationRepository,
-                                     ActorRepository actorRepository, UserRatingRepository userRatingRepository,
+                                     ActorRepository actorRepository, UserMovieRatingRepository userMovieRatingRepository,
                                      FavouriteRepository favouriteRepository, UserSimilarMovieRepository userSimilarMovieRepository) {
 
         this.movieDetail = movieDetail;
         this.recommendationRepository = recommendationRepository;
         this.actorRepository = actorRepository;
-        this.userRatingRepository = userRatingRepository;
+        this.userMovieRatingRepository = userMovieRatingRepository;
         this.favouriteRepository = favouriteRepository;
         this.userSimilarMovieRepository = userSimilarMovieRepository;
     }
@@ -114,7 +114,7 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .collect(Collectors.toList());
 
         if (moviesUrls.size() < maxResults) {
-            List<UserRatingDTO> rating = userRatingRepository.getUserBestRatedMovies(
+            List<UserMovieRatingDTO> rating = userMovieRatingRepository.getUserBestRated(
                     user.getId(),
                     maxResults - moviesUrls.size()
             );
