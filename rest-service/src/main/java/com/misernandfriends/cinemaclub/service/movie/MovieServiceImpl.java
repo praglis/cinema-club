@@ -2,12 +2,12 @@ package com.misernandfriends.cinemaclub.service.movie;
 
 import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
-import com.misernandfriends.cinemaclub.model.user.UserRatingDTO;
+import com.misernandfriends.cinemaclub.model.user.UserMovieRatingDTO;
 import com.misernandfriends.cinemaclub.pojo.movie.Movie;
 import com.misernandfriends.cinemaclub.pojo.movie.MoviesList;
 import com.misernandfriends.cinemaclub.pojo.movie.review.Rate;
 import com.misernandfriends.cinemaclub.repository.movie.MovieRepository;
-import com.misernandfriends.cinemaclub.repository.user.UserRatingRepository;
+import com.misernandfriends.cinemaclub.repository.user.UserMovieRatingRepository;
 import com.misernandfriends.cinemaclub.repository.user.UserRepository;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieServiceLocal;
@@ -23,13 +23,13 @@ public class MovieServiceImpl implements MovieServiceLocal {
 
     private final MovieDetailService movieDetailService;
     private final MovieRepository movieRepository;
-    private final UserRatingRepository userRatingRepository;
+    private final UserMovieRatingRepository userMovieRatingRepository;
     private final UserRepository userRepository;
 
-    public MovieServiceImpl(MovieDetailService movieDetailService, MovieRepository movieRepository, UserRatingRepository userRatingRepository, UserRepository userRepository) {
+    public MovieServiceImpl(MovieDetailService movieDetailService, MovieRepository movieRepository, UserMovieRatingRepository userMovieRatingRepository, UserRepository userRepository) {
         this.movieDetailService = movieDetailService;
         this.movieRepository = movieRepository;
-        this.userRatingRepository = userRatingRepository;
+        this.userMovieRatingRepository = userMovieRatingRepository;
         this.userRepository = userRepository;
     }
 
@@ -63,9 +63,9 @@ public class MovieServiceImpl implements MovieServiceLocal {
     @Override
     @Transactional
     public void rateMovie(String movieId, Rate rate, UserDTO user) {
-        UserRatingDTO ratingDTO = new UserRatingDTO();
+        UserMovieRatingDTO ratingDTO = new UserMovieRatingDTO();
         Integer oldRate = null;
-        Optional<UserRatingDTO> byUser = userRatingRepository.getByUser(user.getId(), movieId);
+        Optional<UserMovieRatingDTO> byUser = userMovieRatingRepository.getByUser(user.getId(), movieId);
         if (byUser.isPresent()) {
             ratingDTO = byUser.get();
             oldRate = ratingDTO.getRating();
@@ -74,23 +74,10 @@ public class MovieServiceImpl implements MovieServiceLocal {
         ratingDTO.setMovie(movie);
         ratingDTO.setUser(user);
         ratingDTO.setRating(rate.getRate());
-        user.setBadgeValue(user.getBadgeValue()+1);
+        user.setBadgeValue(user.getBadgeValue() + 1);
         userRepository.update(user);
-        userRatingRepository.create(ratingDTO);
-        recalculateMovieRating(movie, oldRate, rate.getRate());
-    }
-
-    private void recalculateMovieRating(MovieDTO movie, Integer oldRate, Integer newRate) {
-        Double rating = movie.getMovieRating();
-        Long size = movie.getVotesNumber();
-        boolean isNew = false;
-        if (oldRate == null) {
-            isNew = true;
-            oldRate = 0;
-        }
-        movie.setMovieRating((rating * size + (newRate - oldRate)));
-        movie.setVotesNumber(size + (isNew ? 1 : 0));
-        movie.setMovieRating(movie.getMovieRating() / movie.getVotesNumber());
+        userMovieRatingRepository.create(ratingDTO);
+        movie.recalculateRating(oldRate, rate.getRate());
         movieRepository.update(movie);
     }
 

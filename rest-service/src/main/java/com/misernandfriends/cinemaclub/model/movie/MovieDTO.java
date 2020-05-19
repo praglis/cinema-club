@@ -16,7 +16,7 @@ import java.util.Date;
         @Filter(name = "movieFiler", condition = "infoRD IS NULL")
 })
 @Table(name = "MOV_MOVIES")
-public class MovieDTO implements Serializable {
+public class MovieDTO extends RatingEntity implements Serializable {
 
     private static final long serialVersionUID = -470973098276486768L;
 
@@ -39,7 +39,7 @@ public class MovieDTO implements Serializable {
     private String title;
 
     @Column(name = "MOV_AVG_RATING")
-    private Double movieRating = 0D;
+    private Double rating = 0D;
 
     @Column(name = "MOV_COUNT_RATING")
     private Long votesNumber = 0L;

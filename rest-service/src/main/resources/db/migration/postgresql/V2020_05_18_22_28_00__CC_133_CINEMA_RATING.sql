@@ -1,0 +1,15 @@
+CREATE TABLE USR_CNM_RATING
+(
+    UCR_ID     int primary key,
+    UCR_USR_ID int not null,
+    UCR_CNM_ID int not null,
+    UCR_RATE   int not null,
+    FOREIGN KEY (UCR_USR_ID) REFERENCES USR_USERS (USR_ID),
+    FOREIGN KEY (UCR_CNM_ID) REFERENCES MOV_CINEMAS (CIN_ID)
+);
+
+CREATE SEQUENCE seq_usr_cnm_id
+    MINVALUE 50
+    START WITH 50
+    INCREMENT BY 50
+    CACHE 10;
