@@ -1,6 +1,8 @@
 package com.misernandfriends.cinemaclub.pojo.user;
 
+import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.movie.Movie;
 import lombok.Getter;
 import lombok.Setter;
 
