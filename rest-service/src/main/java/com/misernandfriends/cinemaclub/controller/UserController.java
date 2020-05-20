@@ -8,6 +8,7 @@ import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.config.BugReport;
 import com.misernandfriends.cinemaclub.pojo.movie.Recommendation;
 import com.misernandfriends.cinemaclub.pojo.movie.review.CommentReport;
+import com.misernandfriends.cinemaclub.pojo.user.Badge;
 import com.misernandfriends.cinemaclub.pojo.user.User;
 import com.misernandfriends.cinemaclub.pojo.user.UserReport;
 import com.misernandfriends.cinemaclub.serviceInterface.config.MailService;
@@ -245,12 +246,12 @@ public class UserController {
     }
 
     @GetMapping("/badge")
-    public BadgeDTO getUserBadge() {
+    public Badge getUserBadge() {
         Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
         if (!userDTO.isPresent()) {
             throw new EntityNotFoundException();
         } else {
-            return userService.getBadge(userDTO.get());
+            return userService.getBadge(userDTO.get()).toBadgePojo();
         }
     }
 
