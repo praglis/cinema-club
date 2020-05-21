@@ -1,6 +1,7 @@
 package com.misernandfriends.cinemaclub.pojo.user;
 
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.movie.Movie;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,6 @@ public class UserLikes {
     private boolean isLiked;
     private List<UserLikes> replies;
     private Boolean highlighted;
+    private String movieApi;
+    private Movie movie;
 }
