@@ -22,6 +22,8 @@ public class User {
     private String email;
     private String phoneNo;
     private AddressDTO address;
+    private boolean hasQuestionnaire;
+    private boolean firstLogIn;
 
     public User toUserResponse(UserDTO userDTO) {
         this.id = userDTO.getId();
@@ -34,7 +36,8 @@ public class User {
         this.email = userDTO.getEmail();
         this.phoneNo = userDTO.getPhoneNo();
         this.address = userDTO.getAddress();
-
+        this.hasQuestionnaire = userDTO.getHasQuestionnaire();
+        this.firstLogIn = userDTO.getFirstLogIn();
         return this;
     }
 }

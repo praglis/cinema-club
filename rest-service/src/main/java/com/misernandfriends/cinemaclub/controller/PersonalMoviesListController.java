@@ -13,6 +13,7 @@ import com.misernandfriends.cinemaclub.serviceInterface.config.SecurityService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
 import com.misernandfriends.cinemaclub.serviceInterface.movie.PersonalListService;
 import com.misernandfriends.cinemaclub.serviceInterface.rec.RecommendationService;
+import com.misernandfriends.cinemaclub.serviceInterface.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,13 +37,15 @@ public class PersonalMoviesListController {
     private final RecommendationService recommendationService;
     private final UserRepository userRepository;
     private final SecurityService securityService;
+    private final UserService userService;
 
-    public PersonalMoviesListController(PersonalListService personalListService, MovieDetailService movieService, RecommendationService recommendationService, UserRepository userRepository, SecurityService securityService) {
+    public PersonalMoviesListController(PersonalListService personalListService, MovieDetailService movieService, RecommendationService recommendationService, UserRepository userRepository, SecurityService securityService, UserService userService) {
         this.personalListService = personalListService;
         this.movieService = movieService;
         this.recommendationService = recommendationService;
         this.userRepository = userRepository;
         this.securityService = securityService;
+        this.userService = userService;
     }
 
     @GetMapping("user/favourites")
@@ -150,9 +153,9 @@ public class PersonalMoviesListController {
     }
 
     @PostMapping("user/questionnaire")
-    public ResponseEntity<Object> addMoviesFromQuestionnaire(@RequestBody QuestionnairePostBody body) {
-
-        Optional<UserDTO> existingUser = userRepository.getById(body.getUserId());
+    public ResponseEntity<Object> addMoviesFromQuestionnaire(@RequestBody QuestionnairePostBody movies) {
+        String currentPrincipalName = securityService.findLoggedInUsername();
+        Optional<UserDTO> existingUser = userService.findByUsername(currentPrincipalName);
 
         if (!existingUser.isPresent()) {
             return new ResponseEntity<>("User does not exists", HttpStatus.BAD_REQUEST);
@@ -162,7 +165,7 @@ public class PersonalMoviesListController {
             return new ResponseEntity<>("User is not logged in\"", HttpStatus.BAD_REQUEST);
         }
 
-        for (Movie movie : body.getMovies()) {
+        for (Movie movie : movies.getMovies()) {
             MovieDTO movieDTO = new MovieDTO();
             movieDTO.setApiUrl(movie.getId().toString());
             movieDTO.setTitle(movie.getTitle());

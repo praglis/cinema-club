@@ -12,23 +12,7 @@ import java.util.List;
 @Setter
 public class QuestionnairePostBody {
 
-    @JsonProperty("user_id")
-    @SerializedName("user_id")
-    private Long userId;
-
-    @JsonProperty("page")
-    @SerializedName("page")
-    private Integer page;
-
     @JsonProperty("results")
     @SerializedName("results")
     private List<Movie> movies = new ArrayList<>();
-
-    @JsonProperty("total_results")
-    @SerializedName("total_results")
-    private Integer totalResults;
-
-    @JsonProperty("total_pages")
-    @SerializedName("total_pages")
-    private Integer totalPages;
 }
