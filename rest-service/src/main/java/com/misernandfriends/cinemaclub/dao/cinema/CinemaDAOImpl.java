@@ -33,6 +33,11 @@ public class CinemaDAOImpl extends AbstractDAOImpl<CinemaDTO> implements CinemaR
 
     @Override
     public List<CinemaDTO> searchFor(Map<String, String> params) {
+        String orderBy = null;
+        if (params.containsKey("orderBy")) {
+            orderBy = params.get("orderBy");
+            params.remove("orderBy");
+        }
         String[] table = {"name", "address.country", "address.state", "address.city", "address.streetName", "address.houseNumber"};
         boolean isQueryEmpty = true;
         StringBuilder queryTxt = new StringBuilder("SELECT data FROM " + getEntityName() + " data " +
@@ -52,6 +57,11 @@ public class CinemaDAOImpl extends AbstractDAOImpl<CinemaDTO> implements CinemaR
             queryTxt.delete(queryTxt.length() - 4, queryTxt.length());
             queryTxt.append(")");
         }
+        queryTxt.append("order by ");
+        if ("rating".equals(orderBy)) {
+            queryTxt.append("data.rating DESC,");
+        }
+        queryTxt.append("data.name");
 
         TypedQuery<CinemaDTO> query = em.createQuery(queryTxt.toString(), CinemaDTO.class);
         params.forEach((k, v) -> query.setParameter(k, "%" + v + "%"));

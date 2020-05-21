@@ -44,7 +44,7 @@ public class MovieDetailServiceImpl implements MovieDetailService {
         if (potentialMovie.isPresent()) {
             MovieDTO movie = potentialMovie.get();
             movieSimple.setNumberOfVotes(movie.getVotesNumber());
-            movieSimple.setRating(movie.getMovieRating());
+            movieSimple.setRating(movie.getRating());
         }
 
         return movieSimple;

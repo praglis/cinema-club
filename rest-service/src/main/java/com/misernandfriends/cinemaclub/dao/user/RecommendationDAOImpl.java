@@ -59,7 +59,7 @@ public class RecommendationDAOImpl extends AbstractDAOImpl<RecommendationDTO> im
 
     @Override
     public Map<Long, Integer> getSimilarUser(List<String> moviesUrl, Long exceptUserId) {
-        String queryTxt = "SELECT data.user.id, COUNT(data.movie.id) FROM UserRatingDTO data " +
+        String queryTxt = "SELECT data.user.id, COUNT(data.movie.id) FROM UserMovieRatingDTO data " +
                 "WHERE data.user.id <> :withoutUser ";
         if (!moviesUrl.isEmpty()) {
             queryTxt += "AND data.movie.apiUrl IN :moviesUrls ";
@@ -82,7 +82,7 @@ public class RecommendationDAOImpl extends AbstractDAOImpl<RecommendationDTO> im
 
     @Override
     public List<MovieDTO> findBestMoviesForBy(Long id, Long userId, int moviesToAdd) {
-        String queryTxt = "SELECT data.movie FROM UserRatingDTO data " +
+        String queryTxt = "SELECT data.movie FROM UserMovieRatingDTO data " +
                 "WHERE data.user.id IN :userId AND data.movie.id NOT IN (SELECT fav.movie.id FROM FavouriteDTO fav " +
                 "WHERE fav.user.id = :masterUser) " +
                 "ORDER BY data.rating DESC";

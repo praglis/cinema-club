@@ -1,10 +1,20 @@
 package com.misernandfriends.cinemaclub.model.cinema;
 
 import com.misernandfriends.cinemaclub.model.AddressDTO;
+import com.misernandfriends.cinemaclub.model.movie.RatingEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +22,7 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "MOV_CINEMAS")
-public class CinemaDTO implements Serializable {
+public class CinemaDTO extends RatingEntity implements Serializable {
 
     private static final long serialVersionUID = 3999238317195690091L;
 
@@ -43,4 +53,10 @@ public class CinemaDTO implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "CIN_ADR_ID")
     private AddressDTO address = new AddressDTO();
+
+    @Column(name = "CIN_AVG_RATING")
+    private Double rating = 0D;
+
+    @Column(name = "CIN_COUNT_RATING")
+    private Long votesNumber = 0L;
 }
