@@ -5,6 +5,7 @@ import com.misernandfriends.cinemaclub.comparators.UserLikesComparator;
 import com.misernandfriends.cinemaclub.exception.ApplicationException;
 import com.misernandfriends.cinemaclub.model.cache.CacheValue;
 import com.misernandfriends.cinemaclub.model.cache.LazyCache;
+import com.misernandfriends.cinemaclub.model.movie.MovieDTO;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.movie.review.guardian.GuardianResponse;
@@ -25,7 +26,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -175,7 +181,10 @@ public class ReviewServiceImpl implements ReviewService {
         } else if (userReviewData.getMovieTitle() != null) {
             userReview.setMovie(movieServiceLocal.getMovieData(userReviewData.getMovieTitle()));
         }
-
+        if(userReview.getMovie().getVotesNumber() == null){
+            MovieDTO movie = userReview.getMovie();
+            movie.setRating(0.0);
+        }
         userReview.setParentReviewId(userReviewData.getParentReviewId());
         userReview.setStatement(userReviewData.getReviewBody());
         userReview.setInfoCU(user);

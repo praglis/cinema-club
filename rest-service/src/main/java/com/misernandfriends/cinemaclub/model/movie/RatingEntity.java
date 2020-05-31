@@ -21,7 +21,11 @@ public abstract class RatingEntity {
             isNew = true;
             oldRate = 0;
         }
-        setRating((rating * size + (newRate - oldRate)));
+        if(newRate == null){
+            newRate = 0;
+        }
+        Double rateValue = rating * size + (newRate - oldRate);
+        setRating(rateValue);
         setVotesNumber(size + (isNew ? 1 : 0));
         setRating(getRating() / getVotesNumber());
     }

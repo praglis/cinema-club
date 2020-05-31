@@ -117,6 +117,8 @@ public class UserServiceImpl implements UserService {
         potentialUser.setBirthday(user.getBirthday());
         potentialUser.setPhoneNo(user.getPhoneNo());
         potentialUser.setAddress(user.getAddress());
+        potentialUser.setHasQuestionnaire(user.getHasQuestionnaire());
+        potentialUser.setFirstLogIn(user.getFirstLogIn());
         userRepository.update(potentialUser);
     }
 

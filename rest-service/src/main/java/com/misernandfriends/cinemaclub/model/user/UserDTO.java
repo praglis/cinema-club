@@ -119,6 +119,14 @@ public class UserDTO implements Serializable {
     @Column(name = "USR_BADGE")
     private Integer badgeValue;
 
+
+    @Column(name = "USR_HAS_QUESTIONNAIRE", columnDefinition="BOOLEAN DEFAULT false")
+    private Boolean hasQuestionnaire = false;
+
+
+    @Column(name = "USR_FIRST_LOGIN", columnDefinition="BOOLEAN DEFAULT true")
+    private Boolean firstLogIn = true;
+
     public UserDTO(String username, String password, String passwordConfirm) {
         this.username = username;
         this.password = password;
