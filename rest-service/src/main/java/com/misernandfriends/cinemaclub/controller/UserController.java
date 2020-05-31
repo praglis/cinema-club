@@ -2,12 +2,12 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.review.UserReviewDTO;
-import com.misernandfriends.cinemaclub.model.user.BadgeDTO;
 import com.misernandfriends.cinemaclub.model.user.RecommendationDTO;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
 import com.misernandfriends.cinemaclub.pojo.config.BugReport;
 import com.misernandfriends.cinemaclub.pojo.movie.Recommendation;
 import com.misernandfriends.cinemaclub.pojo.movie.review.CommentReport;
+import com.misernandfriends.cinemaclub.pojo.user.Badge;
 import com.misernandfriends.cinemaclub.pojo.user.User;
 import com.misernandfriends.cinemaclub.pojo.user.UserReport;
 import com.misernandfriends.cinemaclub.serviceInterface.config.MailService;
@@ -20,7 +20,13 @@ import com.misernandfriends.cinemaclub.serviceInterface.user.VerificationTokenSe
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
@@ -245,12 +251,12 @@ public class UserController {
     }
 
     @GetMapping("/badge")
-    public BadgeDTO getUserBadge() {
-        Optional<UserDTO> userDTO = userService.findByUsername(securityService.findLoggedInUsername());
+    public Badge getUserBadge(@RequestParam String userName) {
+        Optional<UserDTO> userDTO = userService.findByUsername(userName);
         if (!userDTO.isPresent()) {
             throw new EntityNotFoundException();
         } else {
-            return userService.getBadge(userDTO.get());
+            return userService.getBadge(userDTO.get()).toBadgePojo();
         }
     }
 

@@ -25,8 +25,8 @@ public class QuestionnaireMovieResponse {
     private Integer totalResults;
 
     public QuestionnaireMovieResponse getResponse(MoviesList popularResponse, MoviesList topRatedResponse) {
-        List<Movie> resultList = popularResponse.getMovies().stream().limit(7).collect(Collectors.toList());
-        resultList.addAll(topRatedResponse.getMovies().stream().limit(7).collect(Collectors.toList()));
+        List<Movie> resultList = popularResponse.getMovies().stream().filter( e-> e.getPosterPath() != null).limit(8).collect(Collectors.toList());
+        resultList.addAll(topRatedResponse.getMovies().stream().filter( e-> (e.getPosterPath() != null)).limit(8).collect(Collectors.toList()));
         this.movies = resultList;
         this.totalResults = resultList.size();
         return this;

@@ -1,5 +1,6 @@
 package com.misernandfriends.cinemaclub.model.user;
 
+import com.misernandfriends.cinemaclub.pojo.user.Badge;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,4 +31,14 @@ public class BadgeDTO implements Serializable {
     @NotNull
     @Column(name = "BAD_TO")
     private Integer valueTo;
+
+    public Badge toBadgePojo() {
+        Badge badge = new Badge();
+        badge.setId(getId());
+        badge.setName(getName());
+        badge.setValueFrom(getValueFrom());
+        badge.setValueTo(getValueTo());
+
+        return badge;
+    }
 }

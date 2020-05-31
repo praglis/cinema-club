@@ -18,8 +18,8 @@ public class QuestionnaireMoviesServiceImpl implements QuestionnaireMovieService
     @Override
     public QuestionnaireMovieResponse getQuestionnaireMovies() {
         Random r = new Random();
-        int page1 = r.nextInt((10) + 1);
-        int page2 = r.nextInt((10) + 1);
+        int page1 = r.nextInt((5) + 1);
+        int page2 = r.nextInt((5) + 1);
 
         String uriPopular = new UrlHelper(CacheValue._API_URLS.MOVIES_API_URL_MOST_POPULAR)
                 .addQuery("page", Integer.toString(page2))
