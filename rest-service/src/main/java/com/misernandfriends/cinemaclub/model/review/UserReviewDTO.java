@@ -90,6 +90,7 @@ public class UserReviewDTO implements Serializable {
         reviewResponse.setStatement(getStatement());
         reviewResponse.setLiked(user.getReviews().contains(this));
         reviewResponse.setHighlighted(isHighlighted());
+        reviewResponse.setMovieApi(getMovie().getApiUrl());
 
         return reviewResponse;
     }
