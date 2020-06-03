@@ -2,14 +2,23 @@ package com.misernandfriends.cinemaclub.controller;
 
 import com.misernandfriends.cinemaclub.controller.entity.ErrorResponse;
 import com.misernandfriends.cinemaclub.model.user.UserDTO;
+import com.misernandfriends.cinemaclub.pojo.user.UserLikes;
 import com.misernandfriends.cinemaclub.pojo.user.UserReview;
-import com.misernandfriends.cinemaclub.serviceInterface.movie.ReviewService;
 import com.misernandfriends.cinemaclub.serviceInterface.config.SecurityService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.MovieDetailService;
+import com.misernandfriends.cinemaclub.serviceInterface.movie.ReviewService;
 import com.misernandfriends.cinemaclub.serviceInterface.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -21,11 +30,13 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final SecurityService securityService;
     private final UserService userService;
+    private final MovieDetailService movieDetailService;
 
-    public ReviewController(ReviewService reviewService, SecurityService securityService, UserService userService) {
+    public ReviewController(ReviewService reviewService, SecurityService securityService, UserService userService, MovieDetailService movieDetailService) {
         this.reviewService = reviewService;
         this.securityService = securityService;
         this.userService = userService;
+        this.movieDetailService = movieDetailService;
     }
 
     @GetMapping("userReview/{movieId}")
@@ -45,7 +56,11 @@ public class ReviewController {
             log.error("User doesn't exist");
             return ErrorResponse.createError("User doesn't exist");
         }
-        return ResponseEntity.ok(reviewService.getAllUserReviews(userOptional.get()));
+        List<UserLikes> allUserReviews = reviewService.getAllUserReviews(userOptional.get());
+        for (UserLikes allUserReview : allUserReviews) {
+            allUserReview.setMovie(movieDetailService.getMovieById(Integer.valueOf(allUserReview.getMovieApi())));
+        }
+        return ResponseEntity.ok(allUserReviews);
     }
 
     @PutMapping("userReview")

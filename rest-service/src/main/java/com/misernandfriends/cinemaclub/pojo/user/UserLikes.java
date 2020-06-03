@@ -20,4 +20,6 @@ public class UserLikes {
     private boolean isLiked;
     private List<UserLikes> replies;
     private Boolean highlighted;
+    private String movieApi;
+    private Movie movie;
 }

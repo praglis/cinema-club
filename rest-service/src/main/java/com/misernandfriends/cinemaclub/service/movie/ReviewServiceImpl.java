@@ -235,6 +235,8 @@ public class ReviewServiceImpl implements ReviewService {
             }
         }
 
+        replies.forEach((userReviewId, replyList) -> replies.get(userReviewId).sort(new ReplyComparator()));
+
         return userReviews.stream()
                 .filter(review -> Objects.isNull(review.getParentReviewId()))
                 .map(userReview -> userReview.toUserLikes(user, replies))
